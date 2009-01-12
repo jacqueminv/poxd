@@ -22,12 +22,12 @@ BACKUPS_DIR = os.path.join(ROOT_PATH, 'backups')
 GENERATE_ABSOLUTE_FS_URLS = False
 
 MEDIA_PROCESSORS = {
-	'*':{
-		'.css':('hyde.processors.YUICompressor',),
-		'.ccss':('hyde.processors.CleverCSS', 'hyde.processors.YUICompressor',),
-		'.hss':('hyde.processors.HSS', 'hyde.processors.YUICompressor',),
-		'.js':('hyde.processors.YUICompressor',)
-	} 
+    '*':{
+        '.css':('hyde.processors.YUICompressor',),
+        '.ccss':('hyde.processors.CleverCSS', 'hyde.processors.YUICompressor',),
+        '.hss':('hyde.processors.HSS', 'hyde.processors.YUICompressor',),
+        '.js':('hyde.processors.YUICompressor',)
+    } 
 }
 
 CONTEXT = {
