@@ -79,17 +79,18 @@ class Generator(object):
         context = settings.CONTEXT
         out_dir = settings.TMP_DIR
         
-        subfolders = []
-        
         class ListingVisitor:
-            @staticmethod
-            def visit_folder(folder):
-                subfolders.append({"name": os.path.basename(folder), "pages": []})
-            @staticmethod
-            def visit_page(page_path, page_context):
+            def __init__(self):
+               self.subfolders = []
+            
+            def visit_folder(self, folder):
+                self.subfolders.append({"name": os.path.basename(folder),           "pages": []})
+
+            def visit_page(self, page_path, page_context):
+                top = self.subfolders[len(self.subfolders)-1]
                 if page_context.has_key('listing_needed'):
+                    top['url'] = page_context['page_url']
                     return
-                top = subfolders[len(subfolders)-1]
                 top['pages'].append(page_context)
         
         class PageVisitor:
@@ -97,17 +98,16 @@ class Generator(object):
             def visit_folder(folder):pass
             @staticmethod
             def visit_page(page_path, page_context):
-                print page_path
                 if page_context.has_key('listing_needed'):
                     if page_context['listing_needed']:
-                        ContentWalker.walk(os.path.dirname(page_path), ListingVisitor)
-                        page_context['subfolders'] = subfolders
+                        listing_visitor = ListingVisitor()
+                        ContentWalker.walk(os.path.dirname(page_path), listing_visitor)
+                        page_context['subfolders'] = listing_visitor.subfolders
                 context['page'] = page_context
                 rendered = render_to_string(page_path,context)
                 source_dir = os.path.dirname(page_path)
                 page_out_dir = PathUtil.mirror_dir_tree(source_dir, settings.CONTENT_DIR, out_dir, ignore_root=True)
                 page_path = os.path.join(page_out_dir,os.path.basename(page_path))
-                print page_path
                 fout = open(page_path,'w')
                 fout.write(rendered)
                 fout.close()
@@ -133,7 +133,6 @@ class ContentWalker(object):
                         page_url = os.path.join(page_out_dir,os.path.basename(page_path))
                     else:
                         fragment = PathUtil.get_path_fragment(settings.CONTENT_DIR, root, True)
-                        print fragment
                         page_url = os.sep + fragment + page
                     page_context['page_url'] = page_url
                     context_cache[page_path] = page_context
