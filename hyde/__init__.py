@@ -4,6 +4,8 @@ from django.core.management import setup_environ
 from hyde.path_util import PathUtil
 from processors import CopyProcessor
 from django.template.loader import render_to_string
+from django.template import add_to_builtins
+from context_processor import ContextProcessor
 
 class MediaProcessor:
 
@@ -66,15 +68,17 @@ class Generator(object):
 		self.render_pages()
 	
 	def render_pages(self):
+		add_to_builtins('hyde.templatetags.hydetags')
 		context = settings.CONTEXT
 		out_dir = settings.TMP_DIR
 		for root, dirs, files in os.walk(settings.CONTENT_DIR):
 			PathUtil.filter_hidden_inplace(dirs)
 			PathUtil.filter_hidden_inplace(files)
 			for page in files:
-				rendered = render_to_string(os.path.join(root,page), context)
+				page_path = os.path.join(root, page)
+				page_context = ContextProcessor.get_page_context(context, page_path)
+				rendered = render_to_string(os.path.join(root,page), page_context)
 				source_dir = root
-				print "+++++++++++++++++++++++++++++++++++++++++++++++"
 				page_out_dir = PathUtil.mirror_dir_tree(source_dir, settings.CONTENT_DIR, out_dir, ignore_root=True)
 				page_path = os.path.join(page_out_dir,page)
 				fout = open(page_path,'w')
@@ -108,3 +112,10 @@ class Initializer(object):
 				shutil.copytree(source, dest)
 			else:
 				shutil.copy(source, dest)
+		# hyde_dest = os.path.join(self.site_path, "hyde")
+		# os.mkdir(hyde_dest)		
+		# hyde_source = os.path.join(root, "hyde", "templatetags")
+		# shutil.copy(os.path.join(hyde_source, "__init__.py"), hyde_dest)
+		# hyde_dest = os.path.join(hyde_dest, "templatetags")
+		# shutil.copytree(hyde_source, hyde_dest)
+

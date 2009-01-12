@@ -23,9 +23,6 @@ class PathUtil:
 
 	@staticmethod
 	def mirror_dir_tree(directory, source_root, mirror_root, ignore_root = False):
-		print directory 
-		print source_root
-		print mirror_root
 		current_fragment = PathUtil.get_path_fragment(source_root, directory)
 		if(not current_fragment): return mirror_root
 		mirror_directory = mirror_root

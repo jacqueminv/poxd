@@ -50,7 +50,7 @@ HSS_PATH = "./tools/hss-1.0-osx"
 TEMPLATE_DIRS = ( SITE_TEMPLATE_DIR, CONTENT_DIR, )
 
 INSTALLED_APPS = (
-    'aym_tags',
+    'hyde',
     'django.contrib.webdesign'
 )
 
