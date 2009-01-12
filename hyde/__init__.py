@@ -28,7 +28,6 @@ class MediaProcessor:
 					for processor_name in file_processors:
 						processor = MediaProcessor.load_processor(processor_name)
 						full_path = processor.process(full_path)
-					
 	
 	@staticmethod
 	def load_processor(name):
@@ -64,11 +63,37 @@ class Generator(object):
 		if os.path.exists(settings.TMP_DIR):
 			shutil.rmtree(settings.TMP_DIR)
 			
+		# Cool Hack - Doesn't work though:) Keeping code until I blog
+		# class Media(dict):
+		# 			def __repr__(self):
+		# 				if not self.key: 
+		# 					return os.path.join(settings.TMP_DIR, os.path.basename(self.root)).rstrip(os.sep)
+		# 				mirror = PathUtil.get_mirror_dir(self.root, settings.MEDIA_DIR, settings.TMP_DIR).rstrip(os.sep)
+		# 				return mirror + os.extsep + self.key
+		# 
+		# 			def __str__(self):
+		# 				return repr(self)
+		# 
+		# 			def __init__(self, root, key=""):
+		# 				self.root = root
+		# 				self.key = key
+		# 
+		# 			def __missing__(self,key):
+		# 				return Media(os.path.join(self.root, self.key), key)
+		
+		if settings.GENERATE_ABSOLUTE_FS_URLS:
+			media_root = os.path.join(settings.TMP_DIR, os.path.basename(settings.MEDIA_DIR)).rstrip(os.sep)
+		else:
+			media_root = os.sep + os.path.basename(settings.MEDIA_DIR)
+			
+		settings.CONTEXT['media'] = media_root
+			
 		MediaProcessor.process_media_dir(settings.MEDIA_DIR)
 		self.render_pages()
 	
 	def render_pages(self):
 		add_to_builtins('hyde.templatetags.hydetags')
+		add_to_builtins('hyde.templatetags.aym')
 		context = settings.CONTEXT
 		out_dir = settings.TMP_DIR
 		for root, dirs, files in os.walk(settings.CONTENT_DIR):
@@ -95,12 +120,13 @@ class Initializer(object):
 			template = "default"
 		template_dir = os.path.join(root, "site_templates", template)
 		if not os.path.exists(template_dir):
-			raise ValueError("Cannot find the specified template[%s]." % template)
+			raise ValueError("Cannot find the specified template[%s]." % template_dir)
 			
 		if not os.path.exists(self.site_path):
 			os.makedirs(self.site_path)
 		else:
 			files = os.listdir(self.site_path)
+			PathUtil.filter_hidden_inplace(files)
 			if len(files):
 				raise ValueError("The site_path[%s] is not empty." % self.site_path)
 			

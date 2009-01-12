@@ -2,6 +2,7 @@ import os, shutil, commands
 from django.template.loader import render_to_string
 from django.conf import settings
 from hyde import PathUtil
+from hyde.context_processor import ContextProcessor
 
 class CopyProcessor:
 	
@@ -12,6 +13,17 @@ class CopyProcessor:
 			os.makedirs(tmp_media_dir)
 		shutil.copy(file, tmp_media_dir)
 		return os.path.join(tmp_media_dir, os.path.basename(file))
+
+class TemplateProcessor:
+	@staticmethod
+	def process(file):
+		page_context = ContextProcessor.get_page_context(settings.CONTEXT, file)
+		rendered = render_to_string(file, page_context)
+		source_dir = os.path.dirname(file)
+		fout = open(file,'w')
+		fout.write(rendered)
+		fout.close()
+		return file
 
 class CleverCSS:
 	
@@ -50,7 +62,7 @@ class YUICompressor:
 		compress = settings.YUI_COMPRESSOR
 		if not compress or not os.path.exists(compress):
 			raise ValueError("YUI Compressor cannot be found at [%s]" % compress)
-		tmp_file = file + ".z-tmp-"
+		tmp_file = file + ".z-tmp"
 		s,o = commands.getstatusoutput(u"java -jar %s %s > %s" % (compress, file, tmp_file))
 		if s > 0: 
 			print o

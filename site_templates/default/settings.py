@@ -19,6 +19,8 @@ BACKUPS_DIR = os.path.join(ROOT_PATH, 'backups')
 # should specify css/ie for the folder name. css/* is not supported (yet).
 
 # Extensions do not support wildcards.
+GENERATE_ABSOLUTE_FS_URLS = False
+
 MEDIA_PROCESSORS = {
 	'*':{
 		'.css':('hyde.processors.YUICompressor',),

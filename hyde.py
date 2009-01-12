@@ -3,6 +3,7 @@ import os, sys
 from optparse import OptionParser
 from hyde import Generator
 from hyde import Initializer
+import cProfile
 
 PROG_ROOT= os.path.dirname(os.path.abspath( __file__ ))
 
@@ -37,3 +38,7 @@ def main(argv):
 	
 if __name__ == "__main__":
 	main(sys.argv[1:])
+	# cProfile.run('main(sys.argv[1:])', filename='hyde.cprof')
+	# import pstats
+	# stats = pstats.Stats('hyde.cprof')
+	# stats.strip_dirs().sort_stats('time').print_stats(20)
