@@ -8,7 +8,7 @@ class HydeContextNode(template.Node):
         print value
     
     def render(self, context):
-        return self.value
+        return ""
         
 @register.tag(name="hyde")
 def hyde_context(parser, token):
