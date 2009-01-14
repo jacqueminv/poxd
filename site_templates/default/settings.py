@@ -23,11 +23,15 @@ GENERATE_ABSOLUTE_FS_URLS = False
 
 MEDIA_PROCESSORS = {
     '*':{
-        '.css':('hyde.processors.YUICompressor',),
-        '.ccss':('hyde.processors.CleverCSS', 'hyde.processors.YUICompressor',),
-        '.hss':('hyde.processors.HSS', 'hyde.processors.YUICompressor',),
-        '.js':('hyde.processors.YUICompressor',)
+        '.css':('hyde.media_processors.YUICompressor',),
+        '.ccss':('hyde.media_processors.CleverCSS', 'hyde.media_processors.YUICompressor',),
+        '.hss':('hyde.media_processors.HSS', 'hyde.media_processors.YUICompressor',),
+        '.js':('hyde.media_processors.YUICompressor',)
     } 
+}
+
+CONTENT_PROCESSORS = {
+    *: 'hyde.content_processors.YAMLProcessor',
 }
 
 CONTEXT = {
@@ -49,7 +53,7 @@ HSS_PATH = "./tools/hss-1.0-osx"
 
 #Django settings
 
-TEMPLATE_DIRS = ( SITE_TEMPLATE_DIR, CONTENT_DIR, )
+TEMPLATE_DIRS = ( SITE_TEMPLATE_DIR, CONTENT_DIR, TMP_DIR)
 
 INSTALLED_APPS = (
     'hyde',
