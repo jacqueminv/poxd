@@ -1,8 +1,7 @@
-import os, shutil, commands
+import os, commands
 from django.template.loader import render_to_string
 from django.conf import settings
-from hyde import PathUtil
-from file_system import *
+from file_system import File
 
 class TemplateProcessor:
     @staticmethod
@@ -12,6 +11,8 @@ class TemplateProcessor:
         fout.write(rendered)
         fout.close()
         return file
+
+## aym-cms code refactored into processors.
 
 class CleverCSS:
     

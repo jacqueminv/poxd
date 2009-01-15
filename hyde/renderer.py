@@ -16,10 +16,20 @@ def get_page_url(page):
 
 def render_pages():
     class Renderer(object):
-        content = []
+        content = None
+        
         def visit_folder(self, folder):
+            if not self.content:
+                self.content = []
+            else:
+                    
             folder.pages = []
             self.content.append(folder)
+        
+        def add_folder(self, page):
+            top = self.content[len(self.content)-1]
+            top.pages.append(page)
+            page.context =  context
             
         def add_page(self, page, context):
             top = self.content[len(self.content)-1]

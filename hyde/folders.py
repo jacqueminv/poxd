@@ -27,13 +27,16 @@ class HydeFolder(Folder):
     def visit_file(self, visitor, file):
         target = file.parent.create_mirror_folder(self, settings.TMP_DIR, self.ignore_root)
         file = file.copy_to(target)
+        self.process_file(file)
+        super(HydeFolder, self).visit_file(visitor, file)
+        
+    def process_file(self, file):
         if file and file.exists and self.current_processors.has_key(file.extension):
             file_processors = self.current_processors[file.extension]
             for processor_name in file_processors:
                 if file and file.exists:
                     processor = load_processor(processor_name)
                     file = processor.process(file)
-        super(HydeFolder, self).visit_file(visitor, file)
 
 class MediaFolder(HydeFolder):
     def __init__(self):

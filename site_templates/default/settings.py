@@ -40,7 +40,7 @@ CONTENT_PROCESSORS = {
     }
 }
 
-SITE_POST_PROCESSORS = ()
+SITE_POST_PROCESSORS = ( 'hyde.site_post_processors.IndexProcessor',)
 
 CONTEXT = {
 
