@@ -49,4 +49,8 @@ class YAMLContentProcessor:
                 source_code = source_code + line
         fin.close()
         import yaml
-        return yaml.load(source_code)
+        context = yaml.load(source_code)
+        if not context:
+            context = {}
+        return context
+        

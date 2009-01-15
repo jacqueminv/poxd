@@ -4,8 +4,7 @@ from django.template import Library
 register = Library()
 
 class HydeContextNode(template.Node):
-    def __init__(self): 
-        print value
+    def __init__(self): pass
     
     def render(self, context):
         return ""

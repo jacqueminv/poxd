@@ -30,9 +30,13 @@ MEDIA_PROCESSORS = {
     } 
 }
 
-CONTENT_PROCESSORS = {
-    *: 'hyde.content_processors.YAMLProcessor',
-}
+# CONTENT_PROCESSORS = {
+#     '*': {
+#         '.html':('hyde.content_processors.YAMLProcessor',)
+#     }
+# }
+
+CONTENT_PROCESSORS = {"*" : 'hyde.content_processors.YAMLContentProcessor'}
 
 CONTEXT = {
 

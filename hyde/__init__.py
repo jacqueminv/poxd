@@ -2,9 +2,10 @@ import imp, sys, os, shutil
 from django.conf import settings
 from django.core.management import setup_environ
 from path_util import PathUtil
-from media_processors import CopyProcessor
 from django.template.loader import render_to_string
 from django.template import add_to_builtins
+from file_system import *
+from folders import *
 
 def load_processor(name):
     (module_name, dot, processor) = name.rpartition(".")
@@ -12,30 +13,6 @@ def load_processor(name):
     module = sys.modules[module_name]
     return getattr(module, processor)
 
-
-class MediaProcessor:
-
-    @staticmethod
-    def process_media_dir(media_dir):
-        default_processors = settings.MEDIA_PROCESSORS['*']
-        for root, dirs, files in os.walk(media_dir):
-            processors = {}
-            processors.update(default_processors)
-            fragment = PathUtil.get_path_fragment(media_dir, root)
-            if len(fragment) and settings.MEDIA_PROCESSORS.has_key(fragment):
-                processors.update(settings.MEDIA_PROCESSORS[fragment])
-                
-            for file in files:
-                (file_name, extension) = os.path.splitext(file)
-                full_path = os.path.join(root, file)
-                full_path = CopyProcessor.process(full_path)
-                if processors.has_key(extension):
-                    file_processors = processors[extension]
-                    for processor_name in file_processors:
-                        processor = load_processor(processor_name)
-                        full_path = processor.process(full_path)
-    
-        
 class Generator(object):
     def __init__(self, site_path):
         super(Generator, self).__init__()
@@ -44,34 +21,38 @@ class Generator(object):
     def generate(self, deploy_path):
         try:
             imp.load_source("hyde_site_settings", os.path.join(self.site_path,"settings.py"))
-            os.environ['DJANGO_SETTINGS_MODULE'] = u"hyde_site_settings"
         except Exception, e:
-            print e
+            print "Cannot Import Site Settings"
             raise ValueError("The given site_path [%s] does not contain a hyde site. Give a valid path or run -init to create a new site." % self.site_path)
             
-        if not deploy_path:
-            deploy_path = settings.DEPLOY_DIR
-            
-        if os.path.exists(deploy_path):
-            statinfo = os.stat(deploy_path)
-            if not os.path.exists(settings.BACKUPS_DIR):
-                os.makedirs(settings.BACKUPS_DIR)
-            dest = os.path.join(settings.BACKUPS_DIR, statinfo.st_ctime)
-            shutil.copytree(deploy_path, dest)
-            shutil.rmtree(deploy_path)
-            
-        if os.path.exists(settings.TMP_DIR):
-            shutil.rmtree(settings.TMP_DIR)
-     
+        try:
+            os.environ['DJANGO_SETTINGS_MODULE'] = u"hyde_site_settings"
+        except Exception, e:
+            print "Site settings are not defined properly"
+            raise ValueError("The given site_path [%s] does not contain a hyde site. Give a valid path or run -init to create a new site." % self.site_path)
+        
+        tmp_folder = Folder(settings.TMP_DIR)
+        backup_folder = Folder(settings.BACKUPS_DIR).make()
+        deploy_folder = Folder((deploy_path, settings.DEPLOY_DIR)[not deploy_path])
+        media_folder = Folder(settings.MEDIA_DIR)
+        
+        if(deploy_folder.exists):
+            deploy_folder.backup(backup_folder)
+
+        tmp_folder.delete()
+        tmp_folder.make()
+
         if settings.GENERATE_ABSOLUTE_FS_URLS:
-            media_root = os.path.join(settings.TMP_DIR, os.path.basename(settings.MEDIA_DIR)).rstrip(os.sep)
+            media_root = tmp_folder.child(media_folder.name)
         else:
-            media_root = os.sep + os.path.basename(settings.MEDIA_DIR)
+            media_root = os.sep + media_folder.name
             
         settings.CONTEXT['media'] = media_root
-            
-        MediaProcessor.process_media_dir(settings.MEDIA_DIR)
+        MediaFolder().walk()    
         self.render_pages()
+        deploy_folder.make()
+        deploy_folder.move_contents_of(tmp_folder)
+        tmp_folder.delete()
     
     def render_pages(self):
         add_to_builtins('hyde.templatetags.hydetags')
@@ -129,7 +110,7 @@ class ContentWalker(object):
             if len(fragment) and settings.CONTENT_PROCESSORS.has_key(fragment):
                 processor = settings.CONTENT_PROCESSORS[fragment]
                 if not processor:
-                    processor = "hyde.content_processors.YAMLProcessor"
+                    processor = "hyde.content_processors.YAMLContentProcessor"
             processor = load_processor(processor)
             for page in files:
                 if page.startswith("_"): continue
@@ -141,7 +122,7 @@ class ContentWalker(object):
                         page_out_dir = PathUtil.mirror_dir_tree(os.path.dirname(page_path), settings.CONTENT_DIR, settings.TMP_DIR, ignore_root=True)
                         page_url = os.path.join(page_out_dir,os.path.basename(page_path))
                     else:
-                        fragment = PathUtil.get_path_fragment(settings.CONTENT_DIR, root, True)
+                        fragment = PathUtil.get_path_fragment(settings.CONTENT_DIR, root)
                         page_url = os.sep + fragment + page
                     page_context['page_url'] = page_url
                     context_cache[page_path] = page_context
