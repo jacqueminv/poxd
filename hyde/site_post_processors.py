@@ -6,7 +6,21 @@ from renderer import render_page
 class IndexProcessor:
  
     @staticmethod
-    def process(content):
+    def process(sitmap):
+        default_template = File(Folder(settings.SITE_TEMPLATE_DIR).child('listing.html'))                
+        class Indexer:
+
+            def visit_folder(self, folder):
+                if folder.
+                try:
+                    template = File(settings.LISTING_TEMPLATES[folder.get_fragment(settings.CONTENT_DIR)])
+                except:
+                    template = default_template
+                
+                
+        
+        while true
+        
         for folder in content:
             default_template = File(Folder(settings.SITE_TEMPLATE_DIR).child('listing.html'))
             try:

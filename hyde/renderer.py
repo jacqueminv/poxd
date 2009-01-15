@@ -3,6 +3,7 @@ from django.template.loader import render_to_string
 from django.template import add_to_builtins
 from file_system import *
 from folders import *
+from sitemap import *
 
 def get_page_url(page):
     if settings.GENERATE_ABSOLUTE_FS_URLS:
@@ -13,28 +14,24 @@ def get_page_url(page):
         page_url = os.sep + fragment + page.name
     return page_url
 
-
 def render_pages():
     class Renderer(object):
-        content = None
+        sitemap = None
+        current_node = None
         
         def visit_folder(self, folder):
-            if not self.content:
-                self.content = []
+            if not self.sitemap:
+                self.sitemap = SitemapFolder(None, folder)
+                self.current_node = self.sitemap
             else:
-                    
-            folder.pages = []
-            self.content.append(folder)
-        
-        def add_folder(self, page):
-            top = self.content[len(self.content)-1]
-            top.pages.append(page)
-            page.context =  context
+                parent = self.current_node.get_parent_of(folder)
+                if parent:
+                   self.current_node = parent.append_child(folder)
             
         def add_page(self, page, context):
-            top = self.content[len(self.content)-1]
-            top.pages.append(page)
+            self.current_node.pages.append(page)
             page.context =  context
+            page.sitemap = self.current_node
             
         def visit_file(self, file):
             render_page(file)
@@ -42,12 +39,12 @@ def render_pages():
             
     renderer = Renderer()
     ContentFolder().walk(renderer)
-    return renderer.content
+    return renderer.sitemap
 
-def post_process_site(content):
+def post_process_site(sitemap):
     for processor_name in settings.SITE_POST_PROCESSORS:
         processor = load_processor(processor_name)
-        processor.process(content)
+        processor.process(sitemap)
             
 def render_page(page):
     rendered = render_to_string(str(page), settings.CONTEXT)    
