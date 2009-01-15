@@ -3,13 +3,10 @@ from django.template.loader import render_to_string
 from django.conf import settings
 from hyde import PathUtil
 from file_system import *
-# from hyde.content_processors import *
 
 class TemplateProcessor:
     @staticmethod
     def process(file):
-        # page_context = ContextProcessor.get_page_context(file)
-        # settings.CONTEXT['page'] = page_context
         rendered = render_to_string(str(file), settings.CONTEXT)
         fout = open(str(file),'w')
         fout.write(rendered)

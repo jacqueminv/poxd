@@ -1,56 +1,48 @@
 import re
+from django.conf import settings
+
+def get_context_text(page):
+    start = re.compile(r'.*?{%\s*hyde\s*(.*?)(%}|$)')
+    end = re.compile(r'(.*?)(%})')
+    fin = open(str(page),'r')
+    started = False
+    text = ''
+    matcher = start
+    for line in fin:
+        match = matcher.match(line)
+        if match:
+            text = text + match.group(1)
+            if started: break
+            else:
+                matcher = end 
+                started = True
+        elif started:
+            text = text + line
+    fin.close()
+    return text
+    
+
 class PyContentProcessor:
     
     @staticmethod
-    def get_page_context(page):
-        start = re.compile(r'.*?{%\s*hyde\s*(.*?)(%}|$)')
-        end = re.compile(r'(.*?)(%})')
-        fin = open(page,'r')
-        started = False
-        source_code = ''
-        matcher = start
-        for line in fin:
-            match = matcher.match(line)
-            if match:
-                source_code = source_code + match.group(1)
-                if started: break
-                else:
-                    matcher = end 
-                    started = True
-            elif started:
-                source_code = source_code + line
-        fin.close()
+    def process(page):
+        text = get_context_text(page)
         page_context = {}
-        source_code = "page_context.update(" + source_code + ")"
+        source_code = "page_context.update(" + text + ")"
         from py.code import Source
         source = Source(source_code)
         exec source.compile()
-        return page_context
+        settings.CONTEXT['page'] = page_context
+        return page
         
 class YAMLContentProcessor:
     
     @staticmethod
-    def get_page_context(page):
-        start = re.compile(r'.*?{%\s*hyde\s*(.*?)(%}|$)')
-        end = re.compile(r'(.*?)(%})')
-        fin = open(page,'r')
-        started = False
-        source_code = ''
-        matcher = start
-        for line in fin:
-            match = matcher.match(line)
-            if match:
-                source_code = source_code + match.group(1)
-                if started: break
-                else:
-                    matcher = end 
-                    started = True
-            elif started:
-                source_code = source_code + line
-        fin.close()
+    def process(page):
+        text = get_context_text(page)
         import yaml
-        context = yaml.load(source_code)
+        context = yaml.load(text)
         if not context:
             context = {}
-        return context
-        
+        settings.CONTEXT['page'] = context    
+        return page

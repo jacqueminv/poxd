@@ -67,6 +67,11 @@ class File(FileSystemEntity):
         shutil.copy(self.path, str(destination))
         return self._get_destination(destination)
         
+    def write(self, text):
+        fout = open(self.path,'w')
+        fout.write(text)
+        fout.close()
+        
 class Folder(FileSystemEntity):
     
     def __init__(self, path):
@@ -116,9 +121,6 @@ class Folder(FileSystemEntity):
             else:
                 count = count + 1
                 new_name = self.name + str(count)
-        print self
-        print destination
-        print dest        
         dest.make()
         dest.move_contents_of(self)
         self.delete()
@@ -179,14 +181,15 @@ class Folder(FileSystemEntity):
         for root, dirs, files in os.walk(self.path):
             PathUtil.filter_hidden_inplace(dirs)
             PathUtil.filter_hidden_inplace(files)
-            self.visit_folder(visitor, Folder(root))
+            folder = Folder(root)
+            self.visit_folder(visitor, folder)
             for file in files:
-                self.visit_file(visitor, File(os.path.join(root,str(file))))
+                self.visit_file(visitor, File(folder.child(file)))
                 
     def visit_folder(self, visitor, folder):
-        if visitor:
-            vistor.visit_folder(folder)
-        
+        if visitor and hasattr(visitor,'visit_folder'):
+            visitor.visit_folder(folder)
+
     def visit_file(self, visitor, file):
-        if visitor:
-            vistor.visit_file(self, file)
+        if visitor and hasattr(visitor,'visit_file'):
+            visitor.visit_file(file)

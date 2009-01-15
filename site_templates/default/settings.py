@@ -19,7 +19,7 @@ BACKUPS_DIR = os.path.join(ROOT_PATH, 'backups')
 # should specify css/ie for the folder name. css/* is not supported (yet).
 
 # Extensions do not support wildcards.
-GENERATE_ABSOLUTE_FS_URLS = False
+GENERATE_ABSOLUTE_FS_URLS = True
 
 MEDIA_PROCESSORS = {
     '*':{
@@ -30,13 +30,17 @@ MEDIA_PROCESSORS = {
     } 
 }
 
-# CONTENT_PROCESSORS = {
-#     '*': {
-#         '.html':('hyde.content_processors.YAMLProcessor',)
-#     }
-# }
+CONTENT_PROCESSORS = {
+    '*': {
+        '.html':('hyde.content_processors.YAMLContentProcessor',
+                # If you want to create a dictionary in python instead:
+                # 'hyde.content_processors.PyContentProcessor'
+                # Needs py.code.
+        )
+    }
+}
 
-CONTENT_PROCESSORS = {"*" : 'hyde.content_processors.YAMLContentProcessor'}
+SITE_POST_PROCESSORS = ()
 
 CONTEXT = {
 
@@ -63,5 +67,3 @@ INSTALLED_APPS = (
     'hyde',
     'django.contrib.webdesign'
 )
-
-
