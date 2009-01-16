@@ -1,0 +1,17 @@
+{% if node.has_listing %}<a href="{{node.listing_url}}">{% endif %}
+{{group.name}}
+{% if node.has_listing %}</a>{% endif %}
+<ul>
+    {% for list_page in node.pages %}
+    <li><a href="{{list_page.url}}">{{list_page.title}}</a></li>
+    {% endfor %}
+</ul>
+<ul>
+{% with node as parent%}        
+{% for node in parent.children %}
+    <li>
+    {% include "skeleton/_innerlisting.html" %}
+    <li>
+{% endfor %}
+{% endwith %}
+</ul>

@@ -1,5 +1,6 @@
 import re
 from django.conf import settings
+from file_system import File
 
 def get_context_text(page):
     start = re.compile(r'.*?{%\s*hyde\s*(.*?)(%}|$)')
@@ -21,6 +22,13 @@ def get_context_text(page):
     fin.close()
     return text
     
+def add_page_variables(page, vars):
+    if not vars: return
+    for key, value in vars.iteritems():
+        if not hasattr(File, key):
+            setattr(File, key, object())
+        setattr(page, key, value)
+            
 
 class PyContentProcessor:
     
@@ -32,7 +40,7 @@ class PyContentProcessor:
         from py.code import Source
         source = Source(source_code)
         exec source.compile()
-        settings.CONTEXT['page'] = page_context
+        add_page_variables(page, page_context)
         return page
         
 class YAMLContentProcessor:
@@ -44,5 +52,5 @@ class YAMLContentProcessor:
         context = yaml.load(text)
         if not context:
             context = {}
-        settings.CONTEXT['page'] = context    
+        add_page_variables(page, context) 
         return page

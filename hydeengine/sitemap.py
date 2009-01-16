@@ -1,11 +1,16 @@
-class SitemapFolder(object):
-    def __init__(self, parent, folder, children = [], pages = []):
-        super(SitemapFolder, self).__init__()
-        self.folder = folder
-        self.children = children
-        self.pages = pages
-        self.parent = parent
+from django.conf import settings
+from file_system import File, Folder
 
+class SitemapNode(object):
+    def __init__(self, parent, folder):
+        super(SitemapNode, self).__init__()
+        self.folder = folder
+        self.parent = parent
+        self.pages = []
+        self.children = []
+        
+    def __repr__(self):
+        return self.folder.path
     
     def get_parent_of(self, folder):
         if folder.parent.path == self.folder.path:
@@ -16,6 +21,16 @@ class SitemapFolder(object):
             return current.get_parent_of(folder)
         return None
         
+    @property
+    def name(self):
+        return self.folder.name
+    
+    @property
+    def url(self):
+        if settings.GENERATE_ABSOLUTE_FS_URLS:
+            return Folder(settings.DEPLOY_DIR).child(self.name)
+        else:
+            return "/" + self.name
     
     @property
     def isroot(self):
@@ -42,28 +57,42 @@ class SitemapFolder(object):
         
     @property
     def next_sibling(self):
-        return next_siblings[0]
+        sibs = self.next_siblings
+        if sibs:
+            return sibs[0]
+        return None
         
     @property
     def prev_siblings(self):
         if not self.parent: return None
         siblings = self.parent.children
         index = siblings.index(self)
-        nextsiblings = siblings[:index]
+        return siblings[:index]
 
     @property
     def prev_sibling(self):
-        return prev_siblings[0]    
+        sibs = self.prev_siblings
+        if sibs:
+            return sibs[0]
+        return None
         
-    def append_child(folder, children = [], pages = []):
-        node = SitemapFolder(self, folder, children, pages)
+    def append_child(self, folder):
+        node = SitemapNode(self, folder)
         self.children.append(node)
         return node
         
-    def walk(self, visitor):
-        visitor.visit_folder(self.folder)
-        for page in self.pages:
-            visitor.visit_page(page)
+    def add_page(self, page):
+        self.pages.append(page)
+        page.node = self
+        
+    def walk(self):
+        yield self
         for child in self.children:
-            child.walk(visitor)
+                   for node in child.walk():
+                       yield node
+
+    def walk_pages(self):
+        for node in self.walk():
+            for page in node.pages:
+                yield page
         

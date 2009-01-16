@@ -3,7 +3,7 @@ import os
 ROOT_PATH = os.path.dirname(__file__)
 
 #Directories
-SITE_TEMPLATE_DIR = os.path.join(ROOT_PATH, 'templates')
+LAYOUT_DIR = os.path.join(ROOT_PATH, 'layout')
 CONTENT_DIR = os.path.join(ROOT_PATH, 'content')
 MEDIA_DIR = os.path.join(ROOT_PATH, 'media')
 DEPLOY_DIR = os.path.join(ROOT_PATH, 'deploy')
@@ -23,24 +23,22 @@ GENERATE_ABSOLUTE_FS_URLS = True
 
 MEDIA_PROCESSORS = {
     '*':{
-        '.css':('hyde.media_processors.YUICompressor',),
-        '.ccss':('hyde.media_processors.CleverCSS', 'hyde.media_processors.YUICompressor',),
-        '.hss':('hyde.media_processors.HSS', 'hyde.media_processors.YUICompressor',),
-        '.js':('hyde.media_processors.YUICompressor',)
+        '.css':('hydeengine.media_processors.YUICompressor',),
+        '.ccss':('hydeengine.media_processors.CleverCSS', 'hydeengine.media_processors.YUICompressor',),
+        '.hss':('hydeengine.media_processors.HSS', 'hydeengine.media_processors.YUICompressor',),
+        '.js':('hydeengine.media_processors.YUICompressor',)
     } 
 }
 
 CONTENT_PROCESSORS = {
     '*': {
-        '.html':('hyde.content_processors.YAMLContentProcessor',
+        '.html':('hydeengine.content_processors.YAMLContentProcessor',
                 # If you want to create a dictionary in python instead:
-                # 'hyde.content_processors.PyContentProcessor'
+                # 'hydeengine.content_processors.PyContentProcessor'
                 # Needs py.code.
         )
     }
 }
-
-SITE_POST_PROCESSORS = ( 'hyde.site_post_processors.IndexProcessor',)
 
 CONTEXT = {
 
@@ -61,9 +59,9 @@ HSS_PATH = "./tools/hss-1.0-osx"
 
 #Django settings
 
-TEMPLATE_DIRS = ( SITE_TEMPLATE_DIR, CONTENT_DIR, TMP_DIR)
+TEMPLATE_DIRS = ( LAYOUT_DIR, CONTENT_DIR, TMP_DIR)
 
 INSTALLED_APPS = (
-    'hyde',
+    'hydeengine',
     'django.contrib.webdesign'
 )

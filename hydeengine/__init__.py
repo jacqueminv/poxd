@@ -45,16 +45,14 @@ class Generator(object):
         settings.CONTEXT['media'] = media_root
         MediaFolder().walk() 
            
-        add_to_builtins('hyde.templatetags.hydetags')
-        add_to_builtins('hyde.templatetags.aym')
-        
-        post_process_site(render_pages())
+        add_to_builtins('hydeengine.templatetags.hydetags')
+        add_to_builtins('hydeengine.templatetags.aym')
+        build_sitemap()
+        render_pages()
         
         deploy_folder.make()
         deploy_folder.move_contents_of(tmp_folder)
         tmp_folder.delete()
-    
-    
     
 class Initializer(object):
     def __init__(self, site_path):
@@ -64,7 +62,7 @@ class Initializer(object):
     def initialize(self, root, template):
         if not template:
             template = "default"
-        template_dir = os.path.join(root, "site_templates", template)
+        template_dir = os.path.join(root, "templates", template)
         if not os.path.exists(template_dir):
             raise ValueError("Cannot find the specified template[%s]." % template_dir)
             

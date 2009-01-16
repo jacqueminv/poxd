@@ -14,37 +14,30 @@ def get_page_url(page):
         page_url = os.sep + fragment + page.name
     return page_url
 
-def render_pages():
-    class Renderer(object):
-        sitemap = None
+def build_sitemap():
+    class Builder(object):
+        site = None
         current_node = None
         
         def visit_folder(self, folder):
-            if not self.sitemap:
-                self.sitemap = SitemapFolder(None, folder)
-                self.current_node = self.sitemap
+            if not self.site:
+                self.site = SitemapNode(None, folder)
+                self.current_node = self.site
+                settings.CONTEXT['site'] = self.site
             else:
                 parent = self.current_node.get_parent_of(folder)
                 if parent:
-                   self.current_node = parent.append_child(folder)
-            
-        def add_page(self, page, context):
-            self.current_node.pages.append(page)
-            page.context =  context
-            page.sitemap = self.current_node
-            
-        def visit_file(self, file):
-            render_page(file)
-            self.add_page(file, settings.CONTEXT['page'])
-            
-    renderer = Renderer()
-    ContentFolder().walk(renderer)
-    return renderer.sitemap
+                    self.current_node = parent.append_child(folder)
+                    
+        def visit_file(self, page):
+            self.current_node.add_page(page)
 
-def post_process_site(sitemap):
-    for processor_name in settings.SITE_POST_PROCESSORS:
-        processor = load_processor(processor_name)
-        processor.process(sitemap)
+    ContentFolder().walk(Builder())
+
+def render_pages():
+    for page in settings.CONTEXT['site'].walk_pages():
+        settings.CONTEXT['page'] = page
+        render_page(page)
             
 def render_page(page):
     rendered = render_to_string(str(page), settings.CONTEXT)    

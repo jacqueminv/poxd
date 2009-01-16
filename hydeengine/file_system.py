@@ -1,4 +1,4 @@
-import os, shutil
+import os, shutil, codecs
 from path_util import PathUtil
 
 class FileSystemEntity(object):
@@ -68,7 +68,7 @@ class File(FileSystemEntity):
         return self._get_destination(destination)
         
     def write(self, text):
-        fout = open(self.path,'w')
+        fout = codecs.open(self.path,'w')
         fout.write(text)
         fout.close()
         
@@ -177,14 +177,15 @@ class Folder(FileSystemEntity):
             else:
                 visitor.visit_file(File(path))
                 
-    def walk(self, visitor = None):
+    def walk(self, visitor = None, pattern = None):
         for root, dirs, files in os.walk(self.path):
             PathUtil.filter_hidden_inplace(dirs)
             PathUtil.filter_hidden_inplace(files)
             folder = Folder(root)
             self.visit_folder(visitor, folder)
             for file in files:
-                self.visit_file(visitor, File(folder.child(file)))
+                if not pattern or fnmatch.fnmatch(file, pattern):
+                    self.visit_file(visitor, File(folder.child(file)))
                 
     def visit_folder(self, visitor, folder):
         if visitor and hasattr(visitor,'visit_folder'):

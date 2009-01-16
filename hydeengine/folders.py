@@ -45,3 +45,4 @@ class MediaFolder(HydeFolder):
 class ContentFolder(HydeFolder):
     def __init__(self):
         super(ContentFolder, self).__init__(settings.CONTENT_DIR, settings.CONTENT_PROCESSORS)
+        self.ignore_root = True

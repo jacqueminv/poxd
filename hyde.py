@@ -1,8 +1,8 @@
 #!/usr/bin/env python2
 import os, sys
 from optparse import OptionParser
-from hyde import Generator
-from hyde import Initializer
+from hydeengine import Generator
+from hydeengine import Initializer
 import cProfile
 
 PROG_ROOT= os.path.dirname(os.path.abspath( __file__ ))
