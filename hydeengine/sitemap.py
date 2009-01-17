@@ -2,12 +2,17 @@ from django.conf import settings
 from file_system import File, Folder
 
 class SitemapNode(object):
-    def __init__(self, parent, folder):
+    def __init__(self, parent, folder, name=None):
         super(SitemapNode, self).__init__()
         self.folder = folder
         self.parent = parent
         self.pages = []
         self.children = []
+        self.listing_page = None
+        if not name:
+            self.name = folder.name
+        else:
+            self.name = name
         
     def __repr__(self):
         return self.folder.path
@@ -20,17 +25,21 @@ class SitemapNode(object):
             current = self.parent
             return current.get_parent_of(folder)
         return None
-        
+    
     @property
-    def name(self):
-        return self.folder.name
+    def has_listing(self):
+        return not self.listing_page is None
+    
+    @property
+    def listing_url(self):
+        return self.listing_page.url
     
     @property
     def url(self):
         if settings.GENERATE_ABSOLUTE_FS_URLS:
-            return Folder(settings.DEPLOY_DIR).child(self.name)
+            return self.folder.get_mirror_folder(settings.CONTENT_DIR, settings.DEPLOY_DIR, ignore_root=True).path
         else:
-            return "/" + self.name
+            return "/" + self.folder.get_fragment(settings.CONTENT_DIR)
     
     @property
     def isroot(self):
@@ -83,7 +92,14 @@ class SitemapNode(object):
         
     def add_page(self, page):
         self.pages.append(page)
+        if settings.GENERATE_ABSOLUTE_FS_URLS:
+            url = Folder(self.url).child(page.name)
+        else:
+            url = self.url + "/" + page.name
+        page.url = url
         page.node = self
+        if page.name_without_extension == self.name:
+            self.listing_page = page
         
     def walk(self):
         yield self

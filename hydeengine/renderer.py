@@ -21,7 +21,7 @@ def build_sitemap():
         
         def visit_folder(self, folder):
             if not self.site:
-                self.site = SitemapNode(None, folder)
+                self.site = SitemapNode(None, folder, settings.SITE_NAME)
                 self.current_node = self.site
                 settings.CONTEXT['site'] = self.site
             else:
@@ -29,7 +29,7 @@ def build_sitemap():
                 if parent:
                     self.current_node = parent.append_child(folder)
                     
-        def visit_file(self, page):
+        def visit_file(self, page):  
             self.current_node.add_page(page)
 
     ContentFolder().walk(Builder())
@@ -41,5 +41,4 @@ def render_pages():
             
 def render_page(page):
     rendered = render_to_string(str(page), settings.CONTEXT)    
-    mirror = page.parent.get_mirror_folder(settings.CONTENT_DIR, settings.TMP_DIR, ignore_root=True)
     page.write(rendered)

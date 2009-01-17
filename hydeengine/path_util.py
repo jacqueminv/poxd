@@ -16,7 +16,7 @@ class PathUtil:
     def get_path_fragment(root_dir, dir):
         current_dir = dir
         current_fragment = ''
-        while not current_dir == root_dir and not current_dir == "/":
+        while not current_dir == root_dir:
             (current_dir, current_fragment_part) = os.path.split(current_dir)
             current_fragment = os.path.join(current_fragment_part, current_fragment)
         return current_fragment

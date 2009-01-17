@@ -26,7 +26,7 @@ def add_page_variables(page, vars):
     if not vars: return
     for key, value in vars.iteritems():
         if not hasattr(File, key):
-            setattr(File, key, object())
+            setattr(File, key, None)
         setattr(page, key, value)
             
 

@@ -11,6 +11,7 @@ def main(argv):
     parser = OptionParser()
     parser.add_option("-s","--sitepath", dest="site_path")
     parser.add_option("-i","--init", action='store_true', dest="init", default=False)
+    parser.add_option("-f","--force", action='store_true', dest="force_init", default=False)
     parser.add_option("-t","--template", dest="template")
     parser.add_option("-g","--generate", action="store_true", dest="generate", default=False)
     parser.add_option("-d","--deploy_to", dest="deploy_to")
@@ -25,7 +26,7 @@ def main(argv):
     if options.init:
         initializer = Initializer(options.site_path)
         try:
-            initializer.initialize(PROG_ROOT, options.template)
+            initializer.initialize(PROG_ROOT, options.template, options.force_init)
         except ValueError, e:
             parser.error(e)
         

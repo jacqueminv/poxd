@@ -57,28 +57,24 @@ class Generator(object):
 class Initializer(object):
     def __init__(self, site_path):
         super(Initializer, self).__init__()
-        self.site_path = os.path.abspath(os.path.expandvars(os.path.expanduser(site_path)))
+        self.site_path = Folder(site_path)
 
-    def initialize(self, root, template):
+    def initialize(self, root, template, force):
         if not template:
             template = "default"
-        template_dir = os.path.join(root, "templates", template)
-        if not os.path.exists(template_dir):
+        root_folder = Folder(root)
+            
+        template_dir = root_folder.child_folder("templates", template)
+        
+        if not template_dir.exists:
             raise ValueError("Cannot find the specified template[%s]." % template_dir)
             
-        if not os.path.exists(self.site_path):
-            os.makedirs(self.site_path)
-        else:
-            files = os.listdir(self.site_path)
+        if self.site_path.exists:    
+            files = os.listdir(self.site_path.path)
             PathUtil.filter_hidden_inplace(files)
-            if len(files):
-                raise ValueError("The site_path[%s] is not empty." % self.site_path)
-            
-        files = os.listdir(template_dir)
-        for file in files:
-            source = os.path.join(template_dir, file)
-            dest = os.path.join(self.site_path, file)
-            if os.path.isdir(source):
-                shutil.copytree(source, dest)
+            if len(files) and not force:
+                    raise ValueError("The site_path[%s] is not empty." % self.site_path)
             else:
-                shutil.copy(source, dest)
+                self.site_path.delete()
+        self.site_path.make()
+        self.site_path.copy_contents_of(template_dir)

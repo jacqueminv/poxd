@@ -14,7 +14,7 @@ class FileSystemEntity(object):
         
     def __repr__(self):
         return self.path
-
+        
     @property    
     def exists(self):
         return os.path.exists(self.path)
@@ -50,10 +50,14 @@ class File(FileSystemEntity):
     
     def has_extension(self, extension):
         return self.extension  == extension
+
+    @property
+    def path_without_extension(self):
+        return os.path.splitext(self.path)[0]
         
     @property
     def name_without_extension(self):
-        return os.path.splitext(self.path)[0]
+        return os.path.splitext(self.name)[0]
         
     @property
     def extension(self):
@@ -97,6 +101,9 @@ class Folder(FileSystemEntity):
         
     def child(self, name):
         return os.path.join(self.path, name)
+        
+    def child_folder(self, *args):
+        return Folder(os.path.join(self.path, *args))
         
     def get_fragment(self, root):
         return PathUtil.get_path_fragment(str(root), self.path)

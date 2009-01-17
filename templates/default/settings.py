@@ -10,11 +10,15 @@ DEPLOY_DIR = os.path.join(ROOT_PATH, 'deploy')
 TMP_DIR = os.path.join(ROOT_PATH, 'deploy_tmp')
 BACKUPS_DIR = os.path.join(ROOT_PATH, 'backups')
 
+SITE_NAME = "Hyde"
+
 
 # {folder : extension : (processors)}
 # The processors are run in the given order and are chained.
-# Only a lone * is supported for folders. Path shoud be specifed 
-# starting under the media folder. For example, if you have media/css under 
+# Only a lone * is supported as an indicator for folders. Path 
+# shoud be specifed. No wildcard card support yet.
+ 
+# Starting under the media folder. For example, if you have media/css under 
 # your site root,you should specify just css. If you have media/css/ie you 
 # should specify css/ie for the folder name. css/* is not supported (yet).
 
@@ -57,11 +61,15 @@ YUI_COMPRESSOR = "./tools/yuicompressor-2.4.1.jar"
 HSS_PATH = "./tools/hss-1.0-osx"
 #HSS_PATH = None # if you don't want to use HSS
 
+
+
+
 #Django settings
 
 TEMPLATE_DIRS = ( LAYOUT_DIR, CONTENT_DIR, TMP_DIR)
 
 INSTALLED_APPS = (
     'hydeengine',
-    'django.contrib.webdesign'
+    'django.contrib.webdesign',
 )
+

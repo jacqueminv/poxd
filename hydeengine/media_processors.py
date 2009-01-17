@@ -19,7 +19,7 @@ class CleverCSS:
     @staticmethod
     def process(file):
         import clevercss
-        out_file = file.name_without_extension + ".css"
+        out_file = file.path_without_extension + ".css"
         fin = open(str(file), 'r')
         data = fin.read()
         fin.close()
@@ -32,7 +32,7 @@ class CleverCSS:
 class HSS:
     @staticmethod
     def process(file):
-        out_file = file.name_without_extension + ".css"
+        out_file = file.path_without_extension + ".css"
         hss = settings.HSS_PATH
         if not hss or not os.path.exists(hss):
             raise ValueError("HSS Processor cannot be found at [%s]" % hss)
