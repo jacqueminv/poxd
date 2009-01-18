@@ -1,180 +1,157 @@
+# HYDE
 
-# AYM CMS Readme
+Hyde is a static website generator with the power of Django templates behind it. You can read more about its conception, history and features [here][1] and [here][2].
 
-The AYM CMS is a simple static CMS system built on top
-of [Django][1] templates, and a 76 line Python build script.
+[1]: www.ringce.com/products/hyde/hyde.html
+[2]: www.ringce.com/blog/2009/introducing-hyde.html
 
-You can use all the default Django template filters and tags,
-and AYM CMS has a couple of custom tags to facilitate
-handling static content more intelligently.
+## Basic Installation
 
-[1]: http://djangoproject.com/
+The very basic installation of hyde only needs Django. More python goodies are needed based on the features you may use.
 
+    sudo easy install django
 
-### Prerequisites
-
-AYM makes use of a handful of Python libraries:
-
-1.  Django
-2.  Python-Markdown
-3.  PIL
-4.  Pygments
-
-All of those libraries should be an easy_install away:
-
-    sudo easy_install django
-    sudo easy_install markdown
-    sudo easy_install PIL
-    sudo easy_install Pygments
+Get the hyde source by git cloning this repository.
 
 
-### Installation
+## Running with Hyde
 
-If you have the folder containing this README file, then
-AYM CMS is already installed.
+The hyde engine has two entry points:
 
-### Usage
+1. Initialization
 
-Unzip/download the AYM CMS project folder. Then type
+        python hyde.py -i -s path/to/your/site [-t template_name = default] [-f]
+    During initialization hyde creates a basic website by copying the specified template (or default). This template contains the skeleton site layout, some content pages and settings.py.
+    
+    Be careful with the -f setting though, it will overwrite your website.
 
-    python build.py
+2. Generation
 
-to build the current website to the ``deploy/`` directory.
+    python hyde.py -g -s path/to/your/site [-d deploy_dir=path/to/your/site/deploy]
+    
+    This will process the content and media and copy the generated website to your deploy directory.
+    
+## Site structure
 
-### Adding Pages to your CMS
+* layout - Template files that are used as base templates for content. None of the files in the layout folder are copied over to the deploy directory.
+* content - Any file that is not prefixed with _, . or suffixed with ~ are processed by running through the template engine.
+* media - Contains site media, css, js and images. 
+* settings.py - Django and hyde settings.
 
-Adding a page to your cms is a two step affair:
+### Recommended conventions
 
-1.  Create a template within the ``templates/`` directory.
-     You can take advantage of template inheritance and all
-     the normal Django templates goodies to do so.
+These conventions will make it easier to configure hyde plugins.
 
-2. Add the template's name to ``PAGES_TO_RENDER`` in
-    your ``settings.py`` file.
+* Prefix files in layout and other template files in content with underscores
+* Keep media folder organized by file type[css, flash, js, images].
 
-You may create templates in subfolders of ``templates/``,
-but be sure that the template string you give to ``PAGES_TO_RENDER``
-reflects that.
+## Configuring your website
 
-For example, you might create the ``charts`` subfolder in ``templates/``,
-so that its path is ``templates/charts/``. If you create a template named
-``line_chart.html``, then you would update ``PAGES_TO_RENDER`` to look
-like this:
+Most of the boiler plate configuration comes as a part of the initialized website. The only setting you _have to_ override is the SITE_NAME setting.
 
-    PAGES_TO_RENDER = (
-        'index.html',
-        'charts/line_chart.html',
-    )
+### Media Processors
 
-AKA, it works exactly the same way that Django does.
+Media processors are defined in the following format:
 
-### Using YUI Compressor with AYM CMS
+    {<folder>:{
+        <file_extension_with_dot>:(<processor_module_name1>, <processor_module_name2>)}
+    }
+    
+The processors are executed in the order in which they are defined. The output from the first processor becomes the input of the next.
+
+A * instead of folder will apply the setting to all folders. There is no wildcard support for folder name yet, * is just a catch all special case.
+
+File extensions should be specified as .css, .js, .png etc. Again no wildcard support yet. 
+
+Hyde retains the YUI Compressor, Clever CSS and HSS processors from aym-cms.
+
+#### Template Processor 
+
+Template processor allows the use of context variables inside your media files. 
+
+#### YUI Compressor
+
+Runs through the all the files defined in the configuration associated with ``'hydeengine.media_processors.YUICompressor'`` and compresses them. 
 
 [yuic]: http://developer.yahoo.com/yui/compressor/
 
 In the settings file, set ``YUI_COMPRESSOR`` to
 be a path to a [YUI Compressor][yuic] jar on your computer.
-Afterwards, all CSS and JS in your ``statc/`` directory
-will automatically be compressed.
 
-*You must download [YUI Compressor][yuic] yourself.*
-*It is not bundled with AYM CMS.*
+#### Clever CSS Processor
 
-### Using CleverCSS with AYM CMS
+Runs through the all the files defined in the configuration associated with ``'hydeengine.media_processors.CleverCSS'`` and converts them to css. 
+
+You need to install Clever CSS using ``sudo easy-install CleverCSS`` command for this processor to work.
 
 [clever_css]: http://sandbox.pocoo.org/clevercss/
 
-You can use [CleverCSS][clever_css] with AYM CMS as well.
-Simply install CleverCSS
+#### HSS Processor
 
-    sudo easy_install CleverCSS
+Runs through the all the files defined in the configuration associated with ``'hydeengine.media_processors.HSS'`` and converts them to css. 
 
-And set these settings in ``settings.py``:
-
-    USE_CLEVER_CSS = True
-    CLEVER_CSS_EXT = ".ccss"
-
-By default it treats ``.ccss`` files as CleverCSS,
-but you could change it to treat all ``.css`` files
-as CleverCSS if you desire.
-
-``.ccss`` files will be renamed to ``.css`` by the
-build script, and will be compressed with YUI Compressor
-if you have it enabled.
-
-
-### Using HSS with AYM CMS
+You need to download HSS from [hss] and set the ``HSS_PATH`` variable to the downloaded path.
 
 [hss]: http://ncannasse.fr/projects/hss
 
-You can now use .hss files, as specified by
-[the HSS project page][hss], to create your
-site's CSS files.
+### Content Processors
 
-*You must download [HSS][hss] yourself.*
-*It is not bundled with AYM CMS.*
+Content processors are run against all files in the content folder where as the media processors are run against the media folder.
 
-Simply put the ``.hss`` file into your ``static/``
-directory, and AYM CMS will translate them into
-``.css`` files in your ``deploy/static/`` folder
-when you run the deploy script.
+These processors allow content pages to define their own context variables that are passed to the entire template hierarchy when the page is processed. This is accomplished by using a special tag at the top of the content page(after any extends tags you may have).
 
-Note that means in your HTML you'll need to import
-``my_hss.hss`` as ``my_hss.css``, because the file
-extension will be translated by the build script!
+    {%hyde
+        <Your variables>
+    %}
 
-(If you are using YUI Compressor, then AYM CMS
-will first convert ``.hss`` files to ``.css``,
-and will then compress them. AKA: it'll just
-work how it should.)
+Every page in the template hierarchy gets these context variables: ``site`` and ``page``. The site variable contains information about the entire site. The ``page`` variable represents the current content page that is being processed. The variables defined at the top of the content pages using the {% hyde %} tags are available through the page variable as attributes.
 
+#### YAMLContentProcessor
 
-### Adding Static Content to your CMS
+``'hydeengine.content_processors.YAMLContentProcessor'``
 
-All content within the ``static/`` directory will be copied over
-into the ``deploy/static/`` directory when you run the build
-script.
+Requires pyYAML. You can install pyYAML with  ``sudo easy_install pyYAML`` command. On your content pages you can define the page variables using the standard YAML format.
 
-The script will preserve subfolders as well, so simply arrange
-things to your liking in the ``static/`` folder and you'll be
-good to go.
+{%hyde
+    title: A New Post
+    list: 
+        - One
+        - Two
+        - Three
+%}
 
 
-### Adding Images to Project
+#### PyContentProcessor
 
-Add any images you want to the ``images/`` folder, and AYM
-CMS will automatically create thumbnails and copy them into a
-subfolder of the ``deploy/static`` folder when you run the build
-script.
+``'hydeengine.content_processors.PyContentProcessor'``
 
-You can access these images within your templates in two ways.
-First, the ``images`` template context is a list of your images
-which can can use as follows:
+Requires py.code. You can install py.code with ``sudo easy_install py`` command. The variables are defined using the python dictionary syntax. The same example from above:
 
-    {% for image in images %}
-    <a href="{{ image.image }}">
-        <img src="{{ image.thumbnail }}" alt="{{ image.filename }}">
-    </a>
-    {% endfor %}
+{%hyde
+{
+    "title": "A New Post"
+    "list": ["One", "Two", "Three"]
+}   
+%}
 
-Second, you may refer to images by name via the ``images_dict``
-context variable. If you added the ``crazy_cats.png`` image to
-your ``images/`` directory, you could then refer to it like this:
 
-    <img src="{{ images_dict.crazy_cats.image }}">
+## Template Tags
 
-And thats really all there is to it.
-
+Hyde retains the markdown and syntax template tags from aym_cms. Additionally hyde introduces a few tags for excerpts. These tags are added to the Django built in tags so there is no need for the load statements.
 
 ### AYM Template Tags
 
-At this time there are two custom template tags included
-in the AYM CMS project: ``markdown`` and ``syntax``.
+For these tags to work markdown and pygments have to be installed. 
+
+    sudo easy_install markdown
+    sudo easy_install Pygments
+
+#### Markdown
 
 ``markdown`` renders the enclosed text as Markdown markup.
 It is used as follows:
 
-    {% load aym %}
+    <del>{% load aym %}</del>
     <p> I love templates. </p>
     {% markdown %}
     Render this **content all in Markdown**.
@@ -186,10 +163,12 @@ It is used as follows:
     2.  What about you?
     {% endmarkdown %}
 
+#### Syntax
+
 ``syntax`` uses Pygments to render the enclosed text with
 a code syntax highlighter. Usage is:
 
-    {% load aym %}
+    <del>{% load aym %}</del>
     <p> blah blah blah </p>
     {% syntax objc %}
     [obj addObject:[NSNumber numberWithInt:53]];
@@ -198,3 +177,29 @@ a code syntax highlighter. Usage is:
 
 They are both intended to make writing static content
 quicker and less painful.
+
+### Hyde Template Tags
+
+The ``{%hyde%}`` tag is used for the page variables, as a template tag all it does is swallow the contents and prevent them from showing up in the html. The even safer approach is to define this tag outside of all blocks so that it is automatically ignored.
+
+#### Excerpt
+
+The ``{%excerpt%}{%endexcerpt%}`` tag decorates the output with html comments that mark the excerpt area. Excerpts marked in this manner can be referenced in other pages using the ``{%render_excerpt%}`` or the ``{%latest_excerpt%}`` tag.
+
+#### Render Excerpt
+
+Render Excerpt takes a page variable and optional number of words argument to render the excerpt from the target page.
+
+#### Latest Excerpt
+
+Latest Excerpt takes a content folder path and optional number of words as input. It parses through the content pages looking for page variables named ``created`` and gets the page with the maximum value and renders the excerpt from that page.
+
+## Base Templates
+
+The default site layout contains templates for basic site structure, navigation, breadcrumbs, listing and posts. However, no CSS is included yet. 
+
+# Examples
+
+The [Ringce][ringce] website source is available as a reference implementation.
+
+[ringce]:https://github.com/lakshmivyas/ringce/tree/master
