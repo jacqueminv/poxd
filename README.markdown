@@ -34,7 +34,7 @@ The hyde engine has two entry points:
 ## Site structure
 
 * layout - Template files that are used as base templates for content. None of the files in the layout folder are copied over to the deploy directory.
-* content - Any file that is not prefixed with _, . or suffixed with ~ are processed by running through the template engine.
+* content - Any file that is not prefixed with \_, . or suffixed with ~ are processed by running through the template engine.
 * media - Contains site media, css, js and images. 
 * settings.py - Django and hyde settings.
 
