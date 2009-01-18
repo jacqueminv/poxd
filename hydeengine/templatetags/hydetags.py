@@ -8,6 +8,9 @@ from hydeengine.file_system import *
 import re
 from datetime import datetime
 
+excerpt_start = "<!-- Hyde::Excerpt::Begin -->\n"
+excerpt_end = "<!-- Hyde::Excerpt::End -->\n"
+
 register = Library()
 
 class HydeContextNode(template.Node):
@@ -30,16 +33,18 @@ class ExcerptNode(template.Node):
         self.nodelist = nodelist
 
     def render(self, context):
-        return self.nodelist.render(context)
+        rendered_string = self.nodelist.render(context)
+        return excerpt_start + rendered_string + excerpt_end
+
 
 class LatestExcerptNode(template.Node):
-    def __init__(self, path, words = 80):
+    def __init__(self, path, words = 50):
         self.path = path
         self.words = words
         
     def render(self, context):
         sitemap_node = None
-        if not self.words == 80:
+        if not self.words == 50:
             self.words = self.words.render(context)
         self.path = self.path.render(context).strip('"')
         sitemap_node = context["site"].get_node_for(Folder(self.path))
@@ -54,21 +59,23 @@ class LatestExcerptNode(template.Node):
             return (page1, page2)[page2_created > page1_created]
             
         page = reduce(later, sitemap_node.walk_pages())
-        fragment = page.parent.get_fragment(settings.TMP_DIR)
-        folder = Folder(settings.CONTENT_DIR).child_folder_with_fragment(fragment)
-        excerpt_page = folder.child("_excerpt_" + page.name)
         rendered = None
-        if File(excerpt_page).exists:
-            rendered = render_to_string(excerpt_page, context)
-            rendered =  truncatewords_html(rendered, self.words)
-        return rendered
-        
+        rendered = render_to_string(str(page), context)
+        start = rendered.find(excerpt_start)
+        if not start == -1:
+            context["latest_excerpt_url"] = page.url
+            context["latest_excerpt_title"] = page.title
+            start = start + len(excerpt_start)
+            end = rendered.find(excerpt_end, start)
+            return truncatewords_html(rendered[start:end], self.words)
+        else:
+            return ""
         
 @register.tag(name="latest_excerpt")
 def latest_excerpt(parser, token):
     tokens = token.split_contents()
     path = None
-    words = 80
+    words = 50
     if len(tokens) > 1:
         path = Template(tokens[1])
     if len(tokens) > 2:
