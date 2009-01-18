@@ -1,11 +1,12 @@
 from django import template
+from django.conf import settings
 from django.template import Template
 from django.template.loader import render_to_string
 from django.template.defaultfilters import truncatewords_html
 from django.template import Library
 from hydeengine.file_system import *
 import re
-import time
+from datetime import datetime
 
 register = Library()
 
@@ -18,26 +19,45 @@ class HydeContextNode(template.Node):
 def hyde_context(parser, token):
     return HydeContextNode()
 
+@register.tag(name="excerpt")
+def excerpt(parser, token):
+    nodelist = parser.parse(('endexcerpt',))
+    parser.delete_first_token()
+    return ExcerptNode(nodelist)
+
+class ExcerptNode(template.Node):
+    def __init__(self, nodelist):
+        self.nodelist = nodelist
+
+    def render(self, context):
+        return self.nodelist.render(context)
 
 class LatestExcerptNode(template.Node):
-    def __init__(self, path, words = 200):
+    def __init__(self, path, words = 80):
         self.path = path
         self.words = words
         
     def render(self, context):
         sitemap_node = None
-        if not self.words == 200:
+        if not self.words == 80:
             self.words = self.words.render(context)
         self.path = self.path.render(context).strip('"')
         sitemap_node = context["site"].get_node_for(Folder(self.path))
         if not sitemap_node:
            sitemap_node = context["site"]
-        t = lambda a: time.strptime(a.created, settings.DATETIME_FORMAT)
-        print sitemap_node.pages
-        page = reduce(lambda a,b:(t(a),t(b))[t(b)>t(a)], sitemap_node.pages)
-        excerpt_page = page.parent.child("_excerpt_" + page.name)
+        def later(page1, page2):
+            page2_created = page1_created = datetime.strptime("2000-01-01 00:00", settings.DATETIME_FORMAT)
+            if hasattr(page1, "created") and page1.created:
+                page1_created = page1.created
+            if hasattr(page2, "created") and page2.created:
+                page2_created = page2.created                
+            return (page1, page2)[page2_created > page1_created]
+            
+        page = reduce(later, sitemap_node.walk_pages())
+        fragment = page.parent.get_fragment(settings.TMP_DIR)
+        folder = Folder(settings.CONTENT_DIR).child_folder_with_fragment(fragment)
+        excerpt_page = folder.child("_excerpt_" + page.name)
         rendered = None
-        print excerpt_page
         if File(excerpt_page).exists:
             rendered = render_to_string(excerpt_page, context)
             rendered =  truncatewords_html(rendered, self.words)
@@ -48,7 +68,7 @@ class LatestExcerptNode(template.Node):
 def latest_excerpt(parser, token):
     tokens = token.split_contents()
     path = None
-    words = 200
+    words = 80
     if len(tokens) > 1:
         path = Template(tokens[1])
     if len(tokens) > 2:

@@ -106,6 +106,9 @@ class Folder(FileSystemEntity):
         
     def child_folder(self, *args):
         return Folder(os.path.join(self.path, *args))
+    
+    def child_folder_with_fragment(self,fragment):
+        return Folder(os.path.join(self.path, fragment))
         
     def get_fragment(self, root):
         return PathUtil.get_path_fragment(str(root), self.path)

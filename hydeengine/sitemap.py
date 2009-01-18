@@ -41,7 +41,7 @@ class SitemapNode(object):
         current = self    
         if not current.isroot:
            current = self.parent
-           return current.get_parent_of(file_system_entity)
+           return current.get_node_for(file_system_entity)
         for node in current.walk():
             if node.folder.path == file_system_entity.path:
               return node
