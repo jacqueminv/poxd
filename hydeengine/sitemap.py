@@ -16,23 +16,39 @@ class SitemapNode(object):
         
     def __repr__(self):
         return self.folder.path
-    
+        
+    @property
+    def ancestors(self):
+        node = self;
+        ancestors = []
+        while not node.isroot:
+            ancestors.append(node)
+            node = node.parent
+        ancestors.append(node)
+        ancestors.reverse()
+        return ancestors
+        
     @property
     def module(self):
         module = self
         while(module.parent and module.parent.parent):
             module = module.parent
         return module
-        
-    
-    def get_parent_of(self, folder):
-        if folder.parent.path == self.folder.path:
-            return self;
+   
+    def get_node_for(self, file_system_entity):
+        if file_system_entity.path == self.folder.path:
+           return self;
         current = self    
         if not current.isroot:
-            current = self.parent
-            return current.get_parent_of(folder)
+           current = self.parent
+           return current.get_parent_of(file_system_entity)
+        for node in current.walk():
+            if node.folder.path == file_system_entity.path:
+              return node
         return None
+   
+    def get_parent_of(self, file_system_entity):
+        return self.get_node_for(file_system_entity.parent)
     
     @property
     def has_listing(self):
@@ -107,7 +123,7 @@ class SitemapNode(object):
         page.url = url
         page.node = self
         page.module = self.module
-        if page.name_without_extension == self.name:
+        if page.name_without_extension.lower() == self.name.lower():
             self.listing_page = page
         
     def walk(self):
