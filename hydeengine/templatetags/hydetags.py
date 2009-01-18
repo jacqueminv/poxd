@@ -82,6 +82,41 @@ def latest_excerpt(parser, token):
         words = Template(tokens[2])
     return LatestExcerptNode(path, words)
 
+@register.tag(name="render_excerpt")    
+def render_excerpt(parser, token):
+    tokens = token.split_contents()
+    path = None
+    words = 50
+    if len(tokens) > 1:
+        path = parser.compile_filter(tokens[1])
+    if len(tokens) > 2:
+        words = Template(tokens[2])
+    return RenderExcerptNode(path, words)
+    
+class RenderExcerptNode(template.Node):
+    def __init__(self, page, words = 50):
+        self.page = page
+        self.words = words
+
+    def render(self, context):
+        if not self.words == 50:
+            self.words = self.words.render(context)
+        page = self.page.resolve(context)
+        rendered = None
+        original_page = context['page']
+        context['page'] = page
+        rendered = render_to_string(str(page), context)
+        context['page'] = original_page
+        start = rendered.find(excerpt_start)
+        if not start == -1:
+            context["excerpt_url"] = page.url
+            context["excerpt_title"] = page.title
+            start = start + len(excerpt_start)
+            end = rendered.find(excerpt_end, start)
+            return truncatewords_html(rendered[start:end], self.words)
+        else:
+            return ""
+
 @register.filter
 def value_for_key(d, key):
     if not d:
