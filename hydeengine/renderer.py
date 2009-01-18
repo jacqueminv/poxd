@@ -32,7 +32,7 @@ def build_sitemap():
         def visit_file(self, page):  
             self.current_node.add_page(page)
 
-    ContentFolder().walk(Builder())
+    ContentFolder().walk(Builder(), "[!_]*")
 
 def render_pages():
     for page in settings.CONTEXT['site'].walk_pages():

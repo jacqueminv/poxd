@@ -3,10 +3,10 @@
 {% block content %}{% block sitenav %}
 <div id="sitenav">
     <ul>
-        {% for module in site.modules %}
+        {% for module in site.children %}
         <li{% ifequal page.module module %} class="selected" {% endifequal %}>
-            <a href="{{site.url}}/{{module|slugify}}/{{module|slugify}}.html">
-                {{module}}
+            <a href="{{module.listing_url}}">
+                {{module.name|unslugify}}
             </a>
         </li>
         {% endfor %}

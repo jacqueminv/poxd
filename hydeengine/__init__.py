@@ -36,18 +36,12 @@ class Generator(object):
 
         tmp_folder.delete()
         tmp_folder.make()
-
-        if settings.GENERATE_ABSOLUTE_FS_URLS:
-            media_root = deploy_folder.child(media_folder.name)
-        else:
-            media_root = os.sep + media_folder.name
-            
-        settings.CONTEXT['media'] = media_root
-        MediaFolder().walk() 
-           
+        
         add_to_builtins('hydeengine.templatetags.hydetags')
         add_to_builtins('hydeengine.templatetags.aym')
         build_sitemap()
+        
+        MediaFolder().walk() 
         render_pages()
         
         deploy_folder.make()

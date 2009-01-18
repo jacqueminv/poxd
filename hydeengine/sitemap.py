@@ -17,6 +17,14 @@ class SitemapNode(object):
     def __repr__(self):
         return self.folder.path
     
+    @property
+    def module(self):
+        module = self
+        while(module.parent and module.parent.parent):
+            module = module.parent
+        return module
+        
+    
     def get_parent_of(self, folder):
         if folder.parent.path == self.folder.path:
             return self;
@@ -98,6 +106,7 @@ class SitemapNode(object):
             url = self.url + "/" + page.name
         page.url = url
         page.node = self
+        page.module = self.module
         if page.name_without_extension == self.name:
             self.listing_page = page
         

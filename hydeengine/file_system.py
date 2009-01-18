@@ -1,5 +1,7 @@
 import os, shutil, codecs
+import fnmatch
 from path_util import PathUtil
+
 
 class FileSystemEntity(object):
     def __init__(self, path):

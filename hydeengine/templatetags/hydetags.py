@@ -25,7 +25,11 @@ def value_for_key(d, key):
 @register.filter
 def remove_date_prefix(slug, sep="-"):
     expr = sep.join([r"\d{2,4}"]*3 + ["(.*)"]) 
-    return re.match(expr, slug).group(1)
+    match = re.match(expr, slug)
+    if not match:
+        return slug
+    else:
+        return match.group(0)
 
 @register.filter
 def unslugify(slug):
