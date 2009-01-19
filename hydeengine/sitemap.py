@@ -1,5 +1,6 @@
 from django.conf import settings
 from file_system import File, Folder
+import os
 
 class SitemapNode(object):
     def __init__(self, parent, folder, name=None):
@@ -63,7 +64,8 @@ class SitemapNode(object):
         if settings.GENERATE_ABSOLUTE_FS_URLS:
             return self.folder.get_mirror_folder(settings.CONTENT_DIR, settings.DEPLOY_DIR, ignore_root=True).path
         else:
-            return "/" + self.folder.get_fragment(settings.CONTENT_DIR)
+            url = "/" + self.folder.get_fragment(settings.CONTENT_DIR).lstrip(os.sep)
+            return url.rstrip("/")
     
     @property
     def isroot(self):

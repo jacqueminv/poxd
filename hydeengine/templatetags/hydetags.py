@@ -119,11 +119,12 @@ class RenderExcerptNode(template.Node):
 
 @register.filter
 def value_for_key(d, key):
-    if not d:
+    if not d:        
         return ""
-    if not d.has_key(key):
+    if not d.has_key(key):        
         return ""
-    return d[key]
+    value = d[key]
+    return value
 
 @register.filter
 def remove_date_prefix(slug, sep="-"):
