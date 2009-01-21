@@ -3,18 +3,25 @@ import os, sys
 from optparse import OptionParser
 from hydeengine import Generator
 from hydeengine import Initializer
-import cProfile
+#import cProfile
 
-PROG_ROOT= os.path.dirname(os.path.abspath( __file__ ))
+PROG_ROOT = os.path.dirname(os.path.abspath( __file__ ))
 
 def main(argv):
     parser = OptionParser()
-    parser.add_option("-s","--sitepath", dest="site_path")
-    parser.add_option("-i","--init", action='store_true', dest="init", default=False)
-    parser.add_option("-f","--force", action='store_true', dest="force_init", default=False)
-    parser.add_option("-t","--template", dest="template")
-    parser.add_option("-g","--generate", action="store_true", dest="generate", default=False)
-    parser.add_option("-d","--deploy_to", dest="deploy_to")
+    parser.add_option("-s", "--sitepath", 
+                        dest = "site_path")
+    parser.add_option("-i", "--init", action = 'store_true', 
+                        dest = "init", default = False)
+    parser.add_option("-f", "--force", action = 'store_true', 
+                        dest = "force_init", default=False)
+    parser.add_option("-t", "--template", 
+                        dest = "template")
+    parser.add_option("-g", "--generate", action = "store_true",
+                        dest = "generate", default = False)
+    parser.add_option("-d", "--deploy_to", 
+                        dest = "deploy_to")
+                        
     (options, args) = parser.parse_args()
     
     if len(args):
@@ -26,16 +33,16 @@ def main(argv):
     if options.init:
         initializer = Initializer(options.site_path)
         try:
-            initializer.initialize(PROG_ROOT, options.template, options.force_init)
-        except ValueError, e:
-            parser.error(e)
-        
+            initializer.initialize(PROG_ROOT,
+                        options.template, options.force_init)
+        except ValueError, err:
+            parser.error(err)
     if options.generate:
         generator = Generator(options.site_path)
         try:
             generator.generate(options.deploy_to)
-        except ValueError, e:
-            parser.error(e)
+        except ValueError, err:
+            parser.error(err)
     
 if __name__ == "__main__":
     main(sys.argv[1:])

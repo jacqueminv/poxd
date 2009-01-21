@@ -107,18 +107,20 @@ class Folder(FileSystemEntity):
     def child_folder(self, *args):
         return Folder(os.path.join(self.path, *args))
     
-    def child_folder_with_fragment(self,fragment):
+    def child_folder_with_fragment(self, fragment):
         return Folder(os.path.join(self.path, fragment))
         
     def get_fragment(self, root):
         return PathUtil.get_path_fragment(str(root), self.path)
         
     def get_mirror_folder(self, root, mirror_root, ignore_root=False):
-        path = PathUtil.get_mirror_dir(self.path, str(root), str(mirror_root), ignore_root)
+        path = PathUtil.get_mirror_dir(
+                self.path, str(root), str(mirror_root), ignore_root)
         return Folder(path)
         
     def create_mirror_folder(self, root, mirror_root, ignore_root=False):
-        mirror_folder = self.get_mirror_folder(root, mirror_root, ignore_root)
+        mirror_folder = self.get_mirror_folder(
+                        root, mirror_root, ignore_root)
         mirror_folder.make()
         return mirror_folder
     
@@ -160,8 +162,8 @@ class Folder(FileSystemEntity):
             def visit_folder(folder):
                 self.move_folder_from(folder)
             @staticmethod                
-            def visit_file(file):
-                self.move_file_from(file)
+            def visit_file(a_file):
+                self.move_file_from(a_file)
         source.list(Mover)
          
     def copy_contents_of(self, source):
@@ -170,8 +172,8 @@ class Folder(FileSystemEntity):
             def visit_folder(folder):
                 self.copy_folder_from(folder)
             @staticmethod                
-            def visit_file(file):
-                self.copy_file_from(file)
+            def visit_file(a_file):
+                self.copy_file_from(a_file)
         source.list(Copier)    
         
     def move_file_from(self, source):
@@ -181,28 +183,28 @@ class Folder(FileSystemEntity):
         shutil.copy(str(source), self.path) 
 
     def list(self, visitor):
-        files = os.listdir(self.path)
-        for file in files:
-            path = os.path.join(self.path, str(file))
+        a_files = os.listdir(self.path)
+        for a_file in a_files:
+            path = os.path.join(self.path, str(a_file))
             if os.path.isdir(path):
                 visitor.visit_folder(Folder(path))
             else:
                 visitor.visit_file(File(path))
                 
     def walk(self, visitor = None, pattern = None):
-        for root, dirs, files in os.walk(self.path):
+        for root, dirs, a_files in os.walk(self.path):
             PathUtil.filter_hidden_inplace(dirs)
-            PathUtil.filter_hidden_inplace(files)
+            PathUtil.filter_hidden_inplace(a_files)
             folder = Folder(root)
             self.visit_folder(visitor, folder)
-            for file in files:
-                if not pattern or fnmatch.fnmatch(file, pattern):
-                    self.visit_file(visitor, File(folder.child(file)))
+            for a_file in a_files:
+                if not pattern or fnmatch.fnmatch(a_file, pattern):
+                    self.visit_file(visitor, File(folder.child(a_file)))
                 
     def visit_folder(self, visitor, folder):
         if visitor and hasattr(visitor,'visit_folder'):
             visitor.visit_folder(folder)
 
-    def visit_file(self, visitor, file):
+    def visit_file(self, visitor, a_file):
         if visitor and hasattr(visitor,'visit_file'):
-            visitor.visit_file(file)
+            visitor.visit_file(a_file)

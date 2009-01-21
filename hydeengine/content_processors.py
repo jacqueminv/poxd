@@ -1,5 +1,4 @@
 import re
-from django.conf import settings
 from file_system import File
 
 def get_context_text(page):
@@ -13,7 +12,8 @@ def get_context_text(page):
         match = matcher.match(line)
         if match:
             text = text + match.group(1)
-            if started: break
+            if started: 
+                break
             else:
                 matcher = end 
                 started = True
@@ -22,9 +22,9 @@ def get_context_text(page):
     fin.close()
     return text
     
-def add_page_variables(page, vars):
-    if not vars: return
-    for key, value in vars.iteritems():
+def add_page_variables(page, page_vars):
+    if not page_vars: return
+    for key, value in page_vars.iteritems():
         if not hasattr(File, key):
             setattr(File, key, None)
         setattr(page, key, value)

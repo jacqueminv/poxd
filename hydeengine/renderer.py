@@ -1,13 +1,14 @@
+import os
 from django.conf import settings
 from django.template.loader import render_to_string
-from django.template import add_to_builtins
-from file_system import *
-from folders import *
-from sitemap import *
+from folders import ContentFolder
+from sitemap import SitemapNode
 
 def get_page_url(page):
     if settings.GENERATE_ABSOLUTE_FS_URLS:
-        mirror = page.parent.get_mirror_folder(settings.CONTENT_DIR, settings.DEPLOY_DIR, ignore_root=True)
+        mirror = page.parent.get_mirror_folder(
+                                settings.CONTENT_DIR, 
+                                settings.DEPLOY_DIR, ignore_root=True)
         page_url = mirror.child(page.name)
     else:
         fragment = page.parent.get_fragment(settings.CONTENT_DIR)

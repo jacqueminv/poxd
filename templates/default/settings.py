@@ -10,6 +10,9 @@ DEPLOY_DIR = os.path.join(ROOT_PATH, 'deploy')
 TMP_DIR = os.path.join(ROOT_PATH, 'deploy_tmp')
 BACKUPS_DIR = os.path.join(ROOT_PATH, 'backups')
 
+BACKUP = FALSE
+
+SITE_WWW_URL = "http://www.yoursite.com"
 SITE_NAME = "Hyde"
 DATETIME_FORMAT = "%Y-%m-%d %H:%i"
 
@@ -28,8 +31,10 @@ GENERATE_ABSOLUTE_FS_URLS = True
 MEDIA_PROCESSORS = {
     '*':{
         '.css':('hydeengine.media_processors.YUICompressor',),
-        '.ccss':('hydeengine.media_processors.CleverCSS', 'hydeengine.media_processors.YUICompressor',),
-        '.hss':('hydeengine.media_processors.HSS', 'hydeengine.media_processors.YUICompressor',),
+        '.ccss':('hydeengine.media_processors.CleverCSS',
+                 'hydeengine.media_processors.YUICompressor',),
+        '.hss':('hydeengine.media_processors.HSS',
+                'hydeengine.media_processors.YUICompressor',),
         '.js':('hydeengine.media_processors.YUICompressor',)
     } 
 }

@@ -1,6 +1,9 @@
 from django.conf import settings
-from file_system import File, Folder
+from file_system import Folder
 import os
+
+def make_url(root, child):
+    return root.rstrip("/") + "/" + child.lstrip("/")
 
 class SitemapNode(object):
     def __init__(self, parent, folder, name=None):
@@ -20,7 +23,7 @@ class SitemapNode(object):
         
     @property
     def ancestors(self):
-        node = self;
+        node = self
         ancestors = []
         while not node.isroot:
             ancestors.append(node)
@@ -28,24 +31,24 @@ class SitemapNode(object):
         ancestors.append(node)
         ancestors.reverse()
         return ancestors
-        
+    
     @property
     def module(self):
         module = self
         while(module.parent and module.parent.parent):
             module = module.parent
         return module
-   
+
     def get_node_for(self, file_system_entity):
         if file_system_entity.path == self.folder.path:
-           return self;
+            return self
         current = self    
         if not current.isroot:
-           current = self.parent
-           return current.get_node_for(file_system_entity)
+            current = self.parent
+            return current.get_node_for(file_system_entity)
         for node in current.walk():
             if node.folder.path == file_system_entity.path:
-              return node
+                return node
         return None
    
     def get_parent_of(self, file_system_entity):
@@ -60,11 +63,23 @@ class SitemapNode(object):
         return self.listing_page.url
     
     @property
+    def full_url(self):
+        if settings.GENERATE_ABSOLUTE_FS_URLS:
+            return self.url        
+        else:
+            return make_url(settings.SITE_WWW_URL, self.url)
+            
+    
+    @property
     def url(self):
         if settings.GENERATE_ABSOLUTE_FS_URLS:
-            return self.folder.get_mirror_folder(settings.CONTENT_DIR, settings.DEPLOY_DIR, ignore_root=True).path
+            return self.folder.get_mirror_folder(
+                        settings.CONTENT_DIR, settings.DEPLOY_DIR,
+                        ignore_root=True).path
         else:
-            url = "/" + self.folder.get_fragment(settings.CONTENT_DIR).lstrip(os.sep)
+            url = "/" + self.folder.get_fragment(
+                                    settings.CONTENT_DIR
+                                    ).lstrip(os.sep)
             return url.rstrip("/")
     
     @property
@@ -77,7 +92,8 @@ class SitemapNode(object):
         
     @property
     def siblings(self):
-        if self.isroot: return None
+        if self.isroot: 
+            return None
         siblings = []
         siblings = self.parent.children[:]
         siblings.remove(self)
@@ -85,7 +101,8 @@ class SitemapNode(object):
         
     @property
     def next_siblings(self):
-        if not self.parent: return None
+        if not self.parent: 
+            return None
         siblings = self.parent.children
         index = siblings.index(self)
         return siblings[index+1:]
@@ -99,7 +116,8 @@ class SitemapNode(object):
         
     @property
     def prev_siblings(self):
-        if not self.parent: return None
+        if not self.parent: 
+            return None
         siblings = self.parent.children
         index = siblings.index(self)
         return siblings[:index]
@@ -121,18 +139,20 @@ class SitemapNode(object):
         if settings.GENERATE_ABSOLUTE_FS_URLS:
             url = Folder(self.url).child(page.name)
         else:
-            url = self.url + "/" + page.name
+            url = make_url(self.url, page.name)
         page.url = url
+        page.full_url = make_url(self.full_url, page.name)
         page.node = self
         page.module = self.module
         if page.name_without_extension.lower() == self.name.lower():
             self.listing_page = page
-        
+            page.listing = True
+            
     def walk(self):
         yield self
         for child in self.children:
-                   for node in child.walk():
-                       yield node
+            for node in child.walk():
+                yield node
 
     def walk_pages(self):
         for node in self.walk():
