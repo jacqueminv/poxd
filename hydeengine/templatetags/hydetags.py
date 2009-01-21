@@ -177,7 +177,7 @@ def xmldatetime(dt):
     tz = dt.strftime("%z")
     if tz:
         zprefix = tz[:3] + ":" + tz[3:]
-    return dt.strftime("%Y-%m:%dT%H:%M") + zprefix
+    return dt.strftime("%Y-%m-%dT%H:%M:%S") + zprefix
 
 @register.filter
 def remove_date_prefix(slug, sep="-"):
