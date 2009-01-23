@@ -1,6 +1,8 @@
 from django.conf import settings
 from file_system import Folder
 import os
+import operator 
+from datetime import datetime
 
 def make_url(root, child):
     return root.rstrip("/") + "/" + child.lstrip("/")
@@ -144,9 +146,15 @@ class SitemapNode(object):
         page.full_url = make_url(self.full_url, page.name)
         page.node = self
         page.module = self.module
+        page.listing = False
+        if not hasattr(page, "exclude"):
+            page.exclude = False
         if page.name_without_extension.lower() == self.name.lower():
             self.listing_page = page
             page.listing = True
+        page.display_in_list = not page.listing and \
+                                not page.exclude and \
+                                page.kind == "html"
             
     def walk(self):
         yield self
@@ -155,7 +163,19 @@ class SitemapNode(object):
                 yield node
 
     def walk_pages(self):
+        def date_from_page(page):
+            created = None
+            if hasattr(page, "created"):
+                created = page.created
+            if not created:
+                created = datetime.strptime(
+                            "2000-01-01 00:00", 
+                            settings.DATETIME_FORMAT)
+            return created
+            
         for node in self.walk():
-            for page in node.pages:
+            sorted_pages = sorted(node.pages,
+                            key=date_from_page)
+            for page in sorted_pages:
                 yield page
         

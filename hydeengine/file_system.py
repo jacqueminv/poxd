@@ -65,6 +65,10 @@ class File(FileSystemEntity):
     def extension(self):
         return os.path.splitext(self.path)[1]
         
+    @property
+    def kind(self):
+        return self.extension.lstrip(".")
+        
     def move_to(self, destination):
         shutil.move(self.path, str(destination))
         return self._get_destination(destination)
