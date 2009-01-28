@@ -13,7 +13,8 @@ class FolderFlattener:
                 self.previous_folder = None
             
             def visit_file(self, file):
-                file.copy_to(self.folder)
+                if not self.folder.is_parent_of(file):
+                    file.copy_to(self.folder)
                 
             def visit_folder(self, this_folder):                
                 if self.previous_folder and self.remove_processed_folders:

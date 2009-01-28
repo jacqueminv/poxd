@@ -19,7 +19,7 @@ class HydeFolder(Folder):
         
     def visit_folder(self, visitor, folder):
         if not self.previous_folder or \
-                not folder.is_child_of(self.previous_folder):
+                not self.previous_folder.is_parent_of(folder):
                 self.current_processors = {}
                 self.current_processors.update(self.default_processors)
         fragment = folder.get_fragment(self.path)

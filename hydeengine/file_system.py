@@ -109,9 +109,9 @@ class Folder(FileSystemEntity):
     def same_as(self, other_folder):
         return os.path.samefile(self.path, other_folder.path)
     
-    def is_child_of(self, other_entity):
+    def is_parent_of(self, other_entity):
         return self.same_as(other_entity.parent)
-        
+
     def child(self, name):
         return os.path.join(self.path, name)
         
