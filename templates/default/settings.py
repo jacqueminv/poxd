@@ -14,7 +14,7 @@ BACKUP = False
 
 SITE_WWW_URL = "http://www.yoursite.com"
 SITE_NAME = "Hyde"
-DATETIME_FORMAT = "%Y-%m-%d %H:%i"
+DATETIME_FORMAT = "%Y-%m-%d %H:%M"
 
 # {folder : extension : (processors)}
 # The processors are run in the given order and are chained.
@@ -40,13 +40,7 @@ MEDIA_PROCESSORS = {
 }
 
 CONTENT_PROCESSORS = {
-    '*': {
-        '.html':('hydeengine.content_processors.YAMLContentProcessor',
-                # If you want to create a dictionary in python instead:
-                # 'hydeengine.content_processors.PyContentProcessor'
-                # Needs py.code.
-        )
-    }
+    '*': {'.html':('hydeengine.content_processors.YAMLContentProcessor',)}
 }
 
 SITE_POST_PROCESSORS = {
@@ -75,15 +69,11 @@ YUI_COMPRESSOR = None
 #HSS_PATH = "./lib/hss-1.0-osx"
 HSS_PATH = None # if you don't want to use HSS
 
-
-
-
 #Django settings
 
-TEMPLATE_DIRS = ( LAYOUT_DIR, CONTENT_DIR, TMP_DIR)
+TEMPLATE_DIRS = (LAYOUT_DIR, CONTENT_DIR, TMP_DIR)
 
 INSTALLED_APPS = (
     'hydeengine',
     'django.contrib.webdesign',
 )
-

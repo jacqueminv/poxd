@@ -40,13 +40,7 @@ MEDIA_PROCESSORS = {
 }
 
 CONTENT_PROCESSORS = {
-    '*': {
-        '.html':('hydeengine.content_processors.YAMLContentProcessor',
-                # If you want to create a dictionary in python instead:
-                # 'hydeengine.content_processors.PyContentProcessor'
-                # Needs py.code.
-        )
-    }
+    '*': {'.html':('hydeengine.content_processors.YAMLContentProcessor',)}
 }
 
 SITE_POST_PROCESSORS = {

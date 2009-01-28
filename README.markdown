@@ -9,7 +9,7 @@ Hyde is a static website generator with the power of Django templates behind it.
 
 The very basic installation of hyde only needs Django. More python goodies are needed based on the features you may use.
 
-    sudo easy install django
+    sudo easy_install django
 
 Get the hyde source by git cloning this repository.
 
@@ -134,6 +134,7 @@ Requires py.code. You can install py.code with ``sudo easy_install py`` command.
 }   
 %}
 
+*Update:* This processor is no longer supported. The code is still around, since I exclusively use the YAMLContentProcessor for Ringce, I have not been able to ensure if this works as expected. Moreover, the YAML context has been much easier to work with.
 
 ## Template Tags
 
