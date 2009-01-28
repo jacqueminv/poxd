@@ -14,7 +14,7 @@ BACKUP = False
 
 SITE_WWW_URL = "http://www.yoursite.com"
 SITE_NAME = "Hyde"
-DATETIME_FORMAT = "%Y-%m-%d %H:%i"
+DATETIME_FORMAT = "%Y-%m-%d %H:%M"
 
 # {folder : extension : (processors)}
 # The processors are run in the given order and are chained.
@@ -50,12 +50,12 @@ CONTENT_PROCESSORS = {
 }
 
 SITE_POST_PROCESSORS = {
-    # 'media/js': {
-    #        'hydeengine.site_post_processors.FolderFlattener' : {
-    #                'remove_processed_folders': True,
-    #                'pattern':"*.js"
-    #        }
-    #    }
+    'media/js/': {
+        'hydeengine.site_post_processors.FolderFlattener' : {
+                'remove_processed_folders': True,
+                'pattern':"*.js"
+        }
+    }
 }
 
 CONTEXT = {
@@ -67,13 +67,13 @@ CONTEXT = {
 # path for YUICompressor, or None if you don't
 # want to compress JS/CSS. Project homepage:
 # http://developer.yahoo.com/yui/compressor/
-#YUI_COMPRESSOR = "./lib/yuicompressor-2.4.1.jar"
-YUI_COMPRESSOR = None 
+YUI_COMPRESSOR = "./lib/yuicompressor-2.4.1.jar"
+#YUI_COMPRESSOR = None 
 
 # path for HSS, which is a preprocessor for CSS-like files (*.hss)
 # project page at http://ncannasse.fr/projects/hss
-#HSS_PATH = "./lib/hss-1.0-osx"
-HSS_PATH = None # if you don't want to use HSS
+HSS_PATH = "./lib/hss-1.0-osx"
+#HSS_PATH = None # if you don't want to use HSS
 
 
 

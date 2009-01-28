@@ -5,7 +5,7 @@ from path_util import PathUtil
 from django.template.loader import render_to_string
 from django.template import add_to_builtins
 from file_system import File, Folder
-from folders import MediaFolder, ContentFolder
+from folders import MediaFolder, ContentFolder, TempFolder
 from renderer import build_sitemap, render_pages
 
 class Generator(object):
@@ -56,6 +56,8 @@ class Generator(object):
         
         MediaFolder().walk() 
         render_pages()
+        
+        TempFolder().walk()
         
         deploy_folder.delete()
         deploy_folder.make()

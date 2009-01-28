@@ -105,6 +105,13 @@ class Folder(FileSystemEntity):
             pass
         return self
         
+        
+    def same_as(self, other_folder):
+        return os.path.samefile(self.path, other_folder.path)
+    
+    def is_child_of(self, other_entity):
+        return self.same_as(other_entity.parent)
+        
     def child(self, name):
         return os.path.join(self.path, name)
         
@@ -160,7 +167,7 @@ class Folder(FileSystemEntity):
     def copy_folder_from(self, source):
         shutil.copytree(str(source), self.child(source.name))
         
-    def move_contents_of(self, source):
+    def move_contents_of(self, source, move_empty_folders=True):
         class Mover:
             @staticmethod
             def visit_folder(folder):
@@ -168,9 +175,9 @@ class Folder(FileSystemEntity):
             @staticmethod                
             def visit_file(a_file):
                 self.move_file_from(a_file)
-        source.list(Mover)
+        source.list(Mover, move_empty_folders)
          
-    def copy_contents_of(self, source):
+    def copy_contents_of(self, source, copy_empty_folders=True):
         class Copier:
             @staticmethod
             def visit_folder(folder):
@@ -178,7 +185,7 @@ class Folder(FileSystemEntity):
             @staticmethod                
             def visit_file(a_file):
                 self.copy_file_from(a_file)
-        source.list(Copier)    
+        source.list(Copier, copy_empty_folders)    
         
     def move_file_from(self, source):
         shutil.move(str(source), self.path)
@@ -186,14 +193,27 @@ class Folder(FileSystemEntity):
     def copy_file_from(self, source):
         shutil.copy(str(source), self.path) 
 
-    def list(self, visitor):
+    def list(self, visitor, list_empty_folders=True):
         a_files = os.listdir(self.path)
         for a_file in a_files:
             path = os.path.join(self.path, str(a_file))
             if os.path.isdir(path):
+                if not list_empty_folders:
+                    if Folder(path).isEmpty():
+                        continue
                 visitor.visit_folder(Folder(path))
             else:
                 visitor.visit_file(File(path))
+    
+    def isEmpty(self):
+        paths = os.listdir(self.path)
+        for path in paths:
+            if os.path.isdir(path):
+                if not Folder(path).isEmpty():
+                    return False
+            else:
+                return False    
+        return True
                 
     def walk(self, visitor = None, pattern = None):
         for root, dirs, a_files in os.walk(self.path):
@@ -204,6 +224,7 @@ class Folder(FileSystemEntity):
             for a_file in a_files:
                 if not pattern or fnmatch.fnmatch(a_file, pattern):
                     self.visit_file(visitor, File(folder.child(a_file)))
+        self.visit_complete(visitor)
                 
     def visit_folder(self, visitor, folder):
         if visitor and hasattr(visitor,'visit_folder'):
@@ -212,3 +233,7 @@ class Folder(FileSystemEntity):
     def visit_file(self, visitor, a_file):
         if visitor and hasattr(visitor,'visit_file'):
             visitor.visit_file(a_file)
+            
+    def visit_complete(self, visitor):
+        if visitor and hasattr(visitor,'visit_complete'):
+            visitor.visit_complete()
