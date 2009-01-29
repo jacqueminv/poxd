@@ -130,13 +130,19 @@ class SitemapNode(object):
         if sibs:
             return sibs[0]
         return None
-        
+    
     def append_child(self, folder):
         node = SitemapNode(self, folder)
         self.children.append(node)
         return node
         
     def add_page(self, page):
+        previous = None
+        if len(self.pages):
+            previous = self.pages[len(self.pages) - 1]
+            if previous and not previous.display_in_list:
+                previous = previous.previous
+        page.previous = previous
         self.pages.append(page)
         if settings.GENERATE_ABSOLUTE_FS_URLS:
             url = Folder(self.url).child(page.name)
@@ -155,14 +161,10 @@ class SitemapNode(object):
         page.display_in_list = not page.listing and \
                                 not page.exclude and \
                                 page.kind == "html"
-            
-    def walk(self):
-        yield self
-        for child in self.children:
-            for node in child.walk():
-                yield node
-
-    def walk_pages(self):
+        if previous and page.display_in_list:
+            previous.next = page
+   
+    def sort_and_link_pages(self):
         def date_from_page(page):
             created = None
             if hasattr(page, "created"):
@@ -172,10 +174,26 @@ class SitemapNode(object):
                             "2000-01-01 00:00", 
                             settings.DATETIME_FORMAT)
             return created
+        self.pages.sort(key=date_from_page, reverse=True)
+        prev = None
+        for page in self.pages:
+         if page.display_in_list:
+             if prev:
+                 prev.next = page
+                 page.prev = prev
+             page.next = None
+             prev = page
+        for node in self.children:
+            node.sort_and_link_pages()
             
+    def walk(self):
+        yield self
+        for child in self.children:
+            for node in child.walk():
+                yield node
+
+    def walk_pages(self):            
         for node in self.walk():
-            sorted_pages = sorted(node.pages,
-                            key=date_from_page)
-            for page in sorted_pages:
+            for page in node.pages:
                 yield page
         
