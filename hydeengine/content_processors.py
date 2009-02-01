@@ -31,9 +31,17 @@ def add_page_variables(page, page_vars):
             
 
 class PyContentProcessor:
-    
     @staticmethod
     def process(page):
+        import warnings
+        warnings.warn("This function is deprecated." + 
+        """ 
+        While this was cool when it was written, it sucks to use 
+        python dictionaries in templates. This class is now deprecated. 
+        Will be removed completely when hyde goes beta.
+        """,
+        DeprecationWarning, stacklevel=2)
+        return
         text = get_context_text(page)
         page_context = {}
         source_code = "page_context.update(" + text + ")"
