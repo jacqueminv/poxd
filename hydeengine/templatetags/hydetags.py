@@ -63,18 +63,7 @@ class LatestExcerptNode(template.Node):
         if not sitemap_node:
             sitemap_node = context["site"]
         def later(page1, page2):
-            page2_created = \
-            page1_created = \
-                datetime.strptime(
-                "2000-01-01 00:00", 
-                settings.DATETIME_FORMAT)
-                
-            if hasattr(page1, "created") and page1.created:
-                page1_created = page1.created
-            if hasattr(page2, "created") and page2.created:
-                page2_created = page2.created                
-            return (page1, page2)[page2_created > page1_created]
-            
+            return (page1, page2)[page2.created > page1.created]
         page = reduce(later, sitemap_node.walk_pages())
         rendered = None
         rendered = render_to_string(str(page), context)

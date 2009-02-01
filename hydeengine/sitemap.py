@@ -33,7 +33,16 @@ class SitemapNode(object):
         ancestors.append(node)
         ancestors.reverse()
         return ancestors
-    
+        
+    @property
+    def depth(self):
+        node = self
+        depth = 0
+        while node.parent:
+            node = node.parent
+            depth = depth + 1
+        return depth
+        
     @property
     def module(self):
         module = self
@@ -155,28 +164,23 @@ class SitemapNode(object):
         page.listing = False
         if not hasattr(page, "exclude"):
             page.exclude = False
+        if not hasattr(page, "created") or not page.created:
+            page.created = datetime.strptime(
+                            "2000-01-01", 
+                            "%Y-%m-%d")
+        if not hasattr(page, "updated") or not page.updated:
+            page.updated = page.created
         if page.name_without_extension.lower() == self.name.lower():
             self.listing_page = page
             page.listing = True
-        page.display_in_list = not page.listing and \
-                                not page.exclude and \
-                                page.kind == "html"
+        page.display_in_list = (not page.listing and 
+                                not page.exclude and 
+                                page.kind == "html")
         if previous and page.display_in_list:
             previous.next = page
    
     def sort_and_link_pages(self):
-        def date_from_page(page):
-            created = None
-            if hasattr(page, "created") and page.created:
-                created = datetime.strptime(
-                            page.created,
-                            settings.DATETIME_FORMAT)
-            if not created:
-                created = datetime.strptime(
-                            "2000-01-01 00:00", 
-                            "%Y-%m-%d %H:%M")
-            return created
-        self.pages.sort(key=date_from_page, reverse=True)
+        self.pages.sort(key=operator.attrgetter("created"), reverse=True)
         prev = None
         for page in self.pages:
          if page.display_in_list:

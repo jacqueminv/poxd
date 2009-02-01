@@ -9,12 +9,13 @@ MEDIA_DIR = os.path.join(ROOT_PATH, 'media')
 DEPLOY_DIR = os.path.join(ROOT_PATH, 'deploy')
 TMP_DIR = os.path.join(ROOT_PATH, 'deploy_tmp')
 BACKUPS_DIR = os.path.join(ROOT_PATH, 'backups')
+URL_LIST_FILE = os.path.join(ROOT_PATH, 'urllist.txt')
 
 BACKUP = False
 
 SITE_WWW_URL = "http://www.yoursite.com"
 SITE_NAME = "Hyde"
-DATETIME_FORMAT = "%Y-%m-%d %H:%M"
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 # {folder : extension : (processors)}
 # The processors are run in the given order and are chained.
@@ -44,6 +45,12 @@ CONTENT_PROCESSORS = {
 }
 
 SITE_POST_PROCESSORS = {
+    '/':{
+        'hydeengine.site_post_processors.UrlListGenerator' : {
+            'url_list_file': URL_LIST_FILE
+        }
+        
+    },
     'media/js/': {
         'hydeengine.site_post_processors.FolderFlattener' : {
                 'remove_processed_folders': True,

@@ -1,5 +1,8 @@
 from django.conf import settings
 from file_system import File
+from datetime import datetime
+from hydeengine.templatetags.hydetags import xmldatetime
+import commands
 
 class FolderFlattener:
     
@@ -27,6 +30,51 @@ class FolderFlattener:
                     self.previous_folder.delete()
 
         folder.walk(Flattener(folder, params), params["pattern"])
-        
 
-        
+
+SITEMAP_CONFIG = \
+"""<?xml version="1.0" encoding="UTF-8"?>
+<site
+  base_url="%(base_url)s"
+  store_into="%(sitemap_path)s"
+  suppress_search_engine_notify="1"
+  verbose="1"
+  >
+  <urllist  path="%(url_list_file)s"/>
+</site>"""
+
+class GoogleSitemapGenerator:
+    
+    @staticmethod
+    def process(folder, params):
+        site = settings.CONTEXT['site']
+        sitemap_path = params["sitemap_file"]
+        url_list_file = File(sitemap_path).parent.child("urllist.txt")
+        config_file =  File(sitemap_path).parent.child("sitemap_config.xml")
+        urllist = open(url_list_file, 'w')
+        for page in site.walk_pages():
+            if not page.kind == "html" or page.exclude:
+                continue
+            created = xmldatetime(page.created)
+            updated = xmldatetime(page.updated)
+            url = page.full_url
+            priority = 0.5
+            if page.listing:
+                priority = 1.0
+            changefreq = "weekly"
+            urllist.write(
+                "%(url)s lastmod=%(updated)s changefreq=%(changefreq)s \
+priority=%(priority).1f\n" 
+                % locals())
+        urllist.close()
+        base_url = settings.SITE_WWW_URL
+        config = open(config_file, 'w')
+        config.write(SITEMAP_CONFIG % locals())        
+        config.close()
+        generator = params["generator"]
+        command = u"python %s --config=%s" % (generator, config_file)
+        status, output = commands.getstatusoutput(command)
+        if status > 0: 
+            print output
+        File(config_file).delete()
+        File(url_list_file).delete()

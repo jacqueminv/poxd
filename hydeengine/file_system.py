@@ -53,6 +53,10 @@ class File(FileSystemEntity):
     def has_extension(self, extension):
         return self.extension  == extension
 
+    def delete(self):
+        if self.exists:
+            os.remove(self.path)
+            
     @property
     def path_without_extension(self):
         return os.path.splitext(self.path)[0]

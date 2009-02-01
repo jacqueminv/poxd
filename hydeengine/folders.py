@@ -64,6 +64,8 @@ class TempFolder(Folder):
         
     def visit_folder(self, visitor, folder):
         fragment = folder.get_fragment(self.path)
+        if not fragment:
+            fragment = "/"
         if len(fragment) and settings.SITE_POST_PROCESSORS.has_key(fragment):
             processors = settings.SITE_POST_PROCESSORS[fragment]
             for processor_name, params in processors.iteritems():

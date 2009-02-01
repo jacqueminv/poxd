@@ -26,7 +26,7 @@ class CleverCSS:
         fout = open(out_file,'w')
         fout.write(clevercss.convert(data))
         fout.close()
-        os.remove(str(a_file))
+        a_file.delete()
         return File(out_file)
         
 class HSS:
@@ -42,7 +42,7 @@ class HSS:
         if status > 0: 
             print output
             return None
-        os.remove(str(a_file))
+        a_file.delete()
         return File(out_file)
         
 class YUICompressor:
