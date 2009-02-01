@@ -80,7 +80,5 @@ priority=%(priority).1f\n"
         generator = params["generator"]
         command = u"python %s --config=%s" % (generator, config_file)
         status, output = commands.getstatusoutput(command)
-        print command  
-        print output      
         if status > 0: 
             print output
