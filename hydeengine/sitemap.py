@@ -176,12 +176,14 @@ class SitemapNode(object):
     def sort_and_link_pages(self):
         def date_from_page(page):
             created = None
-            if hasattr(page, "created"):
-                created = page.created
+            if hasattr(page, "created") and page.created:
+                created = datetime.strptime(
+                            page.created,
+                            settings.DATETIME_FORMAT)
             if not created:
                 created = datetime.strptime(
                             "2000-01-01 00:00", 
-                            settings.DATETIME_FORMAT)
+                            "%Y-%m-%d %H:%M")
             return created
         self.pages.sort(key=date_from_page, reverse=True)
         prev = None
