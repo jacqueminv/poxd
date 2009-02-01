@@ -48,19 +48,15 @@ class GoogleSitemapGenerator:
     @staticmethod
     def process(folder, params):
         site = settings.CONTEXT['site']
-        url_list_file = params["url_list_file"] 
+        sitemap_path = params["sitemap_file"]
+        url_list_file = File(sitemap_path).parent.child("urllist.txt")
+        config_file =  File(sitemap_path).parent.child("sitemap_config.xml")
         urllist = open(url_list_file, 'w')
         for page in site.walk_pages():
-            if not page.kind == "html":
+            if not page.kind == "html" or page.exclude:
                 continue
-            created = (page.created,  datetime.strptime(
-                "2000-01-01 00:00", settings.DATETIME_FORMAT))[not page.created]
-            if not hasattr(page, "updated"):
-                updated = created
-            else:
-                updated = (page.updated, page.created)[not page.updated]
-            created = xmldatetime(created)
-            updated = xmldatetime(updated)
+            created = xmldatetime(page.created)
+            updated = xmldatetime(page.updated)
             url = page.full_url
             priority = 0.5
             if page.listing:
@@ -72,8 +68,6 @@ priority=%(priority).1f\n"
                 % locals())
         urllist.close()
         base_url = settings.SITE_WWW_URL
-        sitemap_path = params["sitemap_file"]
-        config_file =  params["config_file"]
         config = open(config_file, 'w')
         config.write(SITEMAP_CONFIG % locals())        
         config.close()
@@ -82,3 +76,5 @@ priority=%(priority).1f\n"
         status, output = commands.getstatusoutput(command)
         if status > 0: 
             print output
+        File(config_file).delete()
+        File(url_list_file).delete()

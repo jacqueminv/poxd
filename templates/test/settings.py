@@ -15,7 +15,7 @@ BACKUP = False
 
 SITE_WWW_URL = "http://www.yoursite.com"
 SITE_NAME = "Hyde"
-DATETIME_FORMAT = "%Y-%m-%d %H:%M"
+DATETIME_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 # {folder : extension : (processors)}
 # The processors are run in the given order and are chained.
