@@ -33,7 +33,16 @@ class SitemapNode(object):
         ancestors.append(node)
         ancestors.reverse()
         return ancestors
-    
+        
+    @property
+    def depth(self):
+        node = self
+        depth = 0
+        while node.parent:
+            node = node.parent
+            depth = depth + 1
+        return depth
+        
     @property
     def module(self):
         module = self
