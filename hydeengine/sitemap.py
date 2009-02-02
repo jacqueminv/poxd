@@ -161,7 +161,6 @@ class SitemapNode(object):
         page.full_url = make_url(self.full_url, page.name)
         page.node = self
         page.module = self.module
-        page.listing = False
         if not hasattr(page, "exclude"):
             page.exclude = False
         if not hasattr(page, "created") or not page.created:
@@ -170,9 +169,16 @@ class SitemapNode(object):
                             "%Y-%m-%d")
         if not hasattr(page, "updated") or not page.updated:
             page.updated = page.created
+            
         if page.name_without_extension.lower() == self.name.lower():
             self.listing_page = page
             page.listing = True
+        elif (hasattr(page, "listing") and page.listing 
+            and not self.listing_page):
+            self.listing_page = page
+        else:
+            page.listing = False
+            
         page.display_in_list = (not page.listing and 
                                 not page.exclude and 
                                 page.kind == "html")
