@@ -8,6 +8,61 @@ from file_system import File, Folder
 from folders import MediaFolder, ContentFolder, TempFolder
 from renderer import build_sitemap, render_pages
 
+def setup_env(site_path):
+    try:
+        imp.load_source("hyde_site_settings",
+                        os.path.join(site_path,"settings.py"))
+    except Exception, err:
+        print "Cannot Import Site Settings"
+        print err
+        raise ValueError(
+        "The given site_path [%s] does not contain a hyde site. \
+        Give a valid path or run -init to create a new site."  
+        %  site_path
+        )
+        
+    try:
+        os.environ['DJANGO_SETTINGS_MODULE'] = u"hyde_site_settings"
+    except Exception, err:
+        print "Site settings are not defined properly"
+        print err
+        raise ValueError(
+        "The given site_path [%s] has invalid settings. \
+        Give a valid path or run -init to create a new site."  
+        %  site_path
+        )
+
+class Server(object):
+    def __init__(self, site_path):
+        super(Server, self).__init__()
+        self.site_path = os.path.abspath(os.path.expandvars(
+                                        os.path.expanduser(site_path)))
+    def serve(self, deploy_path):
+        setup_env(self.site_path)
+        deploy_folder = Folder(
+                            (deploy_path, settings.DEPLOY_DIR)
+                            [not deploy_path])
+        import cherrypy
+        from cherrypy.lib.static import serve_file
+        
+        class WebRoot:
+            @cherrypy.expose
+            def index(self):
+                if not 'site' in settings.CONTEXT:
+                    build_sitemap()
+                page =  settings.CONTEXT['site'].listing_page
+                return serve_file(deploy_folder.child(page.name))
+            
+        cherrypy.config.update({'environment': 'production',
+                                  'log.error_file': 'site.log',
+                                  'log.screen': True})
+        conf = {'/': {
+        'tools.staticdir.dir': deploy_folder.path, 
+        'tools.staticdir.on':True
+        }}
+        cherrypy.quickstart(WebRoot(), '/', config = conf)
+        
+
 class Generator(object):
     def __init__(self, site_path):
         super(Generator, self).__init__()
@@ -15,29 +70,7 @@ class Generator(object):
                                         os.path.expanduser(site_path)))
     
     def generate(self, deploy_path):
-        try:
-            imp.load_source("hyde_site_settings",
-                            os.path.join(self.site_path,"settings.py"))
-        except Exception, err:
-            print "Cannot Import Site Settings"
-            print err
-            raise ValueError(
-            "The given site_path [%s] does not contain a hyde site. \
-            Give a valid path or run -init to create a new site."  
-            %  self.site_path
-            )
-            
-        try:
-            os.environ['DJANGO_SETTINGS_MODULE'] = u"hyde_site_settings"
-        except Exception, err:
-            print "Site settings are not defined properly"
-            print err
-            raise ValueError(
-            "The given site_path [%s] has invalid settings. \
-            Give a valid path or run -init to create a new site."  
-            %  self.site_path
-            )
-        
+        setup_env(self.site_path)
         tmp_folder = Folder(settings.TMP_DIR)
         deploy_folder = Folder(
                             (deploy_path, settings.DEPLOY_DIR)

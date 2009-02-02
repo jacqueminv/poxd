@@ -1,8 +1,8 @@
 #!/usr/bin/env python2
 import os, sys
 from optparse import OptionParser
-from hydeengine import Generator
-from hydeengine import Initializer
+from hydeengine import Generator, Initializer, Server
+
 #import cProfile
 
 PROG_ROOT = os.path.dirname(os.path.abspath( __file__ ))
@@ -21,7 +21,9 @@ def main(argv):
                         dest = "generate", default = False)
     parser.add_option("-d", "--deploy_to", 
                         dest = "deploy_to")
-                        
+    parser.add_option("-w", "--webserve", action = "store_true",
+                        dest = "webserve", default = False)
+
     (options, args) = parser.parse_args()
     
     if len(args):
@@ -43,6 +45,13 @@ def main(argv):
             generator.generate(options.deploy_to)
         except ValueError, err:
             parser.error(err)
+    if options.webserve:
+        server = Server(options.site_path)
+        try:
+            server.serve(options.deploy_to)
+        except ValueError, err:
+            parser.error(err)
+        
     
 if __name__ == "__main__":
     main(sys.argv[1:])
