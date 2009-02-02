@@ -82,7 +82,7 @@ class Generator(object):
 
         tmp_folder.delete()
         tmp_folder.make()
-        
+        settings.DEPLOY_DIR = deploy_folder.path
         add_to_builtins('hydeengine.templatetags.hydetags')
         add_to_builtins('hydeengine.templatetags.aym')
         build_sitemap()
