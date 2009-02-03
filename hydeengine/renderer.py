@@ -4,17 +4,6 @@ from django.template.loader import render_to_string
 from folders import ContentFolder
 from sitemap import SitemapNode
 
-def get_page_url(page):
-    if settings.GENERATE_ABSOLUTE_FS_URLS:
-        mirror = page.parent.get_mirror_folder(
-                                settings.CONTENT_DIR, 
-                                settings.DEPLOY_DIR, ignore_root=True)
-        page_url = mirror.child(page.name)
-    else:
-        fragment = page.parent.get_fragment(settings.CONTENT_DIR)
-        page_url = os.sep + fragment + page.name
-    return page_url
-
 def build_sitemap():
     class Builder(object):
         site = None
