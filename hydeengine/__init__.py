@@ -52,14 +52,38 @@ class Server(object):
                     build_sitemap()
                 page =  settings.CONTEXT['site'].listing_page
                 return serve_file(deploy_folder.child(page.name))
+            if settings.GENERATE_CLEAN_URLS:
+                from cherrypy import NotFound
+                @cherrypy.expose
+                def default(self, *args):
+                   # first, try to find a lising page whose filename is the
+                   # same as its enclosing folder's name
+                   file = os.path.join(deploy_folder.path, os.sep.join(args),
+                       args[-1] + '.html') 
+                   if os.path.isfile(file):
+                       return serve_file(file)
+                   # failing that, search for a non-listing page
+                   file = os.path.join(deploy_folder.path, os.sep.join(args[:-1]),
+                       args[-1] + '.html') 
+                   if os.path.isfile(file):
+                       return serve_file(file)
+                   # failing that, page not found
+                   raise NotFound
             
         cherrypy.config.update({'environment': 'production',
                                   'log.error_file': 'site.log',
                                   'log.screen': True})
-        conf = {'/': {
-        'tools.staticdir.dir': deploy_folder.path, 
-        'tools.staticdir.on':True
-        }}
+        # even if we're still using clean urls, we still need to serve media.
+        if settings.GENERATE_CLEAN_URLS:
+            conf = {'/media': {
+            'tools.staticdir.dir':os.path.join(deploy_folder.path, 'media'), 
+            'tools.staticdir.on':True
+            }}
+        else:
+            conf = {'/': {
+            'tools.staticdir.dir': deploy_folder.path, 
+            'tools.staticdir.on':True
+            }}
         cherrypy.quickstart(WebRoot(), '/', config = conf)
         
 

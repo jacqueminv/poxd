@@ -16,6 +16,12 @@ BACKUP = False
 SITE_WWW_URL = "http://www.yoursite.com"
 SITE_NAME = "Hyde"
 
+GENERATE_ABSOLUTE_FS_URLS = True
+GENERATE_CLEAN_URLS = False
+# Determines whether or not to append a trailing slash to generated urls when
+# clean urls are enabled.
+APPEND_SLASH = False
+
 # {folder : extension : (processors)}
 # The processors are run in the given order and are chained.
 # Only a lone * is supported as an indicator for folders. Path 
@@ -26,7 +32,6 @@ SITE_NAME = "Hyde"
 # should specify css/ie for the folder name. css/* is not supported (yet).
 
 # Extensions do not support wildcards.
-GENERATE_ABSOLUTE_FS_URLS = True
 
 MEDIA_PROCESSORS = {
     '*':{
