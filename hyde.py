@@ -31,6 +31,9 @@ def main(argv):
         
     if not options.site_path:
         options.site_path = os.getcwdu()
+
+    if options.deploy_to:
+        options.deploy_to = os.path.abspath(options.deploy_to)
     
     if options.init:
         initializer = Initializer(options.site_path)
