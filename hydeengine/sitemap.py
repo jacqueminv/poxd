@@ -80,7 +80,6 @@ class SitemapNode(object):
         else:
             return make_url(settings.SITE_WWW_URL, self.url)
             
-    
     @property
     def url(self):
         if settings.GENERATE_ABSOLUTE_FS_URLS:
@@ -153,12 +152,6 @@ class SitemapNode(object):
                 previous = previous.previous
         page.previous = previous
         self.pages.append(page)
-        if settings.GENERATE_ABSOLUTE_FS_URLS:
-            url = Folder(self.url).child(page.name)
-        else:
-            url = make_url(self.url, page.name)
-        page.url = url
-        page.full_url = make_url(self.full_url, page.name)
         page.node = self
         page.module = self.module
         if not hasattr(page, "exclude"):
@@ -184,6 +177,24 @@ class SitemapNode(object):
                                 page.kind == "html")
         if previous and page.display_in_list:
             previous.next = page
+
+        # clean url generation requires knowing whether or not a page is a
+        # listing page prior to generating its url
+        if settings.GENERATE_CLEAN_URLS:
+            if page.listing:
+                url = str(Folder(self.url))
+            else:
+                url = str(Folder(self.url).child(page.name_without_extension))
+            if settings.APPEND_SLASH or not url:
+                url += "/"
+        elif settings.GENERATE_ABSOLUTE_FS_URLS:
+            url = Folder(self.url).child(page.name)
+        else:
+            url = make_url(self.url, page.name)
+        page.url = url
+        page.full_url = make_url(settings.SITE_WWW_URL, page.url)
+        #import sys
+        #sys.stderr.write("Full url: %s     Url: %s \n" % (page.full_url, page.url))
    
     def sort_and_link_pages(self):
         self.pages.sort(key=operator.attrgetter("created"), reverse=True)
