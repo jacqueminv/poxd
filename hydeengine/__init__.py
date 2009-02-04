@@ -32,6 +32,14 @@ def setup_env(site_path):
         %  site_path
         )
 
+def validate_settings(settings):
+    if settings.GENERATE_CLEAN_URLS and settings.GENERATE_ABSOLUTE_FS_URLS:
+        raise ValueError(
+        "GENERATE_CLEAN_URLS and GENERATE_ABSOLUTE_FS_URLS cannot "
+        "be enabled at the same time."
+        )
+
+
 class Server(object):
     def __init__(self, site_path):
         super(Server, self).__init__()
@@ -39,6 +47,7 @@ class Server(object):
                                         os.path.expanduser(site_path)))
     def serve(self, deploy_path):
         setup_env(self.site_path)
+        validate_settings(settings)
         deploy_folder = Folder(
                             (deploy_path, settings.DEPLOY_DIR)
                             [not deploy_path])
@@ -61,6 +70,12 @@ class Server(object):
                        args[-1] + '.html') 
                    if os.path.isfile(file):
                        return serve_file(file)
+                   # try each filename in LISTING_PAGE_NAMES setting
+                   for listing_name in settings.LISTING_PAGE_NAMES:
+                       file = os.path.join(deploy_folder.path, os.sep.join(args),
+                           listing_name + '.html') 
+                       if os.path.isfile(file):
+                           return serve_file(file)
                    # failing that, search for a non-listing page
                    file = os.path.join(deploy_folder.path, os.sep.join(args[:-1]),
                        args[-1] + '.html') 
@@ -94,6 +109,7 @@ class Generator(object):
     
     def generate(self, deploy_path):
         setup_env(self.site_path)
+        validate_settings(settings)
         tmp_folder = Folder(settings.TMP_DIR)
         deploy_folder = Folder(
                             (deploy_path, settings.DEPLOY_DIR)

@@ -163,7 +163,8 @@ class SitemapNode(object):
         if not hasattr(page, "updated") or not page.updated:
             page.updated = page.created
             
-        if page.name_without_extension.lower() == self.name.lower():
+        if page.name_without_extension.lower() == self.name.lower() or \
+           page.name_without_extension.lower() in settings.LISTING_PAGE_NAMES:
             self.listing_page = page
             page.listing = True
         elif (hasattr(page, "listing") and page.listing 
@@ -193,8 +194,8 @@ class SitemapNode(object):
             url = make_url(self.url, page.name)
         page.url = url
         page.full_url = make_url(settings.SITE_WWW_URL, page.url)
-        #import sys
-        #sys.stderr.write("Full url: %s     Url: %s \n" % (page.full_url, page.url))
+        import sys
+        sys.stderr.write("Full url: %s     Url: %s \n" % (page.full_url, page.url))
    
     def sort_and_link_pages(self):
         self.pages.sort(key=operator.attrgetter("created"), reverse=True)
