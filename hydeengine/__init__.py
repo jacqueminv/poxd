@@ -53,7 +53,6 @@ class Server(object):
                 page =  settings.CONTEXT['site'].listing_page
                 return serve_file(deploy_folder.child(page.name))
             if settings.GENERATE_CLEAN_URLS:
-                from cherrypy import NotFound
                 @cherrypy.expose
                 def default(self, *args):
                    # first, try to find a lising page whose filename is the
@@ -68,7 +67,7 @@ class Server(object):
                    if os.path.isfile(file):
                        return serve_file(file)
                    # failing that, page not found
-                   raise NotFound
+                   raise cherrypy.NotFound
             
         cherrypy.config.update({'environment': 'production',
                                   'log.error_file': 'site.log',
