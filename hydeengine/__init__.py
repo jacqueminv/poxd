@@ -12,12 +12,17 @@ def setup_env(site_path):
     try:
         imp.load_source("hyde_site_settings",
                         os.path.join(site_path,"settings.py"))
+    except SyntaxError, err:
+        print "The given site_path [%s] contains a settings file " \
+              "that could not be loaded due syntax errors." % site_path
+        print err
+        exit()
     except Exception, err:
         print "Cannot Import Site Settings"
         print err
         raise ValueError(
-        "The given site_path [%s] does not contain a hyde site. \
-        Give a valid path or run -init to create a new site."  
+        "The given site_path [%s] does not contain a hyde site. "
+        "Give a valid path or run -init to create a new site."
         %  site_path
         )
         
@@ -27,8 +32,8 @@ def setup_env(site_path):
         print "Site settings are not defined properly"
         print err
         raise ValueError(
-        "The given site_path [%s] has invalid settings. \
-        Give a valid path or run -init to create a new site."  
+        "The given site_path [%s] has invalid settings. "
+        "Give a valid path or run -init to create a new site."
         %  site_path
         )
 
