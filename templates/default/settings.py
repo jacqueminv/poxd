@@ -18,7 +18,7 @@ SITE_NAME = "Hyde"
 # {folder : extension : (processors)}
 # The processors are run in the given order and are chained.
 # Only a lone * is supported as an indicator for folders. Path 
-# shoud be specifed. No wildcard card support yet.
+# should be specified. No wildcard card support yet.
  
 # Starting under the media folder. For example, if you have media/css under 
 # your site root,you should specify just css. If you have media/css/ie you 
