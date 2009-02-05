@@ -1,4 +1,8 @@
+import os
+import string
 from django.conf import settings
+from django.template.loader import render_to_string
+from django.utils.safestring import mark_safe
 from file_system import File
 from datetime import datetime
 from hydeengine.templatetags.hydetags import xmldatetime
@@ -78,3 +82,60 @@ priority=%(priority).1f\n"
             print output
         File(config_file).delete()
         File(url_list_file).delete()
+
+
+REWRITE_RULES = string.Template( \
+r"""
+####  BEGIN HYDE CLEAN URL REWRITE RULES.  ####
+
+# lising pages defined by LISTING_PAGE_NAMES
+${lpn_rewrite_rules}
+
+# listing pages whose names are the same as their enclosing folder's
+RewriteCond %{REQUEST_FILENAME}/$1.html -f 
+RewriteRule ([^/]*)/$ %{REQUEST_FILENAME}/$1.html
+
+# regular pages
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^.*$ %{REQUEST_FILENAME}.html
+
+####  END HYDE CLEAN URL REWRITE RULES.  ####
+""")
+
+LPN_REWRITE_RULE = string.Template(\
+r"""
+RewriteCond %{REQUEST_FILENAME}/${name}.html -f
+RewriteRule ^(.*) $1/${name}.html
+"""
+)
+
+class HtaccessGenerator:
+    """Generates a .htaccess file and places it in the root of the deploy
+    directory.  
+    
+    The template for the .htaccess file is specified using the
+    template parameter.  A context variable, HYDE_REWRITE_RULES, contains the
+    Mod_Rewrite RewriteRules for serving content with clean urls.  If the
+    GENERATE_CLEAN_URLS setting is disabled, HYDE_REWRITE_RULES will be empty.
+
+    HYDE_REWRITE_RULES does not enable the RewriteEngine or set the
+    RewriteBase; it only contains RewriteRules.
+    """
+
+    @staticmethod
+    def process(folder, params):
+        htaccess_file = os.path.join(settings.TMP_DIR, '.htaccess')
+        htaccess_template = params['template']
+        context = {}
+        if settings.GENERATE_CLEAN_URLS:
+            lpn_rewrite_rules = []
+            for name in settings.LISTING_PAGE_NAMES:
+                lpn_rewrite_rules.append(LPN_REWRITE_RULE.safe_substitute( \
+                    {'name': name}))
+            context['HYDE_REWRITE_RULES'] = mark_safe(REWRITE_RULES.safe_substitute( \
+                {'lpn_rewrite_rules' : ''.join(lpn_rewrite_rules)}))
+        else:
+            context['HYDE_REWRITE_RULES'] = ''
+        with open(htaccess_file, 'w') as file:
+            file.write(render_to_string(htaccess_template, 
+                dict(context.items() + settings.CONTEXT.items())))
