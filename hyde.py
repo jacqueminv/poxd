@@ -19,6 +19,8 @@ def main(argv):
                         dest = "template")
     parser.add_option("-g", "--generate", action = "store_true",
                         dest = "generate", default = False)
+    parser.add_option("-k", "--keep_watching", action = "store_true",
+                        dest = "keep_watching", default = False)                        
     parser.add_option("-d", "--deploy_to", 
                         dest = "deploy_to")
     parser.add_option("-w", "--webserve", action = "store_true",
@@ -42,12 +44,14 @@ def main(argv):
                         options.template, options.force_init)
         except ValueError, err:
             parser.error(err)
+            
     if options.generate:
         generator = Generator(options.site_path)
         try:
-            generator.generate(options.deploy_to)
+            generator.generate(options.deploy_to, options.keep_watching)
         except ValueError, err:
             parser.error(err)
+            
     if options.webserve:
         server = Server(options.site_path)
         try:

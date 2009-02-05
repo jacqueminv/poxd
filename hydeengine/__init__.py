@@ -1,14 +1,25 @@
-import imp, sys, os, shutil
+import imp
+import sys
+import os
+import shutil
+from datetime import datetime
+
 from django.conf import settings
 from django.core.management import setup_environ
-from path_util import PathUtil
-from django.template.loader import render_to_string
 from django.template import add_to_builtins
+from django.template.loader import render_to_string
+
+from path_util import PathUtil
 from file_system import File, Folder
 from folders import MediaFolder, ContentFolder, TempFolder
 from renderer import build_sitemap, render_pages
 
 def setup_env(site_path):
+    """
+    
+    Initializes Django Environment
+    
+    """
     try:
         imp.load_source("hyde_site_settings",
                         os.path.join(site_path,"settings.py"))
@@ -33,6 +44,12 @@ def setup_env(site_path):
         )
 
 class Server(object):
+    """
+    
+    Initializes and runs a cherrypy webserver servic static files from the deploy
+    directory
+    
+    """
     def __init__(self, site_path):
         super(Server, self).__init__()
         self.site_path = os.path.abspath(os.path.expandvars(
@@ -69,7 +86,7 @@ class Generator(object):
         self.site_path = os.path.abspath(os.path.expandvars(
                                         os.path.expanduser(site_path)))
     
-    def generate(self, deploy_path):
+    def generate(self, deploy_path, keep_watching):
         setup_env(self.site_path)
         tmp_folder = Folder(settings.TMP_DIR)
         deploy_folder = Folder(
@@ -85,6 +102,9 @@ class Generator(object):
         settings.DEPLOY_DIR = deploy_folder.path
         add_to_builtins('hydeengine.templatetags.hydetags')
         add_to_builtins('hydeengine.templatetags.aym')
+        
+        baseline = datetime.now()
+        
         build_sitemap()
         
         MediaFolder().walk() 
@@ -96,6 +116,20 @@ class Generator(object):
         deploy_folder.make()
         deploy_folder.move_contents_of(tmp_folder)
         tmp_folder.delete()
+        
+        # Now that the site has been generated once,
+        # if keep_watching is specified start monitoring the 
+        # site directory for changes.
+        #
+        import time
+        if keep_watching:
+            while 1:
+                tmp_folder.make()
+                MediaFolder(baseline).walk()
+                deploy_folder.copy_contents_of(tmp_folder, incremental=True)
+                tmp_folder.delete()
+                baseline = datetime.now()
+                time.sleep(10)
     
 class Initializer(object):
     def __init__(self, site_path):

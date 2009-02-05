@@ -1,5 +1,9 @@
-import os, shutil, codecs
+import os
+import shutil
+import codecs
 import fnmatch
+from datetime import datetime
+from distutils import dir_util, file_util
 from path_util import PathUtil
 
 
@@ -57,6 +61,14 @@ class File(FileSystemEntity):
         if self.exists:
             os.remove(self.path)
             
+    def changed_since(self, basetime):
+        updated = os.path.getmtime(self.path)
+        return  datetime.fromtimestamp(updated) > basetime
+        
+    def older_than(self, another_file):
+        return (os.path.getmtime(another_file.path) > 
+                                os.path.getmtime(self.path))
+
     @property
     def path_without_extension(self):
         return os.path.splitext(self.path)[0]
@@ -164,38 +176,43 @@ class Folder(FileSystemEntity):
         shutil.copytree(self.path, str(destination))
         return self._get_destination(destination)
         
-    def move_folder_from(self, source):
-        self.copy_folder_from(source)
+    def move_folder_from(self, source, incremental=False):
+        self.copy_folder_from(source, incremental)
         shutil.rmtree(str(source))
 
-    def copy_folder_from(self, source):
-        shutil.copytree(str(source), self.child(source.name))
-        
-    def move_contents_of(self, source, move_empty_folders=True):
+    def copy_folder_from(self, source, incremental=False):
+        dir_util.copy_tree(str(source), 
+                        self.child(source.name), 
+                        update=incremental)
+                        
+    def move_contents_of(self, source, move_empty_folders=True, 
+                        incremental=False):
         class Mover:
             @staticmethod
             def visit_folder(folder):
-                self.move_folder_from(folder)
+                self.move_folder_from(folder, incremental)
             @staticmethod                
             def visit_file(a_file):
-                self.move_file_from(a_file)
+                self.move_file_from(a_file, incremental)
         source.list(Mover, move_empty_folders)
          
-    def copy_contents_of(self, source, copy_empty_folders=True):
+    def copy_contents_of(self, source, copy_empty_folders=True,
+                        incremental=False):
         class Copier:
             @staticmethod
             def visit_folder(folder):
-                self.copy_folder_from(folder)
+                self.copy_folder_from(folder, incremental)
             @staticmethod                
             def visit_file(a_file):
-                self.copy_file_from(a_file)
+                self.copy_file_from(a_file, incremental)
         source.list(Copier, copy_empty_folders)    
         
-    def move_file_from(self, source):
-        shutil.move(str(source), self.path)
+    def move_file_from(self, source, incremental=False):
+        self.copy_file_from(source, incremental)
+        source.delete()
 
-    def copy_file_from(self, source):
-        shutil.copy(str(source), self.path) 
+    def copy_file_from(self, source, incremental=False):
+        file_util.copy_file(str(source), self.path, update=incremental)
 
     def list(self, visitor, list_empty_folders=True):
         a_files = os.listdir(self.path)

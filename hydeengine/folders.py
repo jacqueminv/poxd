@@ -1,6 +1,7 @@
 import sys
 from file_system import Folder
 from django.conf import settings
+from datetime import datetime
 
 def load_processor(name):
     (module_name, _ , processor) = name.rpartition(".")
@@ -10,12 +11,15 @@ def load_processor(name):
 
 
 class HydeFolder(Folder):    
-    def __init__(self, path, processors, ignore_root=False):
+    def __init__(self, path, processors, ignore_root=False, baseline=None):
         super(HydeFolder, self).__init__(path)
         self.processors = processors
         self.default_processors = processors["*"]
         self.ignore_root = ignore_root
         self.previous_folder = None
+        self.baseline = baseline
+        if not self.baseline:
+            self.baseline = datetime.strptime("2000-01-01", "%Y-%m-%d")
         
     def visit_folder(self, visitor, folder):
         if not self.previous_folder or \
@@ -28,9 +32,13 @@ class HydeFolder(Folder):
         super(HydeFolder, self).visit_folder(visitor, folder)
     
     def visit_file(self, visitor, a_file):
+        if not a_file.changed_since(self.baseline):
+            return
+            
         target = a_file.parent.create_mirror_folder(
                                 self, settings.TMP_DIR, 
                                 self.ignore_root)
+        print "Processing " + str(a_file)
         a_file = a_file.copy_to(target)
         self.process_file(a_file)
         super(HydeFolder, self).visit_file(visitor, a_file)
@@ -48,9 +56,10 @@ class HydeFolder(Folder):
         return load_processor(processor_name)
 
 class MediaFolder(HydeFolder):
-    def __init__(self):
+    def __init__(self, baseline=None):
         super(MediaFolder, self).__init__(settings.MEDIA_DIR,
-                                            settings.MEDIA_PROCESSORS)
+                                            settings.MEDIA_PROCESSORS,
+                                            baseline=baseline)
         
 class ContentFolder(HydeFolder):
     def __init__(self):
