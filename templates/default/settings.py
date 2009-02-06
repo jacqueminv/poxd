@@ -15,8 +15,25 @@ BACKUP = False
 SITE_WWW_URL = "http://www.yoursite.com"
 SITE_NAME = "Hyde"
 
+#Url Configuration
 GENERATE_ABSOLUTE_FS_URLS = False
+
+# Clean urls causes Hyde to generate urls without extensions. Examples:
+# http://example.com/section/page.html becomes
+# http://example.com/section/page/, and the listing for that section becomes
+# http://example.com/section/
+# The built-in CherryPy webserver is capable of serving pages with clean urls
+# without any additional configuration, but Apache will need to use Mod_Rewrite
+# to map the clean urls to the actual html files.  The HtaccessGenerator site
+# post processor is capable of automatically generating the necessary
+# RewriteRules for use with Apache.
 GENERATE_CLEAN_URLS = False
+
+# A list of filenames (without extensions) that will be considered listing
+# pages for their enclosing folders.
+# LISTING_PAGE_NAMES = ['index.html']
+LISTING_PAGE_NAMES = []
+
 # Determines whether or not to append a trailing slash to generated urls when
 # clean urls are enabled.
 APPEND_SLASH = False
@@ -54,6 +71,11 @@ SITE_POST_PROCESSORS = {
     #                'pattern':"*.js"
     #        }
     #    }
+    # '/' : {
+    #       'hydeengine.site_post_processors.HtaccessGenerator' : {
+    #           'template' : '_htaccess'    
+    #       }
+    #   }
 }
 
 CONTEXT = {

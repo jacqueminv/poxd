@@ -1,4 +1,5 @@
 import imp, sys, os, shutil
+from collections import defaultdict
 from django.conf import settings
 from django.core.management import setup_environ
 from path_util import PathUtil
@@ -51,20 +52,37 @@ class Server(object):
         deploy_folder = Folder(
                             (deploy_path, settings.DEPLOY_DIR)
                             [not deploy_path])
+        if not 'site' in settings.CONTEXT:
+            build_sitemap()
+        site = settings.CONTEXT['site']
+        url_file_mapping = defaultdict(bool)
+        # This following bit is for supporting listing pages with arbitrary
+        # filenames.
+        if settings.GENERATE_CLEAN_URLS:
+            for page in site.walk_pages(): # build url to file mapping
+                if page.listing and page.name_without_extension not in \
+                   (settings.LISTING_PAGE_NAMES + [page.node.name]):
+                    filename = os.path.join(settings.DEPLOY_DIR, page.name)
+                    url = page.url.strip('/')
+                    url_file_mapping[url] = filename
+
         import cherrypy
         from cherrypy.lib.static import serve_file
         
         class WebRoot:
             @cherrypy.expose
             def index(self):
-                if not 'site' in settings.CONTEXT:
-                    build_sitemap()
-                page =  settings.CONTEXT['site'].listing_page
+                page =  site.listing_page
                 return serve_file(deploy_folder.child(page.name))
             if settings.GENERATE_CLEAN_URLS:
                 @cherrypy.expose
                 def default(self, *args):
-                   # first, try to find a lising page whose filename is the
+                   # first, see if the url is a in the url_file_mapping
+                   # dictionary
+                   file = url_file_mapping[os.sep.join(args)]
+                   if file:
+                       return serve_file(file)
+                   # next, try to find a lising page whose filename is the
                    # same as its enclosing folder's name
                    file = os.path.join(deploy_folder.path, os.sep.join(args),
                        args[-1] + '.html') 
