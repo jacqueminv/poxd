@@ -31,17 +31,17 @@ class HydeFolder(Folder):
             self.current_processors.update(self.processors[fragment])
         super(HydeFolder, self).visit_folder(visitor, folder)
     
-    def visit_file(self, visitor, a_file):
-        if not a_file.changed_since(self.baseline):
+    def visit_file(self, visitor, source_file):
+        if not source_file.changed_since(self.baseline):
             return
-            
-        target = a_file.parent.create_mirror_folder(
+        target = source_file.parent.create_mirror_folder(
                                 self, settings.TMP_DIR, 
                                 self.ignore_root)
-        print "Processing " + str(a_file)
-        a_file = a_file.copy_to(target)
-        self.process_file(a_file)
-        super(HydeFolder, self).visit_file(visitor, a_file)
+        print "Processing " + str(source_file)
+        target_file = source_file.copy_to(target)
+        target_file.source_file = source_file
+        self.process_file(target_file)
+        super(HydeFolder, self).visit_file(visitor, target_file)
         
     def process_file(self, a_file):
         if a_file and a_file.exists and \

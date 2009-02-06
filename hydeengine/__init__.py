@@ -114,29 +114,31 @@ class Generator(object):
         
         deploy_folder.delete()
         deploy_folder.make()
-        deploy_folder.move_contents_of(tmp_folder)
-        tmp_folder.delete()
+        deploy_folder.copy_contents_of(tmp_folder)
         
         # Now that the site has been generated once,
         # if keep_watching is specified start monitoring the 
         # site directory for changes.
         #
         import time
+        # TODO: Do this in a secondary thread. Investigate options for running 
+        # the server and the watcher simultaneously.
+        #
         if keep_watching:
             while 1:
-                tmp_folder.make()
                 MediaFolder(baseline).walk()
+                render_pages(baseline)
                 deploy_folder.copy_contents_of(tmp_folder, incremental=True)
-                tmp_folder.delete()
                 baseline = datetime.now()
                 time.sleep(10)
+        tmp_folder.delete()
     
 class Initializer(object):
     def __init__(self, site_path):
         super(Initializer, self).__init__()
         self.site_path = Folder(site_path)
 
-    def initialize(self, root, template, force):
+    def initialize(self, root, template=None, force=False):
         if not template:
             template = "default"
         root_folder = Folder(root)
