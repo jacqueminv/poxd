@@ -89,11 +89,14 @@ r"""
 ####  BEGIN HYDE CLEAN URL REWRITE RULES.  ####
 
 # lising pages defined by LISTING_PAGE_NAMES
-${lpn_rewrite_rules}
+${auto_rules}
 
 # listing pages whose names are the same as their enclosing folder's
 RewriteCond %{REQUEST_FILENAME}/$1.html -f 
 RewriteRule ([^/]*)/$ %{REQUEST_FILENAME}/$1.html
+
+# listing pages with 'listing: true' attribute manually set
+${manual_rules}
 
 # regular pages
 RewriteCond %{REQUEST_FILENAME}.html -f
@@ -102,7 +105,7 @@ RewriteRule ^.*$ %{REQUEST_FILENAME}.html
 ####  END HYDE CLEAN URL REWRITE RULES.  ####
 """)
 
-LPN_REWRITE_RULE = string.Template(\
+AUTO_REWRITE_RULE = string.Template(\
 r"""
 RewriteCond %{REQUEST_FILENAME}/${name}.html -f
 RewriteRule ^(.*) $1/${name}.html
@@ -124,16 +127,32 @@ class HtaccessGenerator:
 
     @staticmethod
     def process(folder, params):
+        site = settings.CONTEXT['site']
         htaccess_file = os.path.join(settings.TMP_DIR, '.htaccess')
         htaccess_template = params['template']
         context = {}
         if settings.GENERATE_CLEAN_URLS:
-            lpn_rewrite_rules = []
+            auto_rules = [] # for LISTING_PAGE_NAMES listings
             for name in settings.LISTING_PAGE_NAMES:
-                lpn_rewrite_rules.append(LPN_REWRITE_RULE.safe_substitute( \
+                auto_rules.append(AUTO_REWRITE_RULE.safe_substitute( \
                     {'name': name}))
+            manual_rules_url_map = [] # for 'listing: true' listings
+            for page in site.walk_pages(): # build url to file mapping
+                if page.listing and page.name_without_extension not in \
+                   (settings.LISTING_PAGE_NAMES + [page.node.name]):
+                    filename = os.path.join(settings.DEPLOY_DIR, page.name)
+                    if settings.APPEND_SLASH:
+                        url = page.url.lstrip('/')
+                    else:
+                        url = page.url.strip('/')
+                    manual_rules_url_map.append((url, filename))
+            manual_rules = []
+            for page in manual_rules_url_map: # turn that mapping into RewriteRules
+                manual_rules.append("RewriteRule ^%s$ %s" % page)
             context['HYDE_REWRITE_RULES'] = mark_safe(REWRITE_RULES.safe_substitute( \
-                {'lpn_rewrite_rules' : ''.join(lpn_rewrite_rules)}))
+                {'auto_rules' : ''.join(auto_rules),
+                 'manual_rules' : ''.join(manual_rules) 
+                }))
         else:
             context['HYDE_REWRITE_RULES'] = ''
         with open(htaccess_file, 'w') as file:
