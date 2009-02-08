@@ -3,7 +3,6 @@ import sys
 import unittest
 from django.conf import settings
 
-
 TEST_ROOT = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(TEST_ROOT + "/..")
 
@@ -84,5 +83,3 @@ class TestSiteInfo:
                                 os.path.join(settings.DEPLOY_DIR, fragment)))
                 assert node.temp_folder.same_as(Folder(
                            os.path.join(settings.TMP_DIR, fragment)))
-                           
-    def                        
