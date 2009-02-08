@@ -90,6 +90,7 @@ class Generator(object):
         settings.DEPLOY_DIR = deploy_folder.path
         add_to_builtins('hydeengine.templatetags.hydetags')
         add_to_builtins('hydeengine.templatetags.aym')
+        add_to_builtins('hydeengine.templatetags.typogrify')
         build_sitemap()
         
         MediaFolder().walk() 
