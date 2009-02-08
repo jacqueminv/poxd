@@ -1,7 +1,7 @@
 """
 1. Can build a sitemap from a folder
-    1.1 Number of nodes
-    1.2 Number of pages in each node
+    1.1 Number of nodes  
+    1.2 Number of pages in each node  
     1.3 Node Attributes
         1.3.1 Url
         1.3.2 Full Url
@@ -37,7 +37,8 @@ Notes:
 
 1. Full Regeneration:
     1.1 Layout changes
-    1.2 Folder move / renames
+    1.2 "_"(incude) file changes
+    1.3 Folder move / renames
 2. Excerpts => Regenerated when dependent page changes
 3  Listing Files => When there are pages added / removed, or when dependent changes
 4. Three threads for monitoring:

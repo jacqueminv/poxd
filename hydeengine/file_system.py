@@ -20,6 +20,18 @@ class FileSystemEntity(object):
         
     def __repr__(self):
         return self.path
+    
+    @property
+    def humblepath(self):
+        return os.path.abspath(
+        os.path.normpath(
+        os.path.normcase(
+        os.path.expandvars(
+        os.path.expanduser(self.path)))))
+        
+    def same_as(self, other):
+        return (self.humblepath.rstrip(os.sep) == 
+                        other.humblepath.rstrip(os.sep))
         
     @property    
     def exists(self):
@@ -113,6 +125,9 @@ class Folder(FileSystemEntity):
         if self.exists:
             shutil.rmtree(self.path)
     
+    def depth(self):
+        return len(self.path.split(os.sep))
+    
     def make(self):
         try:
             if not self.exists:
@@ -121,12 +136,16 @@ class Folder(FileSystemEntity):
             pass
         return self
         
-        
-    def same_as(self, other_folder):
-        return os.path.samefile(self.path, other_folder.path)
-    
     def is_parent_of(self, other_entity):
         return self.same_as(other_entity.parent)
+        
+    def is_ancestor_of(self, other_entity):
+        folder = other_entity
+        while not folder.parent.same_as(folder):
+            folder = folder.parent
+            if self.same_as(folder):
+                return True                
+        return False    
 
     def child(self, name):
         return os.path.join(self.path, name)
