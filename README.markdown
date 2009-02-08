@@ -59,7 +59,7 @@ Media processors are defined in the following format:
     
 The processors are executed in the order in which they are defined. The output from the first processor becomes the input of the next.
 
-A * instead of folder will apply the setting to all folders. There is no wildcard support for folder name yet, * is just a catch all special case.
+A \* instead of folder will apply the setting to all folders. There is no wildcard support for folder name yet, \* is just a catch all special case.
 
 File extensions should be specified as .css, .js, .png etc. Again no wildcard support yet. 
 
@@ -82,7 +82,7 @@ be a path to a [YUI Compressor][yuic] jar on your computer.
 
 Runs through the all the files defined in the configuration associated with ``'hydeengine.media_processors.CleverCSS'`` and converts them to css. 
 
-You need to install Clever CSS using ``sudo easy-install CleverCSS`` command for this processor to work.
+You need to install Clever CSS using ``sudo easy_install CleverCSS`` command for this processor to work.
 
 [clever_css]: http://sandbox.pocoo.org/clevercss/
 
