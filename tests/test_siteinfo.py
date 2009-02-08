@@ -1,3 +1,12 @@
+"""
+
+uses py.test
+
+sudo_easy_install py
+
+http://codespeak.net/py/dist/test.html
+
+"""
 import os
 import sys
 import unittest
@@ -9,6 +18,7 @@ ROOT = os.path.abspath(TEST_ROOT + "/..")
 sys.path = [ROOT] + sys.path
 
 from hydeengine.file_system import File, Folder
+from hydeengine import url
 from hydeengine import Initializer, setup_env
 from hydeengine.siteinfo import SiteNode, SiteInfo
 
@@ -55,37 +65,66 @@ class TestSiteInfo:
         assert_node_type(settings.MEDIA_DIR, "media")
         assert_node_type(settings.LAYOUT_DIR, "layout")
         
-    def test_urls(self):
+    def test_attributes(self):
         for node in self.site.walk():
-            if node.type == "content":
-                fragment = node.folder.get_fragment(self.site.content_folder)
-            elif node.type == "media":
-                fragment = node.folder.get_fragment(self.site.folder)                
-            else:
-                fragment = None
-
-            if node.type in ("content", "media"):
-                fragment = "/" + fragment.lstrip("/").rstrip("/")
-                assert node.url == fragment
-                assert node.full_url == settings.SITE_WWW_URL + fragment
-            else:    
-                assert not node.url
-                assert not node.full_url
+           self.assert_node_attributes(node)
+           for resource in node.resources:
+               self.assert_resource_attributes(resource)
+                           
+    def assert_node_attributes(self, node):
+        fragment = self.get_node_fragment(node)
+        if node.type == "content":
+            fragment = node.folder.get_fragment(self.site.content_folder)
+        elif node.type == "media":
+            fragment = node.folder.get_fragment(self.site.folder)
+            
+        if node.type in ("content", "media"):
+            fragment = "/" + fragment.lstrip("/").rstrip("/")
+            assert node.url == fragment
+            assert node.full_url == settings.SITE_WWW_URL + fragment
+        else:    
+            assert not node.url
+            assert not node.full_url
                 
-    def test_folders(self):
-        for node in self.site.walk():
-            fragment = ''
-            if node.type == "content":
-                fragment = node.folder.get_fragment(self.site.content_folder)
-            elif node.type == "media":
-                fragment = node.folder.get_fragment(self.site.folder)
-             
-            assert node.source_folder == node.folder
-            if not node == self.site and node.type not in ("content", "media"):
-                assert not node.target_folder
-                assert not node.temp_folder
-            else:     
-                assert node.target_folder.same_as(Folder(
-                                os.path.join(settings.DEPLOY_DIR, fragment)))
-                assert node.temp_folder.same_as(Folder(
-                           os.path.join(settings.TMP_DIR, fragment)))
+        assert node.source_folder == node.folder
+        if not node == self.site and node.type not in ("content", "media"):
+            assert not node.target_folder
+            assert not node.temp_folder
+        else:
+            assert node.target_folder.same_as(Folder(
+                            os.path.join(settings.DEPLOY_DIR,
+                                fragment.lstrip("/"))))
+            assert node.temp_folder.same_as(Folder(
+                            os.path.join(settings.TMP_DIR, 
+                                fragment.lstrip("/"))))
+                       
+    def assert_resource_attributes(self, resource):
+        node = resource.node
+        fragment = self.get_node_fragment(node)
+        if resource.node.type in ("content", "media"):
+            assert (resource.url ==  
+                        url.join(node.url, resource.resource_file.name))
+            assert (resource.full_url ==  
+                        url.join(node.full_url, resource.resource_file.name))
+            assert resource.target_file.same_as(
+                    File(node.target_folder.child(
+                            resource.resource_file.name)))
+            assert resource.temp_file.same_as(
+                    File(node.temp_folder.child(resource.resource_file.name)))
+        else:
+            assert not resource.url
+            assert not resource.full_url
+        
+        assert resource.source_file.parent.same_as(node.folder)
+        assert resource.source_file.name == resource.resource_file.name
+        
+    def get_node_fragment(self, node):
+        fragment = ''
+        if node.type == "content":
+            fragment = node.folder.get_fragment(self.site.content_folder)
+        elif node.type == "media":
+            fragment = node.folder.get_fragment(self.site.folder)
+        return fragment        
+            
+        
+        

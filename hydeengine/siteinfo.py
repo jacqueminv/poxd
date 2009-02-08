@@ -9,27 +9,27 @@ class SiteResource(object):
     
     @property
     def url(self):
-        if not node.url:
+        if not self.node.url:
             return None
-        return url.join(node.url, self.resource_file.name)
+        return url.join(self.node.url, self.resource_file.name)
     
     @property
     def full_url(self):
-        if not node.full_url:
+        if not self.node.full_url:
             return None
-        return url.join(node.full_url, self.resource_file.name)
+        return url.join(self.node.full_url, self.resource_file.name)
     
     @property
     def source_file(self):
-        return self.file
+        return self.resource_file
     
     @property
     def target_file(self):
-        return File(self.node.target_folder.child(self.file.name))
+        return File(self.node.target_folder.child(self.resource_file.name))
         
     @property
     def temp_file(self):
-        return File(self.node.temp_folder.child(self.file.name))
+        return File(self.node.temp_folder.child(self.resource_file.name))
         
     def __repr__(self):
         return str(self.resource_file)
