@@ -1,9 +1,35 @@
 from hydeengine.file_system import File, Folder
+from hydeengine import url
 
 class SiteResource(object):
-    def __init__(self, a_file):
+    def __init__(self, a_file, node):
         super(SiteResource, self).__init__()
         self.resource_file = a_file
+        self.node = node
+    
+    @property
+    def url(self):
+        if not node.url:
+            return None
+        return url.join(node.url, self.resource_file.name)
+    
+    @property
+    def full_url(self):
+        if not node.full_url:
+            return None
+        return url.join(node.full_url, self.resource_file.name)
+    
+    @property
+    def source_file(self):
+        return self.file
+    
+    @property
+    def target_file(self):
+        return File(self.node.target_folder.child(self.file.name))
+        
+    @property
+    def temp_file(self):
+        return File(self.node.temp_folder.child(self.file.name))
         
     def __repr__(self):
         return str(self.resource_file)
@@ -55,7 +81,7 @@ class SiteNode(object):
         return node
         
     def add_resource(self, a_file):
-        resource = SiteResource(a_file)
+        resource = SiteResource(a_file, self)
         self.resources.append(resource)
         return resource
         
@@ -102,8 +128,7 @@ class SiteNode(object):
     def full_url(self):
         if not self.url:
             return None
-        return self.site.settings.SITE_WWW_URL.rstrip("/") + \
-                "/" + self.url.lstrip("/")
+        return url.join(self.site.settings.SITE_WWW_URL, self.url)
         
     @property
     def type(self):
@@ -128,8 +153,8 @@ class ContentNode(SiteNode):
 
     @property
     def url(self):
-        return "/" + self.folder.get_fragment(
-                        self.site.content_folder).lstrip("/")
+        return url.fixslash(
+                self.folder.get_fragment(self.site.content_folder))
     
     @property            
     def type(self):
@@ -155,7 +180,8 @@ class MediaNode(SiteNode):
     
     @property
     def url(self):
-        return "/" + self.folder.get_fragment(self.site.folder).lstrip("/")
+        return url.fixslash(
+                self.folder.get_fragment(self.site.folder))
 
     @property            
     def type(self):

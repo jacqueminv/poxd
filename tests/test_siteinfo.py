@@ -65,7 +65,7 @@ class TestSiteInfo:
                 fragment = None
 
             if node.type in ("content", "media"):
-                fragment = "/" + fragment.lstrip("/")
+                fragment = "/" + fragment.lstrip("/").rstrip("/")
                 assert node.url == fragment
                 assert node.full_url == settings.SITE_WWW_URL + fragment
             else:    

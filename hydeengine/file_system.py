@@ -149,7 +149,7 @@ class Folder(FileSystemEntity):
 
     def child(self, name):
         return os.path.join(self.path, name)
-        
+    
     def child_folder(self, *args):
         return Folder(os.path.join(self.path, *args))
     
