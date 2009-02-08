@@ -59,12 +59,18 @@ class TestSiteInfo:
         for node in self.site.walk():
             if node.type == "content":
                 fragment = node.folder.get_fragment(self.site.content_folder)
-                assert node.url == fragment
-                assert node.full_url == settings.SITE_WWW_URL + "/" + fragment
             elif node.type == "media":
-                assert node.url == node.folder.get_fragment(self.site.folder)
+                fragment = node.folder.get_fragment(self.site.folder)                
             else:
+                fragment = None
+
+            if node.type in ("content", "media"):
+                fragment = "/" + fragment.lstrip("/")
+                assert node.url == fragment
+                assert node.full_url == settings.SITE_WWW_URL + fragment
+            else:    
                 assert not node.url
+                assert not node.full_url
                 
     def test_folders(self):
         for node in self.site.walk():

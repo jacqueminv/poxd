@@ -43,7 +43,14 @@ class SiteNode(object):
         return None
         
     def add_child(self, folder):
-        node = SiteNode(folder, parent=self)
+        if ContentNode.is_content(self.site, folder):
+            node = ContentNode(folder, parent=self)
+        elif LayoutNode.is_layout(self.site, folder):
+            node = LayoutNode(folder, parent=self)
+        elif MediaNode.is_media(self.site, folder):
+            node = MediaNode(folder, parent=self)            
+        else:
+            node = SiteNode(folder, parent=self)    
         self.children.append(node)
         return node
         
@@ -81,64 +88,88 @@ class SiteNode(object):
 
     @property
     def target_folder(self):
-        if self.type not in ("content", "media"):
-            return None
-        deploy_folder = self.site.target_folder
-        return deploy_folder.child_folder_with_fragment(self.url)
+        return None
         
     @property
     def temp_folder(self):
-        if self.type not in ("content", "media"):
-            return None
-        temp_folder = self.site.temp_folder
-        return temp_folder.child_folder_with_fragment(self.url)
+        return None
 
     @property
     def url(self):
-        if self.type == "content":
-            return self.folder.get_fragment(self.site.content_folder)
-        elif self.type == "layout":
-            return None    
-        else: 
-            return self.folder.get_fragment(self.site.folder)
-            
+        return None    
+        
     @property   
     def full_url(self):
+        if not self.url:
+            return None
         return self.site.settings.SITE_WWW_URL.rstrip("/") + \
                 "/" + self.url.lstrip("/")
         
     @property
     def type(self):
-        folders = { self.site.content_folder:"content",
-                    self.site.media_folder:"media",
-                    self.site.layout_folder:"layout"
-                  }
-        for folder, type in folders.iteritems():
-            if (folder.same_as(self.folder) or
-                folder.is_ancestor_of(self.folder)):
-                return type
         return None
         
 class ContentNode(SiteNode):
-      def __init__(self, folder):
-          super(ContentNode, self).__init__(folder)
-          
-      def type(self):
-          return "content"
+
+    @staticmethod
+    def is_content(site, folder):
+        return (site.content_folder.same_as(folder) or
+                site.content_folder.is_ancestor_of(folder))
+    
+    @property
+    def target_folder(self):
+        deploy_folder = self.site.target_folder
+        return deploy_folder.child_folder_with_fragment(self.url)
+
+    @property
+    def temp_folder(self):
+        temp_folder = self.site.temp_folder
+        return temp_folder.child_folder_with_fragment(self.url)
+
+    @property
+    def url(self):
+        return "/" + self.folder.get_fragment(
+                        self.site.content_folder).lstrip("/")
+    
+    @property            
+    def type(self):
+      return "content"
           
 class LayoutNode(SiteNode):
-    def __init__(self, folder):
-        super(LayoutNode, self).__init__(folder)
-
+    
+    @staticmethod
+    def is_layout(site, folder):
+        return (site.layout_folder.same_as(folder) or
+                site.layout_folder.is_ancestor_of(folder))
+                
+    @property
     def type(self):
         return "layout"          
           
 class MediaNode(SiteNode):
-      def __init__(self, folder):
-          super(MediaNode, self).__init__(folder)
 
-      def type(self):
-          return "media"          
+    @staticmethod
+    def is_media(site, folder):
+        return (site.media_folder.same_as(folder) or
+                site.media_folder.is_ancestor_of(folder))
+    
+    @property
+    def url(self):
+        return "/" + self.folder.get_fragment(self.site.folder).lstrip("/")
+
+    @property            
+    def type(self):
+        return "media"    
+        
+    @property
+    def target_folder(self):
+        deploy_folder = self.site.target_folder
+        return deploy_folder.child_folder_with_fragment(self.url)
+
+    @property
+    def temp_folder(self):
+        temp_folder = self.site.temp_folder
+        return temp_folder.child_folder_with_fragment(self.url)      
     
 class SiteInfo(SiteNode):
     def __init__(self, settings, site_path, visitor=None):

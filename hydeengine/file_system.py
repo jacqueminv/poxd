@@ -154,7 +154,7 @@ class Folder(FileSystemEntity):
         return Folder(os.path.join(self.path, *args))
     
     def child_folder_with_fragment(self, fragment):
-        return Folder(os.path.join(self.path, fragment))
+        return Folder(os.path.join(self.path, fragment.lstrip(os.sep)))
         
     def get_fragment(self, root):
         return PathUtil.get_path_fragment(str(root), self.path)
