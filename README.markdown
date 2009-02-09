@@ -204,3 +204,9 @@ The default site layout contains templates for basic site structure, navigation,
 The [Ringce][ringce] website source is available as a reference implementation.
 
 [ringce]:http://github.com/lakshmivyas/ringce/tree/master
+
+# CONTRIBUTORS
+
+- lakshmivyas
+- joshrosen
+- h3yl9r
