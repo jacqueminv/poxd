@@ -1,3 +1,7 @@
+from threading import Thread
+from Queue import Queue
+import time
+
 from hydeengine.file_system import File, Folder
 from hydeengine import url
 
@@ -6,12 +10,22 @@ class SiteResource(object):
         super(SiteResource, self).__init__()
         self.resource_file = a_file
         self.node = node
+        self.last_known_modification_time = a_file.last_modified
+   
+    @property
+    def has_changes(self):
+        return (not self.last_known_modification_time ==
+                    self.resource_file.last_modified)
     
     @property
     def url(self):
         if not self.node.url:
             return None
         return url.join(self.node.url, self.resource_file.name)
+        
+    @property
+    def last_modified(self):
+        return self.file.last_modified
     
     @property
     def full_url(self):
@@ -44,6 +58,7 @@ class SiteNode(object):
             self.site = self.parent.site
         self.children = []
         self.resources = []
+        self.queue = Queue()
     
     def __repr__(self):
         return str(self.folder)
@@ -198,10 +213,10 @@ class MediaNode(SiteNode):
         return temp_folder.child_folder_with_fragment(self.url)      
     
 class SiteInfo(SiteNode):
-    def __init__(self, settings, site_path, visitor=None):
+    def __init__(self, settings, site_path):
         super(SiteInfo, self).__init__(Folder(site_path))
         self.settings = settings
-        self.update(visitor)
+        self.init()
      
     @property
     def content_folder(self):
@@ -222,19 +237,53 @@ class SiteInfo(SiteNode):
     @property
     def target_folder(self):
         return Folder(self.settings.DEPLOY_DIR)
-
+    
+    def monitor(self):
+        m = Thread(target=self.__monitor_thread__)
+        m.start()
         
-    def update(self, visitor):
+    def __monitor_thread__(self):
+        while True:
+            self.update()
+            # TODO: add time out
+            time.sleep(10)
+     
+    def find_and_add_resource(self, a_file):
+        node = self.find_and_add_node(a_file.parent)
+        return node.add_resource(a_file)
+        
+    def find_and_add_node(self, folder):
+        node = self.find_node(folder.parent)
+        if not node:
+            node = find_and_add_node(folder.parent.parent)
+            node = node.add_child(folder.parent)
+        return node.add_child(folder)
+        
+    def update(self):
+        site = self
+        class Visitor(object):
+            def visit_file(self, a_file):
+                resource = site.find_resource(a_file)
+                change = None
+                if not resource:
+                   resource = site.find_and_add_resource(a_file)
+                   change = "Added"
+                elif resource.has_changes:
+                   change = "Modified"
+                if change:
+                   site.queue.put({
+                       "change": change,
+                       "resource": resource
+                   })    
+        self.folder.walk(visitor=Visitor())
+        
+    def init(self):
         class Visitor(object):
             def __init__(self, siteinfo):
                 self.current_node = siteinfo
                 
             def visit_file(self, a_file):
                 resource = self.current_node.add_resource(a_file)
-                try:
-                    visitor.visit_resource(resource)
-                except AttributeError:
-                    pass
                     
             def visit_folder(self, folder):
                 node = self.current_node.find_node(folder)
@@ -243,15 +292,5 @@ class SiteInfo(SiteNode):
                 else:
                     parent = self.current_node.find_node(folder.parent)
                     self.current_node = parent.add_child(folder)
-                try:
-                    visitor.visit_node(self.current_node)
-                except AttributeError:
-                    pass
-                    
-            def visit_complete(self):
-                try:
-                    visitor.visit_complete()
-                except AttributeError:
-                    pass
                     
         self.folder.walk(visitor=Visitor(self))

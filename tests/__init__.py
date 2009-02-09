@@ -46,8 +46,8 @@ Notes:
     4.2 Media
     4.3 Layout
 5. Two threads for regeneration:
-    4.1 Content
-    4.2 Media
+    5.1 Content
+    5.2 Media
 6. 
 
 """

@@ -73,13 +73,16 @@ class File(FileSystemEntity):
         if self.exists:
             os.remove(self.path)
             
+    @property        
+    def last_modified(self):
+        return datetime.fromtimestamp(os.path.getmtime(self.path))
+            
     def changed_since(self, basetime):
-        updated = os.path.getmtime(self.path)
-        return  datetime.fromtimestamp(updated) > basetime
+        return self.last_modified > basetime
         
     def older_than(self, another_file):
-        return (os.path.getmtime(another_file.path) > 
-                                os.path.getmtime(self.path))
+        return another_file.last_modified > self.last_modified
+                                
 
     @property
     def path_without_extension(self):

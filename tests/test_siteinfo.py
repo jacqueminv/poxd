@@ -124,7 +124,32 @@ class TestSiteInfo:
             fragment = node.folder.get_fragment(self.site.content_folder)
         elif node.type == "media":
             fragment = node.folder.get_fragment(self.site.folder)
-        return fragment        
+        return fragment
+        
+class TestSiteInfoContinuous:
+    
+    def setup_method(self, method):
+        self.site = SiteInfo(settings, TEST_SITE.path)
+    
+    def modification_checker(self):
+        from Queue import Empty
+        try:
+            changes = self.site.queue.get(block=True, timeout=5)
+            assert changes
+            assert changes['change'] == "Modified"
+            assert changes['resource']
+            assert changes['resource'].resource_file.path == \
+                        self.site.media_folder.child("css/base.css") 
+        except Empty:
+            print "kashdkjashdk"    
+            assert None
             
-        
-        
+    def test_modify_content(self):
+        from threading import Thread
+        from Queue import Queue
+        self.site.monitor()
+        t = Thread(target=self.modification_checker)
+        t.start()
+        os.utime(self.site.media_folder.child_folder_with_fragment(
+                "css/base.css").path, None)
+        t.join()            
