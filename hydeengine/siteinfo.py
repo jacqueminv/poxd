@@ -1,4 +1,5 @@
-from threading import Thread
+import sys
+from threading import Thread, Event
 from Queue import Queue
 import time
 
@@ -76,6 +77,11 @@ class SiteNode(object):
         for child in self.children:
             for node in child.walk():                
                 yield node
+                
+    def walk_resources(self):
+        for node in self.walk():
+            for resource in node.resources:
+                yield resource
     
     def find_child(self, folder):
         for node in self.walk():
@@ -217,6 +223,8 @@ class SiteInfo(SiteNode):
         super(SiteInfo, self).__init__(Folder(site_path))
         self.settings = settings
         self.init()
+        self.m = None
+        self._stop = Event()
      
     @property
     def content_folder(self):
@@ -239,12 +247,31 @@ class SiteInfo(SiteNode):
         return Folder(self.settings.DEPLOY_DIR)
     
     def monitor(self):
-        m = Thread(target=self.__monitor_thread__)
-        m.start()
+        if self.m:
+            return self.m
+        self._stop.clear()    
+        self.m = Thread(target=self.__monitor_thread__)
+        self.m.start()
+        return self.m
+    
+    def dont_monitor(self):
+        if not self.m or not self.m.isAlive():
+            return
+        self._stop.set()
+        self.m.join()
+        self._stop.clear()
         
     def __monitor_thread__(self):
-        while True:
-            self.update()
+        while not self._stop.isSet():
+            try:
+                self.update()
+            except:
+                self.queue.put({
+                    "exception": True
+                })
+                raise
+            if self._stop.isSet():
+                break        
             # TODO: add time out
             time.sleep(10)
      
@@ -261,6 +288,9 @@ class SiteInfo(SiteNode):
         
     def update(self):
         site = self
+        # Have to poll for changes since there is no reliable way
+        # to get notification in a platform independent manner
+        #
         class Visitor(object):
             def visit_file(self, a_file):
                 resource = site.find_resource(a_file)
@@ -273,9 +303,18 @@ class SiteInfo(SiteNode):
                 if change:
                    site.queue.put({
                        "change": change,
-                       "resource": resource
+                       "resource": resource,
+                       "exception": False
                    })    
+     
         self.folder.walk(visitor=Visitor())
+        for resource in self.walk_resources():
+            if not resource.resource_file.exists:
+                site.queue.put({
+                    "change":"Deleted",
+                    "resource":resource,
+                    "exception": False
+                })
         
     def init(self):
         class Visitor(object):

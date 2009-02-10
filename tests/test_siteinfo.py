@@ -2,7 +2,7 @@
 
 uses py.test
 
-sudo_easy_install py
+sudo easy_install py
 
 http://codespeak.net/py/dist/test.html
 
@@ -10,6 +10,10 @@ http://codespeak.net/py/dist/test.html
 import os
 import sys
 import unittest
+from threading import Thread
+from Queue import Queue
+from Queue import Empty
+
 from django.conf import settings
 
 TEST_ROOT = os.path.dirname(os.path.abspath(__file__))
@@ -130,26 +134,58 @@ class TestSiteInfoContinuous:
     
     def setup_method(self, method):
         self.site = SiteInfo(settings, TEST_SITE.path)
-    
-    def modification_checker(self):
-        from Queue import Empty
+        self.exception_queue = Queue()
+        
+    def change_checker(self, change, path):
         try:
             changes = self.site.queue.get(block=True, timeout=5)
             assert changes
-            assert changes['change'] == "Modified"
+            assert not changes['exception']
+            assert changes['change'] == change
             assert changes['resource']
-            assert changes['resource'].resource_file.path == \
-                        self.site.media_folder.child("css/base.css") 
-        except Empty:
-            print "kashdkjashdk"    
-            assert None
+            assert changes['resource'].resource_file.path == path
+        except:
+            self.exception_queue.put(sys.exc_info())
+            raise
             
-    def test_modify_content(self):
-        from threading import Thread
-        from Queue import Queue
+    def test_monitor_stop(self):
+        m = self.site.monitor()
+        self.site.dont_monitor()
+        assert not m.isAlive()
+            
+    def test_modify(self):
         self.site.monitor()
-        t = Thread(target=self.modification_checker)
+        path = self.site.media_folder.child("css/base.css")
+        t = Thread(target=self.change_checker, 
+                    kwargs={"change":"Modified", "path":path})
         t.start()
-        os.utime(self.site.media_folder.child_folder_with_fragment(
-                "css/base.css").path, None)
-        t.join()            
+        os.utime(path, None)
+        t.join()
+        assert self.exception_queue.empty()
+            
+        
+    def test_add(self, direct=False):
+        self.site.monitor()
+        path = self.site.layout_folder.child("test.ggg")
+        t = Thread(target=self.change_checker, 
+                    kwargs={"change":"Added", "path":path})
+        t.start()      
+        f = File(path)        
+        f.write("test")
+        t.join()
+        if not direct:
+            f.delete()
+        assert self.exception_queue.empty()        
+        
+    def test_delete(self):
+        path = self.site.layout_folder.child("test.ggg")
+        self.test_add(direct=True)
+        t = Thread(target=self.change_checker, 
+                    kwargs={"change":"Deleted", "path":path})
+        t.start()      
+        File(path).delete()
+        t.join()
+        assert self.exception_queue.empty()
+        
+    def test_stop_monitor(self):
+        self.site.dont_monitor()
