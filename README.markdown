@@ -90,7 +90,7 @@ You need to install Clever CSS using ``sudo easy_install CleverCSS`` command for
 
 Runs through the all the files defined in the configuration associated with ``'hydeengine.media_processors.HSS'`` and converts them to css. 
 
-You need to download HSS from [hss] and set the ``HSS_PATH`` variable to the downloaded path.
+You need to download HSS from [the project website][hss] and set the ``HSS_PATH`` variable to the downloaded path. A version for OS X is installed in the ``lib`` folder. To use it, just uncomment the ``HSS_PATH`` line in the settings.py file of your template.
 
 [hss]: http://ncannasse.fr/projects/hss
 
