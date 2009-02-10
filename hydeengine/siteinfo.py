@@ -242,11 +242,12 @@ class SiteInfo(SiteNode):
     def resource_added(self, resource):
         self.resourcemap[resource.resource_file.path] = resource    
     
-    def monitor(self):
+    def monitor(self, waittime=10):
         if self.m:
             return self.m
         self._stop.clear()    
-        self.m = Thread(target=self.__monitor_thread__)
+        self.m = Thread(target=self.__monitor_thread__, 
+                            kwargs={"waittime":waittime})
         self.m.start()
         return self.m
     
@@ -257,7 +258,7 @@ class SiteInfo(SiteNode):
         self.m.join()
         self._stop.clear()
         
-    def __monitor_thread__(self):
+    def __monitor_thread__(self, waittime):
         while not self._stop.isSet():
             try:
                 self.update()
@@ -268,8 +269,7 @@ class SiteInfo(SiteNode):
                 raise
             if self._stop.isSet():
                 break        
-            # TODO: add time out
-            time.sleep(10)
+            time.sleep(waittime)
      
     def find_and_add_resource(self, a_file):
         node = self.find_and_add_node(a_file.parent)
