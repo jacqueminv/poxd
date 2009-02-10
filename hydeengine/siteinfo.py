@@ -82,13 +82,7 @@ class SiteNode(object):
         for node in self.walk():
             for resource in node.resources:
                 yield resource
-    
-    def find_child(self, folder):
-        for node in self.walk():
-            if node.folder.same_as(folder):
-                return node
-        return None
-        
+
     def add_child(self, folder):
         if ContentNode.is_content(self.site, folder):
             node = ContentNode(folder, parent=self)
@@ -99,36 +93,30 @@ class SiteNode(object):
         else:
             node = SiteNode(folder, parent=self)    
         self.children.append(node)
+        self.site.child_added(node)
         return node
         
     def add_resource(self, a_file):
         resource = SiteResource(a_file, self)
         self.resources.append(resource)
+        self.site.resource_added(resource)
         return resource
         
     def find_node(self, folder):
-        if self.folder.same_as(folder):
-            return self
-        found_node = None
-        # Check parents first
-        #
-        if not self.isroot:
-            found_node = self.parent.find_node(folder)
-        # Check children
-        #     
-        if not found_node:
-            found_node = self.find_child(folder)
-        return found_node
+        try:
+            return self.site.nodemap[folder.path]
+        except KeyError:
+            print folder
+            return None
+        
+    find_child = find_node    
     
     def find_resource(self, a_file):
-        node = self.find_node(a_file.parent)
-        if not node:
+        try:
+            return self.site.resourcemap[a_file.path]
+        except KeyError:
             return None
-        for resource in node.resources:
-            if resource.resource_file.same_as(a_file):
-                return resource
-        return None
-    
+
     @property
     def source_folder(self):
         return self.folder
@@ -222,9 +210,11 @@ class SiteInfo(SiteNode):
     def __init__(self, settings, site_path):
         super(SiteInfo, self).__init__(Folder(site_path))
         self.settings = settings
-        self.init()
         self.m = None
         self._stop = Event()
+        self.nodemap = {site_path:self}
+        self.resourcemap = {}
+        self.init()
      
     @property
     def content_folder(self):
@@ -245,6 +235,12 @@ class SiteInfo(SiteNode):
     @property
     def target_folder(self):
         return Folder(self.settings.DEPLOY_DIR)
+    
+    def child_added(self, node):
+        self.nodemap[node.folder.path] = node
+        
+    def resource_added(self, resource):
+        self.resourcemap[resource.resource_file.path] = resource    
     
     def monitor(self):
         if self.m:

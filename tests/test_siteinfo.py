@@ -130,7 +130,7 @@ class TestSiteInfo:
             fragment = node.folder.get_fragment(self.site.folder)
         return fragment
         
-class TestSiteInfoContinuous:
+class TestSiteInfoMonitoring:
     
     def setup_method(self, method):
         self.site = SiteInfo(settings, TEST_SITE.path)
@@ -162,7 +162,6 @@ class TestSiteInfoContinuous:
         os.utime(path, None)
         t.join()
         assert self.exception_queue.empty()
-            
         
     def test_add(self, direct=False):
         self.site.monitor()
