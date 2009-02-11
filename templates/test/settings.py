@@ -13,6 +13,7 @@ URL_LIST_FILE = os.path.join(ROOT_PATH, 'urllist.txt')
 
 BACKUP = False
 
+SITE_ROOT  = "/"
 SITE_WWW_URL = "http://www.yoursite.com"
 SITE_NAME = "Hyde"
 
