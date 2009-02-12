@@ -140,7 +140,7 @@ class HtaccessGenerator:
             for page in site.walk_pages(): # build url to file mapping
                 if page.listing and page.name_without_extension not in \
                    (settings.LISTING_PAGE_NAMES + [page.node.name]):
-                    filename = os.path.join(settings.DEPLOY_DIR, page.name)
+                    filename = os.path.join(page.url, page.name)
                     if settings.APPEND_SLASH:
                         url = page.url.lstrip('/')
                     else:
@@ -148,14 +148,14 @@ class HtaccessGenerator:
                     manual_rules_url_map.append((url, filename))
             manual_rules = []
             for page in manual_rules_url_map: # turn that mapping into RewriteRules
-                manual_rules.append("RewriteRule ^%s$ %s" % page)
+                manual_rules.append("RewriteRule ^%s$ %s\n" % page)
             context['HYDE_REWRITE_RULES'] = mark_safe(REWRITE_RULES.safe_substitute( \
                 {'auto_rules' : ''.join(auto_rules),
                  'manual_rules' : ''.join(manual_rules) 
                 }))
         else:
             context['HYDE_REWRITE_RULES'] = ''
-            htaccess = open(htaccess_file, 'w')
-            htaccess.write(render_to_string(htaccess_template, 
+        htaccess = open(htaccess_file, 'w')
+        htaccess.write(render_to_string(htaccess_template, 
             dict(context.items() + settings.CONTEXT.items())))
-            htaccess.close()
+        htaccess.close()
