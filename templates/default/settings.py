@@ -12,6 +12,7 @@ BACKUPS_DIR = os.path.join(ROOT_PATH, 'backups')
 
 BACKUP = False
 
+SITE_ROOT = "/"
 SITE_WWW_URL = "http://www.yoursite.com"
 SITE_NAME = "Hyde"
 

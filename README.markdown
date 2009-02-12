@@ -90,7 +90,7 @@ You need to install Clever CSS using ``sudo easy_install CleverCSS`` command for
 
 Runs through the all the files defined in the configuration associated with ``'hydeengine.media_processors.HSS'`` and converts them to css. 
 
-You need to download HSS from [hss] and set the ``HSS_PATH`` variable to the downloaded path.
+You need to download HSS from [the project website][hss] and set the ``HSS_PATH`` variable to the downloaded path. A version for OS X is installed in the ``lib`` folder by default. To use it, just uncomment the ``HSS_PATH`` line in the settings.py file of your template.
 
 [hss]: http://ncannasse.fr/projects/hss
 
@@ -195,6 +195,12 @@ Render Excerpt takes a page variable and optional number of words argument to re
 
 Latest Excerpt takes a content folder path and optional number of words as input. It parses through the content pages looking for page variables named ``created`` and gets the page with the maximum value and renders the excerpt from that page.
 
+### Typogrify
+
+To enable Typogrify, use ``{% filter typogrify %}`` in your code. Typogrify is "a collection of Django template filters that help prettify your web typography by preventing ugly quotes and widows", according to the [project web site][typogrify_site]. It is automatically enabled in the default template.
+
+[typogrify_site]:http://code.google.com/p/typogrify/
+
 ## Base Templates
 
 The default site layout contains templates for basic site structure, navigation, breadcrumbs, listing and posts. However, no CSS is included yet. 
@@ -204,3 +210,9 @@ The default site layout contains templates for basic site structure, navigation,
 The [Ringce][ringce] website source is available as a reference implementation.
 
 [ringce]:http://github.com/lakshmivyas/ringce/tree/master
+
+# CONTRIBUTORS
+
+- lakshmivyas
+- joshrosen
+- Harry Lachenmayer

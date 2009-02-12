@@ -87,7 +87,11 @@ class SitemapNode(object):
                         settings.CONTENT_DIR, settings.DEPLOY_DIR,
                         ignore_root=True).path
         else:
-            url = "/" + self.folder.get_fragment(
+            site_root = ""
+            if hasattr(settings, "SITE_ROOT"):
+                site_root = settings.SITE_ROOT.rstrip("/")
+                
+            url = site_root + "/" + self.folder.get_fragment(
                                     settings.CONTENT_DIR
                                     ).lstrip(os.sep)
             return url.rstrip("/")

@@ -102,7 +102,7 @@ def render_excerpt(parser, token):
     return RenderExcerptNode(path, words)
 
 @register.tag(name="render_article")    
-def render_excerpt(parser, token):
+def render_article(parser, token):
     tokens = token.split_contents()
     path = None
     if len(tokens) > 1:
