@@ -155,6 +155,7 @@ class HtaccessGenerator:
                 }))
         else:
             context['HYDE_REWRITE_RULES'] = ''
-        with open(htaccess_file, 'w') as file:
-            file.write(render_to_string(htaccess_template, 
-                dict(context.items() + settings.CONTEXT.items())))
+            htaccess = open(htaccess_file, 'w')
+            htaccess.write(render_to_string(htaccess_template, 
+            dict(context.items() + settings.CONTEXT.items())))
+            htaccess.close()

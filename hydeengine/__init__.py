@@ -9,9 +9,27 @@ from file_system import File, Folder
 from folders import MediaFolder, ContentFolder, TempFolder
 from renderer import build_sitemap, render_pages
 
+class hyde_defaults:
+    
+    GENERATE_CLEAN_URLS = True
+    
+    GENERATE_ABSOLUTE_FS_URLS = False
+    
+    LISTING_PAGE_NAMES = ['index', 'default', 'listing']
+    
+    APPEND_SLASH = False
+    
+    MEDIA_PROCESSORS = {}
+    
+    CONTENT_PROCESSORS = {}
+        
+    SITE_POST_PROCESSORS =  {}
+    
+    CONTEXT =  {}
+    
 def setup_env(site_path):
     try:
-        imp.load_source("hyde_site_settings",
+       hyde_site_settings = imp.load_source("hyde_site_settings",
                         os.path.join(site_path,"settings.py"))
     except SyntaxError, err:
         print "The given site_path [%s] contains a settings file " \
@@ -28,7 +46,11 @@ def setup_env(site_path):
         )
         
     try:
-        os.environ['DJANGO_SETTINGS_MODULE'] = u"hyde_site_settings"
+        #os.environ['DJANGO_SETTINGS_MODULE'] = u"hyde_site_settings"
+        from django.conf import global_settings
+        defaults = global_settings.__dict__
+        defaults.update(hyde_site_settings.__dict__)
+        settings.configure(hyde_defaults, **defaults)
     except Exception, err:
         print "Site settings are not defined properly"
         print err
