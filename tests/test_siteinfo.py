@@ -9,6 +9,7 @@ http://codespeak.net/py/dist/test.html
 """
 import os
 import sys
+from datetime import datetime, timedelta
 import unittest
 from threading import Thread
 from Queue import Queue
@@ -34,7 +35,7 @@ def setup_module(module):
     
 def teardown_module(module):
     TEST_SITE.delete()
-
+    
 class TestSiteInfo:
 
     def setup_method(self, method):
@@ -107,20 +108,20 @@ class TestSiteInfo:
         fragment = self.get_node_fragment(node)
         if resource.node.type in ("content", "media"):
             assert (resource.url ==  
-                        url.join(node.url, resource.resource_file.name))
+                        url.join(node.url, resource.file.name))
             assert (resource.full_url ==  
-                        url.join(node.full_url, resource.resource_file.name))
+                        url.join(node.full_url, resource.file.name))
             assert resource.target_file.same_as(
                     File(node.target_folder.child(
-                            resource.resource_file.name)))
+                            resource.file.name)))
             assert resource.temp_file.same_as(
-                    File(node.temp_folder.child(resource.resource_file.name)))
+                    File(node.temp_folder.child(resource.file.name)))
         else:
             assert not resource.url
             assert not resource.full_url
         
         assert resource.source_file.parent.same_as(node.folder)
-        assert resource.source_file.name == resource.resource_file.name
+        assert resource.source_file.name == resource.file.name
         
     def get_node_fragment(self, node):
         fragment = ''
@@ -143,7 +144,7 @@ class TestSiteInfoMonitoring:
             assert not changes['exception']
             assert changes['change'] == change
             assert changes['resource']
-            assert changes['resource'].resource_file.path == path
+            assert changes['resource'].file.path == path
         except:
             self.exception_queue.put(sys.exc_info())
             raise
@@ -188,3 +189,49 @@ class TestSiteInfoMonitoring:
         
     def test_stop_monitor(self):
         self.site.dont_monitor()
+        
+class TestYAMLProcessor:
+    
+    def setup_method(self, method):
+        self.site = SiteInfo(settings, TEST_SITE.path)
+        self.exception_queue = Queue()
+        
+    def yaml_checker(self, path, vars):
+           try:
+               changes = self.site.queue.get(block=True, timeout=5)
+               assert changes
+               assert not changes['exception']
+               resource = changes['resource']               
+               assert resource
+               assert resource.file.path == path
+               from hydeengine.content_processors import YAMLContentProcessor
+               YAMLContentProcessor.process(resource)
+               for key, value in vars.iteritems():
+                   assert hasattr(resource, key)
+                   assert getattr(resource, key) == value
+           except:
+               self.exception_queue.put(sys.exc_info())
+               raise    
+    
+    def test_variables_are_added(self):
+        vars = {}
+        vars["title"] = "Test Title"
+        vars["created"] = datetime.now()
+        vars["updated"] = datetime.now() + timedelta(hours=1)
+        content = "{%hyde\n"
+        for key, value in vars.iteritems():
+            content += "    %s: %s\n" % (key, value)
+        content +=  "%}"
+        out = File(self.site.content_folder.child("test_yaml.html"))
+        self.site.monitor()
+        t = Thread(target=self.yaml_checker, 
+                        kwargs={"path":out.path, "vars":vars})
+        t.start()
+        out.write(content)
+        t.join()
+        assert self.exception_queue.empty()
+        
+    def test_stop_monitor(self):
+        self.site.dont_monitor()
+        
+            

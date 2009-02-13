@@ -9,20 +9,20 @@ from hydeengine import url
 class SiteResource(object):
     def __init__(self, a_file, node):
         super(SiteResource, self).__init__()
-        self.resource_file = a_file
+        self.file = a_file
         self.node = node
         self.last_known_modification_time = a_file.last_modified
    
     @property
     def has_changes(self):
         return (not self.last_known_modification_time ==
-                    self.resource_file.last_modified)
+                    self.file.last_modified)
     
     @property
     def url(self):
         if not self.node.url:
             return None
-        return url.join(self.node.url, self.resource_file.name)
+        return url.join(self.node.url, self.file.name)
         
     @property
     def last_modified(self):
@@ -32,22 +32,25 @@ class SiteResource(object):
     def full_url(self):
         if not self.node.full_url:
             return None
-        return url.join(self.node.full_url, self.resource_file.name)
+        return url.join(self.node.full_url, self.file.name)
     
     @property
     def source_file(self):
-        return self.resource_file
+        return self.file
     
     @property
     def target_file(self):
-        return File(self.node.target_folder.child(self.resource_file.name))
+        return File(self.node.target_folder.child(self.file.name))
         
     @property
     def temp_file(self):
-        return File(self.node.temp_folder.child(self.resource_file.name))
+        return File(self.node.temp_folder.child(self.file.name))
         
     def __repr__(self):
-        return str(self.resource_file)
+        return str(self.file)
+ 
+class Page(SiteResource):
+    pass
 
 class SiteNode(object):
     def __init__(self, folder, parent=None):
@@ -97,16 +100,18 @@ class SiteNode(object):
         return node
         
     def add_resource(self, a_file):
-        resource = SiteResource(a_file, self)
+        resource = self._make_resource_from_file(a_file)
         self.resources.append(resource)
         self.site.resource_added(resource)
         return resource
+    
+    def _make_resource_from_file(self, a_file):
+        return SiteResource(a_file, self)
         
     def find_node(self, folder):
         try:
             return self.site.nodemap[folder.path]
         except KeyError:
-            print folder
             return None
         
     find_child = find_node    
@@ -149,6 +154,9 @@ class ContentNode(SiteNode):
     def is_content(site, folder):
         return (site.content_folder.same_as(folder) or
                 site.content_folder.is_ancestor_of(folder))
+   
+    def _make_resource_from_file(self, a_file):
+        return Page(a_file, self)
     
     @property
     def target_folder(self):
@@ -215,6 +223,18 @@ class SiteInfo(SiteNode):
         self.nodemap = {site_path:self}
         self.resourcemap = {}
         self.init()
+        
+    @property
+    def content_node(self):
+        return self.nodemap[self.content_folder.path]
+        
+    @property
+    def media_node(self):
+        return self.nodemap[self.media_folder.path]    
+    
+    @property
+    def layout_node(self):
+        return self.nodemap[self.layout_folder.path]    
      
     @property
     def content_folder(self):
@@ -240,7 +260,7 @@ class SiteInfo(SiteNode):
         self.nodemap[node.folder.path] = node
         
     def resource_added(self, resource):
-        self.resourcemap[resource.resource_file.path] = resource    
+        self.resourcemap[resource.file.path] = resource    
     
     def monitor(self, waittime=10):
         if self.m:
@@ -305,7 +325,7 @@ class SiteInfo(SiteNode):
      
         self.folder.walk(visitor=Visitor())
         for resource in self.walk_resources():
-            if not resource.resource_file.exists:
+            if not resource.file.exists:
                 site.queue.put({
                     "change":"Deleted",
                     "resource":resource,

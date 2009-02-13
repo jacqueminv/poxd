@@ -1,10 +1,11 @@
 import re
 from file_system import File
+from siteinfo import Page
 
 def get_context_text(page):
     start = re.compile(r'.*?{%\s*hyde\s*(.*?)(%}|$)')
     end = re.compile(r'(.*?)(%})')
-    fin = open(str(page),'r')
+    fin = open(page.file.path,'r')
     started = False
     text = ''
     matcher = start
@@ -25,31 +26,9 @@ def get_context_text(page):
 def add_page_variables(page, page_vars):
     if not page_vars: return
     for key, value in page_vars.iteritems():
-        if not hasattr(File, key):
-            setattr(File, key, None)
+        if not hasattr(Page, key):
+            setattr(Page, key, None)
         setattr(page, key, value)
-            
-
-class PyContentProcessor:
-    @staticmethod
-    def process(page):
-        import warnings
-        warnings.warn("This function is deprecated." + 
-        """ 
-        While this was cool when it was written, it sucks to use 
-        python dictionaries in templates. This class is now deprecated. 
-        Will be removed completely when hyde goes beta.
-        """,
-        DeprecationWarning, stacklevel=2)
-        return
-        text = get_context_text(page)
-        page_context = {}
-        source_code = "page_context.update(" + text + ")"
-        from py.code import Source
-        source = Source(source_code)
-        exec source.compile()
-        add_page_variables(page, page_context)
-        return page
         
 class YAMLContentProcessor:
     
