@@ -104,7 +104,11 @@ class SiteNode(object):
         self.resources.append(resource)
         self.site.resource_added(resource)
         return resource
-    
+        
+    def remove_resource(self, resource):
+        self.resources.remove(resource)
+        self.site.resource_removed(resource)
+
     def _make_resource_from_file(self, a_file):
         return SiteResource(a_file, self)
         
@@ -222,7 +226,7 @@ class SiteInfo(SiteNode):
         self._stop = Event()
         self.nodemap = {site_path:self}
         self.resourcemap = {}
-        self.init()
+        self.update()
         
     @property
     def content_node(self):
@@ -260,7 +264,10 @@ class SiteInfo(SiteNode):
         self.nodemap[node.folder.path] = node
         
     def resource_added(self, resource):
-        self.resourcemap[resource.file.path] = resource    
+        self.resourcemap[resource.file.path] = resource
+        
+    def resource_removed(self, resource):
+        del self.resourcemap[resource.file.path]
     
     def monitor(self, waittime=10):
         if self.m:
@@ -292,21 +299,24 @@ class SiteInfo(SiteNode):
             time.sleep(waittime)
      
     def find_and_add_resource(self, a_file):
+        resource = self.find_resource(a_file)
+        if resource:
+            return resource
         node = self.find_and_add_node(a_file.parent)
         return node.add_resource(a_file)
         
     def find_and_add_node(self, folder):
-        node = self.find_node(folder.parent)
-        if not node:
-            node = find_and_add_node(folder.parent.parent)
-            node = node.add_child(folder.parent)
+        node = self.find_node(folder)
+        if node:
+            return node
+        node = self.find_and_add_node(folder.parent)    
         return node.add_child(folder)
         
     def update(self):
         site = self
         # Have to poll for changes since there is no reliable way
         # to get notification in a platform independent manner
-        #
+        #                    
         class Visitor(object):
             def visit_file(self, a_file):
                 resource = site.find_resource(a_file)
@@ -321,7 +331,8 @@ class SiteInfo(SiteNode):
                        "change": change,
                        "resource": resource,
                        "exception": False
-                   })    
+                   })
+                   resource.last_known_modification_time = a_file.last_modified
      
         self.folder.walk(visitor=Visitor())
         for resource in self.walk_resources():
@@ -331,21 +342,5 @@ class SiteInfo(SiteNode):
                     "resource":resource,
                     "exception": False
                 })
-        
-    def init(self):
-        class Visitor(object):
-            def __init__(self, siteinfo):
-                self.current_node = siteinfo
+                resource.node.remove_resource(resource)
                 
-            def visit_file(self, a_file):
-                resource = self.current_node.add_resource(a_file)
-                    
-            def visit_folder(self, folder):
-                node = self.current_node.find_node(folder)
-                if node:
-                    self.current_node = node
-                else:
-                    parent = self.current_node.find_node(folder.parent)
-                    self.current_node = parent.add_child(folder)
-                    
-        self.folder.walk(visitor=Visitor(self))

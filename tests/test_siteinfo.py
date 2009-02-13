@@ -131,15 +131,33 @@ class TestSiteInfo:
             fragment = node.folder.get_fragment(self.site.folder)
         return fragment
         
-class TestSiteInfoMonitoring:
-    
+
+def clean_queue(site):
+    while not site.queue.empty():
+        try:
+            site.queue.get()
+            site.queue.task_done()
+        except Empty:
+            break
+
+class MonitorTests(object):
+    def setup_class(cls):
+        cls.site = None
+
+    def teardown_class(cls):
+        if cls.site:
+            cls.site.dont_monitor()    
+            
     def setup_method(self, method):
         self.site = SiteInfo(settings, TEST_SITE.path)
         self.exception_queue = Queue()
         
+class TestSiteInfoMonitoring(MonitorTests):
+    
     def change_checker(self, change, path):
         try:
-            changes = self.site.queue.get(block=True, timeout=5)
+            changes = self.site.queue.get(block=True, timeout=20)
+            self.site.queue.task_done()
             assert changes
             assert not changes['exception']
             assert changes['change'] == change
@@ -150,11 +168,13 @@ class TestSiteInfoMonitoring:
             raise
             
     def test_monitor_stop(self):
+        clean_queue(self.site)
         m = self.site.monitor()
         self.site.dont_monitor()
         assert not m.isAlive()
             
     def test_modify(self):
+        clean_queue(self.site)
         self.site.monitor()
         path = self.site.media_folder.child("css/base.css")
         t = Thread(target=self.change_checker, 
@@ -165,6 +185,7 @@ class TestSiteInfoMonitoring:
         assert self.exception_queue.empty()
         
     def test_add(self, direct=False):
+        clean_queue(self.site)
         self.site.monitor()
         path = self.site.layout_folder.child("test.ggg")
         t = Thread(target=self.change_checker, 
@@ -178,6 +199,7 @@ class TestSiteInfoMonitoring:
         assert self.exception_queue.empty()        
         
     def test_delete(self):
+        clean_queue(self.site)        
         path = self.site.layout_folder.child("test.ggg")
         self.test_add(direct=True)
         t = Thread(target=self.change_checker, 
@@ -187,18 +209,12 @@ class TestSiteInfoMonitoring:
         t.join()
         assert self.exception_queue.empty()
         
-    def test_stop_monitor(self):
-        self.site.dont_monitor()
-        
-class TestYAMLProcessor:
-    
-    def setup_method(self, method):
-        self.site = SiteInfo(settings, TEST_SITE.path)
-        self.exception_queue = Queue()
-        
+class TestYAMLProcessor(MonitorTests):
+   
     def yaml_checker(self, path, vars):
            try:
                changes = self.site.queue.get(block=True, timeout=5)
+               self.site.queue.task_done()
                assert changes
                assert not changes['exception']
                resource = changes['resource']               
@@ -214,6 +230,7 @@ class TestYAMLProcessor:
                raise    
     
     def test_variables_are_added(self):
+        clean_queue(self.site)        
         vars = {}
         vars["title"] = "Test Title"
         vars["created"] = datetime.now()
@@ -237,7 +254,3 @@ class TestYAMLProcessor:
             assert hasattr(page, key)
             assert not getattr(page, key)
         
-    def test_stop_monitor(self):
-        self.site.dont_monitor()
-        
-            
