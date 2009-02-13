@@ -25,7 +25,7 @@ sys.path = [ROOT] + sys.path
 from hydeengine.file_system import File, Folder
 from hydeengine import url
 from hydeengine import Initializer, setup_env
-from hydeengine.siteinfo import SiteNode, SiteInfo
+from hydeengine.siteinfo import SiteNode, SiteInfo, Page
 
 TEST_SITE = Folder(TEST_ROOT).child_folder("test_site")
 
@@ -230,6 +230,12 @@ class TestYAMLProcessor:
         out.write(content)
         t.join()
         assert self.exception_queue.empty()
+        # Ensure default values are added for all pages
+        #
+        page = Page(out, None)
+        for key, value in vars.iteritems():
+            assert hasattr(page, key)
+            assert not getattr(page, key)
         
     def test_stop_monitor(self):
         self.site.dont_monitor()
