@@ -234,7 +234,11 @@ REDIRECT_OLD_URLS_RULE = string.Template(\
 r"""
 RewriteCond %{THE_REQUEST} \.html
 RewriteRule ^(.*/?([^/]+))/\2\.html ${site_url}/$1${trailing_slash} [R=301]
+"""
+)
 
+REDIRECT_OLD_URLS_LPN_RULE = string.Template(\
+r"""
 RewriteCond %{THE_REQUEST} \.html
 RewriteRule ^([^.]+)/(${lpn_names})\.html$ ${site_url}/$1${trailing_slash} [R=301]
 """
@@ -242,42 +246,61 @@ RewriteRule ^([^.]+)/(${lpn_names})\.html$ ${site_url}/$1${trailing_slash} [R=30
 
 class RenderHydeRewriteRulesNode(template.Node):
     def render(self, context):
-        site = settings.CONTEXT['site']
         if settings.GENERATE_CLEAN_URLS:
-            # generate the rules to redirect requests to html files to clean
-            # urls
-            if settings.APPEND_SLASH:
-                trailing_slash = '/'
-            else:
-                trailing_slash = ''
-            redirect_old_urls_rules = REDIRECT_OLD_URLS_RULE.safe_substitute( \
-                {'site_url': settings.SITE_WWW_URL.rstrip('/'),
-                 'lpn_names': '|'.join(settings.LISTING_PAGE_NAMES),
-                 'trailing_slash' : trailing_slash
-                })
-            # generate the rules to map clean urls to html files
-            auto_rules = [] # for LISTING_PAGE_NAMES listings
-            for name in settings.LISTING_PAGE_NAMES:
-                auto_rules.append(AUTO_REWRITE_RULE.safe_substitute( \
-                    {'name': name}))
-            manual_rules_url_map = [] # for 'listing: true' listings
-            for page in site.walk_pages(): # build url to file mapping
-                if page.listing and page.name_without_extension not in \
-                   (settings.LISTING_PAGE_NAMES + [page.node.name]):
-                    filename = os.path.join(page.url, page.name)
-                    if settings.APPEND_SLASH:
-                        url = page.url.lstrip('/')
-                    else:
-                        url = page.url.strip('/')
-                    manual_rules_url_map.append((url, filename))
-            manual_rules = []
-            for page in manual_rules_url_map: # turn that mapping into RewriteRules
-                manual_rules.append("RewriteRule ^%s$ %s\n" % page)
             hyde_rewrite_rules = mark_safe(REWRITE_RULES.safe_substitute( \
-                {'auto_rules' : ''.join(auto_rules),
-                 'manual_rules' : ''.join(manual_rules),
-                 'redirect_old_urls_rules' : redirect_old_urls_rules
+                {'auto_rules' : self.auto_rules(),
+                 'manual_rules' : self.manual_rules(),
+                 'redirect_old_urls_rules' : self.redirect_old_urls_rules()
                 }))
         else:
             hyde_rewrite_rules = ''
         return hyde_rewrite_rules
+
+    @staticmethod
+    def auto_rules():
+        # generate the rules to map clean urls to html files
+        if not settings.LISTING_PAGE_NAMES:
+            return ''
+        auto_rules = [] # for LISTING_PAGE_NAMES listings
+        for name in settings.LISTING_PAGE_NAMES:
+            auto_rules.append(AUTO_REWRITE_RULE.safe_substitute( \
+                {'name': name}))
+        return ''.join(auto_rules)
+
+    @staticmethod
+    def manual_rules():
+        # generate the rules for 'listing: true' listing pages
+        site = settings.CONTEXT['site']
+        manual_rules_url_map = []
+        for page in site.walk_pages(): # build url to file mapping
+            if page.listing and page.name_without_extension not in \
+               (settings.LISTING_PAGE_NAMES + [page.node.name]):
+                filename = os.path.join(page.url, page.name)
+                if settings.APPEND_SLASH:
+                    url = page.url.lstrip('/')
+                else:
+                    url = page.url.strip('/')
+                manual_rules_url_map.append((url, filename))
+        manual_rules = []
+        for page in manual_rules_url_map: # turn that mapping into RewriteRules
+            manual_rules.append("RewriteRule ^%s$ %s\n" % page)
+        return ''.join(manual_rules)
+
+    @staticmethod
+    def redirect_old_urls_rules():
+        # generate the rules to redirect requests to html files to clean urls
+        if settings.APPEND_SLASH:
+            trailing_slash = '/'
+        else:
+            trailing_slash = ''
+        vars = {'site_url': settings.SITE_WWW_URL.rstrip('/'),
+                'lpn_names': '|'.join(settings.LISTING_PAGE_NAMES),
+                'trailing_slash' : trailing_slash
+               }
+        if settings.LISTING_PAGE_NAMES:
+            return REDIRECT_OLD_URLS_RULE.safe_substitute(vars) \
+                 + REDIRECT_OLD_URLS_LPN_RULE.safe_substitute(vars)
+        else:
+            return REDIRECT_OLD_URLS_RULE.safe_substitute(vars)
+
+
