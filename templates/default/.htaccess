@@ -1,0 +1,4 @@
+{% if GENERATE_CLEAN_URLS %}
+RewriteEngine on
+{% hyde_rewrite_rules %}
+{% endif %}

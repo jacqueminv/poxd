@@ -4,8 +4,11 @@ from django.template import Template
 from django.template.loader import render_to_string
 from django.template.defaultfilters import truncatewords_html
 from django.template import Library
+from django.utils.safestring import mark_safe
 from hydeengine.file_system import Folder
 import re
+import string
+import os
 from datetime import datetime
 from datetime import timedelta
 
@@ -184,3 +187,97 @@ def unslugify(slug):
                         replace(".", "").split()
                         
     return ' '.join(map(lambda str: str.capitalize(), words))
+
+@register.tag(name="hyde_rewrite_rules")
+def hyde_rewrite_rules(parser, token):
+    """Prints the Apache Mod_Rewrite RewriteRules for clean urls.  These rules
+    are designed to be placed in a .htaccess file; they have not been tested
+    inside of httpd.conf
+
+    This only generates RewriteRules; it does not enable url rewriting or set
+    RewriteBase.
+    """
+    return RenderHydeRewriteRulesNode()
+
+REWRITE_RULES = string.Template( \
+r"""
+####  BEGIN HYDE CLEAN URL REWRITE RULES.  ####
+
+# 301 redirect requests to the .html files to the clean urls
+${redirect_old_urls_rules}
+
+# lising pages defined by LISTING_PAGE_NAMES
+${auto_rules}
+
+# listing pages whose names are the same as their enclosing folder's
+RewriteCond %{REQUEST_FILENAME}/$1.html -f 
+RewriteRule ^([^/]*)/$ %{REQUEST_FILENAME}/$1.html
+
+# listing pages with 'listing: true' attribute manually set
+${manual_rules}
+
+# regular pages
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule ^.*$ %{REQUEST_FILENAME}.html
+
+####  END HYDE CLEAN URL REWRITE RULES.  ####
+""")
+
+AUTO_REWRITE_RULE = string.Template(\
+r"""
+RewriteCond %{REQUEST_FILENAME}/${name}.html -f
+RewriteRule ^(.*) $1/${name}.html
+"""
+)
+
+REDIRECT_OLD_URLS_RULE = string.Template(\
+r"""
+RewriteCond %{THE_REQUEST} \.html
+RewriteRule ^(.*/?([^/]+))/\2\.html ${site_url}/$1${trailing_slash} [R=301]
+
+RewriteCond %{THE_REQUEST} \.html
+RewriteRule ^([^.]+)/(${lpn_names})\.html$ ${site_url}/$1${trailing_slash} [R=301]
+"""
+)
+
+class RenderHydeRewriteRulesNode(template.Node):
+    def render(self, context):
+        site = settings.CONTEXT['site']
+        if settings.GENERATE_CLEAN_URLS:
+            # generate the rules to redirect requests to html files to clean
+            # urls
+            if settings.APPEND_SLASH:
+                trailing_slash = '/'
+            else:
+                trailing_slash = ''
+            redirect_old_urls_rules = REDIRECT_OLD_URLS_RULE.safe_substitute( \
+                {'site_url': settings.SITE_WWW_URL.rstrip('/'),
+                 'lpn_names': '|'.join(settings.LISTING_PAGE_NAMES),
+                 'trailing_slash' : trailing_slash
+                })
+            # generate the rules to map clean urls to html files
+            auto_rules = [] # for LISTING_PAGE_NAMES listings
+            for name in settings.LISTING_PAGE_NAMES:
+                auto_rules.append(AUTO_REWRITE_RULE.safe_substitute( \
+                    {'name': name}))
+            manual_rules_url_map = [] # for 'listing: true' listings
+            for page in site.walk_pages(): # build url to file mapping
+                if page.listing and page.name_without_extension not in \
+                   (settings.LISTING_PAGE_NAMES + [page.node.name]):
+                    filename = os.path.join(page.url, page.name)
+                    if settings.APPEND_SLASH:
+                        url = page.url.lstrip('/')
+                    else:
+                        url = page.url.strip('/')
+                    manual_rules_url_map.append((url, filename))
+            manual_rules = []
+            for page in manual_rules_url_map: # turn that mapping into RewriteRules
+                manual_rules.append("RewriteRule ^%s$ %s\n" % page)
+            hyde_rewrite_rules = mark_safe(REWRITE_RULES.safe_substitute( \
+                {'auto_rules' : ''.join(auto_rules),
+                 'manual_rules' : ''.join(manual_rules),
+                 'redirect_old_urls_rules' : redirect_old_urls_rules
+                }))
+        else:
+            hyde_rewrite_rules = ''
+        return hyde_rewrite_rules

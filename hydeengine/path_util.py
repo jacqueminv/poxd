@@ -9,7 +9,7 @@ class PathUtil:
                     
         wanted = filter(
         lambda item:
-         not (item.startswith('.') or item.endswith('~')), item_list)
+         not ((item.startswith('.') and item != ".htaccess") or item.endswith('~')), item_list)
          
         count = len(item_list)
         good_item_count = len(wanted)
