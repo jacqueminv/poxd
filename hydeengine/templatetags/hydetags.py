@@ -245,7 +245,10 @@ RewriteRule ^([^.]+)/(${lpn_names})\.html$ ${site_url}/$1${trailing_slash} [R=30
 )
 
 class RenderHydeRewriteRulesNode(template.Node):
+    def __init__(self):
+        self.manual_listing_map = None
     def render(self, context):
+        self.build_manual_listing_map
         if settings.GENERATE_CLEAN_URLS:
             hyde_rewrite_rules = mark_safe(REWRITE_RULES.safe_substitute( \
                 {'auto_rules' : self.auto_rules(),
@@ -267,11 +270,20 @@ class RenderHydeRewriteRulesNode(template.Node):
                 {'name': name}))
         return ''.join(auto_rules)
 
-    @staticmethod
-    def manual_rules():
+    def manual_rules(self):
         # generate the rules for 'listing: true' listing pages
+        manual_rules = []
+        for page in self.manual_listing_map: # turn that mapping into RewriteRules
+            manual_rules.append("RewriteRule ^%s$ %s\n" % page)
+        return ''.join(manual_rules)
+
+    def build_manual_listing_map(self):
+        """
+        Builds a list of tuples of the form (url, filename) for pages whose
+        listing attribute has manually been set to True.
+        """
         site = settings.CONTEXT['site']
-        manual_rules_url_map = []
+        url_file_map = []
         for page in site.walk_pages(): # build url to file mapping
             if page.listing and page.name_without_extension not in \
                (settings.LISTING_PAGE_NAMES + [page.node.name]):
@@ -280,11 +292,8 @@ class RenderHydeRewriteRulesNode(template.Node):
                     url = page.url.lstrip('/')
                 else:
                     url = page.url.strip('/')
-                manual_rules_url_map.append((url, filename))
-        manual_rules = []
-        for page in manual_rules_url_map: # turn that mapping into RewriteRules
-            manual_rules.append("RewriteRule ^%s$ %s\n" % page)
-        return ''.join(manual_rules)
+                url_file_map.append((url, filename))
+        self.manual_listing_map = url_file_map
 
     @staticmethod
     def redirect_old_urls_rules():

@@ -36,6 +36,7 @@ class TestHtaccess:
         settings.LISTING_PAGE_NAMES = ['listing']
         settings.SITE_WWW_URL = "http://www.example.com"
         build_sitemap()
+        self.htaccess_generator = RenderHydeRewriteRulesNode()
 
     def test_redirect_old_urls_auto_listing_pages(self):
         # test with one name
@@ -47,7 +48,7 @@ RewriteRule ^(.*/?([^/]+))/\2\.html http://www.example.com/$1 [R=301]
 RewriteCond %{THE_REQUEST} \.html
 RewriteRule ^([^.]+)/(listing)\.html$ http://www.example.com/$1 [R=301]
     """
-        actual = RenderHydeRewriteRulesNode.redirect_old_urls_rules() 
+        actual = self.htaccess_generator.redirect_old_urls_rules() 
         assert actual.strip() == expected.strip()
 
         # test with multiple names
@@ -59,7 +60,7 @@ RewriteRule ^(.*/?([^/]+))/\2\.html http://www.example.com/$1 [R=301]
 RewriteCond %{THE_REQUEST} \.html
 RewriteRule ^([^.]+)/(listing|index|default)\.html$ http://www.example.com/$1 [R=301]
     """
-        actual = RenderHydeRewriteRulesNode.redirect_old_urls_rules() 
+        actual = self.htaccess_generator.redirect_old_urls_rules() 
         assert actual.strip() == expected.strip()
 
         # test with no names
@@ -68,5 +69,5 @@ RewriteRule ^([^.]+)/(listing|index|default)\.html$ http://www.example.com/$1 [R
 RewriteCond %{THE_REQUEST} \.html
 RewriteRule ^(.*/?([^/]+))/\2\.html http://www.example.com/$1 [R=301]
 """
-        actual = RenderHydeRewriteRulesNode.redirect_old_urls_rules() 
-        assert actual.strip()== expected.strip() 
+        actual = self.htaccess_generator.redirect_old_urls_rules() 
+        assert actual.strip() == expected.strip() 
