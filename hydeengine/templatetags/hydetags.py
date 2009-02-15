@@ -188,141 +188,35 @@ def unslugify(slug):
                         
     return ' '.join(map(lambda str: str.capitalize(), words))
 
-@register.tag(name="hyde_rewrite_rules")
-def hyde_rewrite_rules(parser, token):
-    """Prints the Apache Mod_Rewrite RewriteRules for clean urls.  These rules
-    are designed to be placed in a .htaccess file; they have not been tested
-    inside of httpd.conf
+@register.tag(name="hyde_listing_page_rewrite_rules")
+def hyde_listing_page_rewrite_rules(parser, token):
+    """Prints the Apache Mod_Rewrite RewriteRules for clean urls for pages in
+    LISTING_PAGE_NAMES.  These rules are designed to be placed in a .htaccess
+    file; they have not been tested inside of httpd.conf
 
     This only generates RewriteRules; it does not enable url rewriting or set
     RewriteBase.
     """
-    return RenderHydeRewriteRulesNode()
-
-REWRITE_RULES = string.Template( \
-r"""
-####  BEGIN HYDE CLEAN URL REWRITE RULES.  ####
+    return RenderHydeListingPageRewriteRulesNode()
 
 
-# lising pages defined by LISTING_PAGE_NAMES
-${auto_rules}
-
-# listing pages whose names are the same as their enclosing folder's
-RewriteCond %{REQUEST_FILENAME}/$1.html -f 
-RewriteRule ^([^/]*)/$ %{REQUEST_FILENAME}/$1.html
-
-# listing pages with 'listing: true' attribute manually set
-${manual_rules}
-
-# regular pages
-RewriteCond %{REQUEST_FILENAME}.html -f
-RewriteRule ^.*$ %{REQUEST_FILENAME}.html
-
-# 301 redirect requests to the .html files to the clean urls
-${redirect_old_urls_rules}
-
-####  END HYDE CLEAN URL REWRITE RULES.  ####
-""")
-
-AUTO_REWRITE_RULE = string.Template(\
+LPN_REWRITE_RULE = string.Template(\
 r"""
 RewriteCond %{REQUEST_FILENAME}/${name}.html -f
 RewriteRule ^(.*) $1/${name}.html
 """
 )
 
-REDIRECT_OLD_URLS_RULE = string.Template(\
-r"""
-RewriteCond %{THE_REQUEST} \.html
-RewriteRule ^(.*/?([^/]+))/\2\.html ${site_url}/$1${trailing_slash} [R=301]
-
-RewriteCond %{THE_REQUEST} \.html
-RewriteRule ^([^.]*)\.html$ ${site_url}/$1${trailing_slash} [R=301]
-"""
-)
-
-REDIRECT_OLD_URLS_LPN_RULE = string.Template(\
-r"""
-RewriteCond %{THE_REQUEST} \.html
-RewriteRule ^([^.]+)/(${lpn_names})\.html$ ${site_url}/$1${trailing_slash} [R=301]
-"""
-)
-REDIRECT_OLD_URLS_MANUAL_LISTING_RULE = string.Template(\
-r"""
-RewriteCond %{THE_REQUEST} \.html
-RewriteRule ^${filename}$ ${site_url}/${url} [R=301]
-"""
-)
-
-class RenderHydeRewriteRulesNode(template.Node):
-    def __init__(self):
-        self.manual_listing_map = []
+class RenderHydeListingPageRewriteRulesNode(template.Node):
     def render(self, context):
-        if not settings.GENERATE_CLEAN_URLS:
-            return ''
-        self.build_manual_listing_map()
-        hyde_rewrite_rules = mark_safe(REWRITE_RULES.safe_substitute( \
-            {'auto_rules' : self.auto_rules(),
-             'manual_rules' : self.manual_rules(),
-             'redirect_old_urls_rules' : self.redirect_old_urls_rules()
-            }))
-        return hyde_rewrite_rules
-
-    @staticmethod
-    def auto_rules():
-        # generate the rules to map clean urls to html files
         if not settings.LISTING_PAGE_NAMES:
             return ''
-        auto_rules = [] # for LISTING_PAGE_NAMES listings
+        rules = [] # for LISTING_PAGE_NAMES listings
         for name in settings.LISTING_PAGE_NAMES:
-            auto_rules.append(AUTO_REWRITE_RULE.safe_substitute( \
+            rules.append(LPN_REWRITE_RULE.safe_substitute( \
                 {'name': name}))
-        return ''.join(auto_rules)
-
-    def manual_rules(self):
-        # generate the rules for 'listing: true' listing pages
-        manual_rules = []
-        for page in self.manual_listing_map:
-            manual_rules.append("RewriteRule ^%s$ %s\n" % page)
-        return ''.join(manual_rules)
-
-    def build_manual_listing_map(self):
-        """
-        Builds a list of tuples of the form (url, filename) for pages whose
-        listing attribute has manually been set to True.
-        """
-        site = settings.CONTEXT['site']
-        url_file_map = []
-        for page in site.walk_pages(): # build url to file mapping
-            if page.listing and page.name_without_extension not in \
-               (settings.LISTING_PAGE_NAMES + [page.node.name]):
-                filename = os.path.join(page.url, page.name)
-                if settings.APPEND_SLASH:
-                    url = page.url.lstrip('/')
-                else:
-                    url = page.url.strip('/')
-                url_file_map.append((url, filename))
-        self.manual_listing_map = url_file_map
-
-    def redirect_old_urls_rules(self):
-        # generate the rules to redirect requests to html files to clean urls
-        if settings.APPEND_SLASH:
-            trailing_slash = '/'
-        else:
-            trailing_slash = ''
-        site_url = settings.SITE_WWW_URL.rstrip('/')
-        manual_rules = []
-        for url, filename in self.manual_listing_map:
-            filename = filename.lstrip('/')
-            manual_rules.append(REDIRECT_OLD_URLS_MANUAL_LISTING_RULE.safe_substitute(locals()))
-        redirect_old_urls_manual_listing_urls = ''.join(manual_rules)
-        if settings.LISTING_PAGE_NAMES:
-            lpn_names =  '|'.join(settings.LISTING_PAGE_NAMES)
-            return redirect_old_urls_manual_listing_urls \
-                 + REDIRECT_OLD_URLS_LPN_RULE.safe_substitute(locals()) \
-                 + REDIRECT_OLD_URLS_RULE.safe_substitute(locals())
-        else:
-            return redirect_old_urls_manual_listing_urls \
-                 + REDIRECT_OLD_URLS_RULE.safe_substitute(locals())
-
+        return \
+            "###  BEGIN GENERATED REWRITE RULES  ####\n" \
+          + ''.join(rules) \
+          + "\n####  END GENERATED REWRITE RULES  ####"
 

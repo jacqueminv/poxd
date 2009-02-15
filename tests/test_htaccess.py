@@ -16,7 +16,7 @@ sys.path = [ROOT] + sys.path
 
 from hydeengine.file_system import File, Folder
 from hydeengine import Initializer, setup_env, Generator
-from hydeengine.templatetags.hydetags import RenderHydeRewriteRulesNode
+from hydeengine.templatetags.hydetags import RenderHydeListingPageRewriteRulesNode as htaccessgen
 from hydeengine.renderer import build_sitemap
 
 TEST_SITE = Folder(TEST_ROOT).child_folder("test_site")
@@ -29,45 +29,24 @@ def teardown_module(module):
     TEST_SITE.delete()
 
 class TestHtaccess:
-    def setup_class(self):
-        settings.GENERATE_ABSOLUTE_FS_URLS = False
-        settings.GENERATE_CLEAN_URLS = True
-        settings.APPEND_SLASH = False # See Also: TestHtaccessAppendSlash
-        settings.LISTING_PAGE_NAMES = ['listing']
-        settings.SITE_WWW_URL = "http://www.example.com"
-        build_sitemap()
-        self.htaccess_generator = RenderHydeRewriteRulesNode()
-
-    def test_redirect_old_urls_auto_listing_pages(self):
-        # test with one name
-        settings.LISTING_PAGE_NAMES = ['listing']
+    def test_listing_page_rewite_rule_generator(self):
+        # test with two names
+        settings.LISTING_PAGE_NAMES = ['listing', 'index']
         expected = r"""
-RewriteCond %{THE_REQUEST} \.html
-RewriteRule ^(.*/?([^/]+))/\2\.html http://www.example.com/$1 [R=301]
+###  BEGIN GENERATED REWRITE RULES  ####
 
-RewriteCond %{THE_REQUEST} \.html
-RewriteRule ^([^.]+)/(listing)\.html$ http://www.example.com/$1 [R=301]
-    """
-        actual = self.htaccess_generator.redirect_old_urls_rules() 
-        assert actual.strip() == expected.strip()
+RewriteCond %{REQUEST_FILENAME}/listing.html -f
+RewriteRule ^(.*) $1/listing.html
 
-        # test with multiple names
-        settings.LISTING_PAGE_NAMES = ['listing', 'index', 'default']
-        expected = r"""
-RewriteCond %{THE_REQUEST} \.html
-RewriteRule ^(.*/?([^/]+))/\2\.html http://www.example.com/$1 [R=301]
+RewriteCond %{REQUEST_FILENAME}/index.html -f
+RewriteRule ^(.*) $1/index.html
 
-RewriteCond %{THE_REQUEST} \.html
-RewriteRule ^([^.]+)/(listing|index|default)\.html$ http://www.example.com/$1 [R=301]
-    """
-        actual = self.htaccess_generator.redirect_old_urls_rules() 
+####  END GENERATED REWRITE RULES  ####
+"""
+        actual = htaccessgen().render('')
         assert actual.strip() == expected.strip()
 
         # test with no names
         settings.LISTING_PAGE_NAMES = []
-        expected = r"""
-RewriteCond %{THE_REQUEST} \.html
-RewriteRule ^(.*/?([^/]+))/\2\.html http://www.example.com/$1 [R=301]
-"""
-        actual = self.htaccess_generator.redirect_old_urls_rules() 
-        assert actual.strip() == expected.strip() 
+        actual = htaccessgen().render('')
+        assert actual == ""
