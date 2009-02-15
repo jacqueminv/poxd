@@ -203,8 +203,6 @@ REWRITE_RULES = string.Template( \
 r"""
 ####  BEGIN HYDE CLEAN URL REWRITE RULES.  ####
 
-# 301 redirect requests to the .html files to the clean urls
-${redirect_old_urls_rules}
 
 # lising pages defined by LISTING_PAGE_NAMES
 ${auto_rules}
@@ -220,6 +218,9 @@ ${manual_rules}
 RewriteCond %{REQUEST_FILENAME}.html -f
 RewriteRule ^.*$ %{REQUEST_FILENAME}.html
 
+# 301 redirect requests to the .html files to the clean urls
+${redirect_old_urls_rules}
+
 ####  END HYDE CLEAN URL REWRITE RULES.  ####
 """)
 
@@ -234,6 +235,9 @@ REDIRECT_OLD_URLS_RULE = string.Template(\
 r"""
 RewriteCond %{THE_REQUEST} \.html
 RewriteRule ^(.*/?([^/]+))/\2\.html ${site_url}/$1${trailing_slash} [R=301]
+
+RewriteCond %{THE_REQUEST} \.html
+RewriteRule ^([^.]*)\.html$ ${site_url}/$1${trailing_slash} [R=301]
 """
 )
 
@@ -243,20 +247,25 @@ RewriteCond %{THE_REQUEST} \.html
 RewriteRule ^([^.]+)/(${lpn_names})\.html$ ${site_url}/$1${trailing_slash} [R=301]
 """
 )
+REDIRECT_OLD_URLS_MANUAL_LISTING_RULE = string.Template(\
+r"""
+RewriteCond %{THE_REQUEST} \.html
+RewriteRule ^${filename}$ ${site_url}/${url} [R=301]
+"""
+)
 
 class RenderHydeRewriteRulesNode(template.Node):
     def __init__(self):
-        self.manual_listing_map = None
+        self.manual_listing_map = []
     def render(self, context):
-        self.build_manual_listing_map
-        if settings.GENERATE_CLEAN_URLS:
-            hyde_rewrite_rules = mark_safe(REWRITE_RULES.safe_substitute( \
-                {'auto_rules' : self.auto_rules(),
-                 'manual_rules' : self.manual_rules(),
-                 'redirect_old_urls_rules' : self.redirect_old_urls_rules()
-                }))
-        else:
-            hyde_rewrite_rules = ''
+        if not settings.GENERATE_CLEAN_URLS:
+            return ''
+        self.build_manual_listing_map()
+        hyde_rewrite_rules = mark_safe(REWRITE_RULES.safe_substitute( \
+            {'auto_rules' : self.auto_rules(),
+             'manual_rules' : self.manual_rules(),
+             'redirect_old_urls_rules' : self.redirect_old_urls_rules()
+            }))
         return hyde_rewrite_rules
 
     @staticmethod
@@ -273,7 +282,7 @@ class RenderHydeRewriteRulesNode(template.Node):
     def manual_rules(self):
         # generate the rules for 'listing: true' listing pages
         manual_rules = []
-        for page in self.manual_listing_map: # turn that mapping into RewriteRules
+        for page in self.manual_listing_map:
             manual_rules.append("RewriteRule ^%s$ %s\n" % page)
         return ''.join(manual_rules)
 
@@ -295,21 +304,25 @@ class RenderHydeRewriteRulesNode(template.Node):
                 url_file_map.append((url, filename))
         self.manual_listing_map = url_file_map
 
-    @staticmethod
-    def redirect_old_urls_rules():
+    def redirect_old_urls_rules(self):
         # generate the rules to redirect requests to html files to clean urls
         if settings.APPEND_SLASH:
             trailing_slash = '/'
         else:
             trailing_slash = ''
-        vars = {'site_url': settings.SITE_WWW_URL.rstrip('/'),
-                'lpn_names': '|'.join(settings.LISTING_PAGE_NAMES),
-                'trailing_slash' : trailing_slash
-               }
+        site_url = settings.SITE_WWW_URL.rstrip('/')
+        manual_rules = []
+        for url, filename in self.manual_listing_map:
+            filename = filename.lstrip('/')
+            manual_rules.append(REDIRECT_OLD_URLS_MANUAL_LISTING_RULE.safe_substitute(locals()))
+        redirect_old_urls_manual_listing_urls = ''.join(manual_rules)
         if settings.LISTING_PAGE_NAMES:
-            return REDIRECT_OLD_URLS_RULE.safe_substitute(vars) \
-                 + REDIRECT_OLD_URLS_LPN_RULE.safe_substitute(vars)
+            lpn_names =  '|'.join(settings.LISTING_PAGE_NAMES)
+            return redirect_old_urls_manual_listing_urls \
+                 + REDIRECT_OLD_URLS_LPN_RULE.safe_substitute(locals()) \
+                 + REDIRECT_OLD_URLS_RULE.safe_substitute(locals())
         else:
-            return REDIRECT_OLD_URLS_RULE.safe_substitute(vars)
+            return redirect_old_urls_manual_listing_urls \
+                 + REDIRECT_OLD_URLS_RULE.safe_substitute(locals())
 
 
