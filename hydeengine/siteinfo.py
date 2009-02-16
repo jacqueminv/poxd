@@ -1,6 +1,5 @@
 import sys
 from threading import Thread, Event
-from Queue import Queue
 import time
 
 from hydeengine.file_system import File, Folder
@@ -12,7 +11,7 @@ class SiteResource(object):
         self.file = a_file
         self.node = node
         self.last_known_modification_time = a_file.last_modified
-   
+    
     @property
     def has_changes(self):
         return (not self.last_known_modification_time ==
@@ -20,7 +19,7 @@ class SiteResource(object):
     
     @property
     def url(self):
-        if not self.node.url:
+        if self.node.url is None:
             return None
         return url.join(self.node.url, self.file.name)
         
@@ -37,7 +36,7 @@ class SiteResource(object):
     @property
     def source_file(self):
         return self.file
-    
+        
     @property
     def target_file(self):
         return File(self.node.target_folder.child(self.file.name))
@@ -62,8 +61,7 @@ class SiteNode(object):
             self.site = self.parent.site
         self.children = []
         self.resources = []
-        self.queue = Queue()
-    
+
     def __repr__(self):
         return str(self.folder)
         
@@ -144,7 +142,7 @@ class SiteNode(object):
         
     @property   
     def full_url(self):
-        if not self.url:
+        if self.url is None:
             return None
         return url.join(self.site.settings.SITE_WWW_URL, self.url)
         
@@ -173,9 +171,14 @@ class ContentNode(SiteNode):
         return temp_folder.child_folder_with_fragment(self.url)
 
     @property
+    def fragment(self):
+        return self.folder.get_fragment(self.site.content_folder)
+
+    @property
     def url(self):
-        return url.fixslash(
-                self.folder.get_fragment(self.site.content_folder))
+        return url.join(self.site.settings.SITE_ROOT,
+                url.fixslash(        
+                    self.folder.get_fragment(self.site.content_folder)))
     
     @property            
     def type(self):
@@ -189,6 +192,10 @@ class LayoutNode(SiteNode):
                 site.layout_folder.is_ancestor_of(folder))
                 
     @property
+    def fragment(self):
+        return self.folder.get_fragment(self.site.layout_folder)
+        
+    @property
     def type(self):
         return "layout"          
           
@@ -198,11 +205,16 @@ class MediaNode(SiteNode):
     def is_media(site, folder):
         return (site.media_folder.same_as(folder) or
                 site.media_folder.is_ancestor_of(folder))
+
+    @property
+    def fragment(self):
+        return self.folder.get_fragment(self.site.media_folder)
     
     @property
     def url(self):
-        return url.fixslash(
-                self.folder.get_fragment(self.site.folder))
+        return url.join(self.site.settings.SITE_ROOT,
+                url.fixslash(        
+                    self.folder.get_fragment(self.site.folder)))
 
     @property            
     def type(self):
@@ -226,11 +238,14 @@ class SiteInfo(SiteNode):
         self._stop = Event()
         self.nodemap = {site_path:self}
         self.resourcemap = {}
-        self.update()
-        
+
     @property
     def content_node(self):
         return self.nodemap[self.content_folder.path]
+    
+    @property
+    def fragment(self):
+        return ""
         
     @property
     def media_node(self):
@@ -269,12 +284,12 @@ class SiteInfo(SiteNode):
     def resource_removed(self, resource):
         del self.resourcemap[resource.file.path]
     
-    def monitor(self, waittime=10):
-        if self.m:
-            return self.m
+    def monitor(self, queue=None, waittime=10):
+        if self.m and self.m.isAlive():
+            raise "A monitor is currently running."
         self._stop.clear()    
         self.m = Thread(target=self.__monitor_thread__, 
-                            kwargs={"waittime":waittime})
+                            kwargs={"waittime":waittime, "queue": queue})
         self.m.start()
         return self.m
     
@@ -285,14 +300,13 @@ class SiteInfo(SiteNode):
         self.m.join()
         self._stop.clear()
         
-    def __monitor_thread__(self, waittime):
+    def __monitor_thread__(self, queue, waittime):
         while not self._stop.isSet():
             try:
-                self.update()
+                self.refresh(queue)
             except:
-                self.queue.put({
-                    "exception": True
-                })
+                if queue:
+                    queue.put({"exception": True})
                 raise
             if self._stop.isSet():
                 break        
@@ -312,7 +326,7 @@ class SiteInfo(SiteNode):
         node = self.find_and_add_node(folder.parent)    
         return node.add_child(folder)
         
-    def update(self):
+    def refresh(self, queue=None):
         site = self
         # Have to poll for changes since there is no reliable way
         # to get notification in a platform independent manner
@@ -327,20 +341,22 @@ class SiteInfo(SiteNode):
                 elif resource.has_changes:
                    change = "Modified"
                 if change:
-                   site.queue.put({
-                       "change": change,
-                       "resource": resource,
-                       "exception": False
-                   })
-                   resource.last_known_modification_time = a_file.last_modified
+                    if queue:
+                       queue.put({
+                           "change": change,
+                           "resource": resource,
+                           "exception": False
+                       })
+                    resource.last_known_modification_time = a_file.last_modified
      
         self.folder.walk(visitor=Visitor())
         for resource in self.walk_resources():
             if not resource.file.exists:
-                site.queue.put({
-                    "change":"Deleted",
-                    "resource":resource,
-                    "exception": False
-                })
+                if queue:
+                    queue.put({
+                        "change":"Deleted",
+                        "resource":resource,
+                        "exception": False
+                    })
                 resource.node.remove_resource(resource)
                 

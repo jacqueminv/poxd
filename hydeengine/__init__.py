@@ -13,6 +13,8 @@ from path_util import PathUtil
 from file_system import File, Folder
 from folders import MediaFolder, ContentFolder, TempFolder
 from renderer import build_sitemap, render_pages
+from processor import Processor
+from siteinfo import SiteInfo
 
 def setup_env(site_path):
     """
@@ -78,16 +80,43 @@ class Server(object):
         'tools.staticdir.on':True
         }}
         cherrypy.quickstart(WebRoot(), '/', config = conf)
-        
+   
 
 class Generator(object):
     def __init__(self, site_path):
         super(Generator, self).__init__()
         self.site_path = os.path.abspath(os.path.expandvars(
                                         os.path.expanduser(site_path)))
+                                        
+    # def start_processing(self, all_done, queue, process):
+    #     while True:
+    #         try:
+    #             processable = queue.get(15)
+    #             if processable['exception']:
+    #                 raise processable['exception']
+    #             resource = processable['resource']
+    #             change = processable['change']
+    #             process(resource, change)
+    #         except Empty:
+    #             # Nothing in the queue... check if we are all done.
+    #             if all_done.isSet():
+    #                 # Looks like we are done here. Break off.
+    #                 break
+    #                 
+    # def generate_all(self):
     
+    def process(self, resource, change="Added"):
+        processor = Processor(settings) 
+        settings.CONTEXT['node'] = resource.node
+        settings.CONTEXT['resource'] = resource
+        processor.process(resource)
+        
+    def build_siteinfo(self):
+        self.siteinfo  = SiteInfo(settings, self.site_path)
+        self.siteinfo.refresh()
+        settings.CONTEXT['site'] = self.siteinfo.content_node
+
     def generate(self, deploy_path, keep_watching):
-        setup_env(self.site_path)
         tmp_folder = Folder(settings.TMP_DIR)
         deploy_folder = Folder(
                             (deploy_path, settings.DEPLOY_DIR)

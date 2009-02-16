@@ -23,11 +23,11 @@ ROOT = os.path.abspath(TEST_ROOT + "/..")
 sys.path = [ROOT] + sys.path
 
 from hydeengine.file_system import File, Folder
-from hydeengine import url
-from hydeengine import Initializer, setup_env
+from hydeengine import url, Initializer, Generator, setup_env
 from hydeengine.siteinfo import SiteNode, SiteInfo, Page
 
-TEST_SITE = Folder(TEST_ROOT).child_folder("test_site")
+TEST_ROOT = Folder(TEST_ROOT)
+TEST_SITE = TEST_ROOT.child_folder("test_site")
 
 def setup_module(module):
     Initializer(TEST_SITE.path).initialize(ROOT, force=True)
@@ -39,7 +39,8 @@ def teardown_module(module):
 class TestSiteInfo:
 
     def setup_method(self, method):
-        self.site = SiteInfo(settings, TEST_SITE.path)        
+        self.site = SiteInfo(settings, TEST_SITE.path)
+        self.site.refresh()
 
     def assert_node_complete(self, node, folder):
         assert node.folder.path == folder.path
@@ -82,11 +83,10 @@ class TestSiteInfo:
             fragment = node.folder.get_fragment(self.site.content_folder)
         elif node.type == "media":
             fragment = node.folder.get_fragment(self.site.folder)
-            
         if node.type in ("content", "media"):
-            fragment = "/" + fragment.lstrip("/").rstrip("/")
-            assert node.url == fragment
-            assert node.full_url == settings.SITE_WWW_URL + fragment
+            fragment = ("/" + fragment.strip("/")).rstrip("/")
+            assert fragment == node.url
+            assert settings.SITE_WWW_URL + fragment == node.full_url
         else:    
             assert not node.url
             assert not node.full_url
@@ -132,17 +132,18 @@ class TestSiteInfo:
         return fragment
         
 
-def clean_queue(site):
-    while not site.queue.empty():
-        try:
-            site.queue.get()
-            site.queue.task_done()
-        except Empty:
-            break
-
-class MonitorTests(object):
+class MonitorTests(object): 
+    def clean_queue(self):
+        while not self.queue.empty():
+            try:
+                self.queue.get()
+                self.queue.task_done()
+            except Empty:
+                break
+    
     def setup_class(cls):
         cls.site = None
+        cls.queue = Queue()
 
     def teardown_class(cls):
         if cls.site:
@@ -150,14 +151,16 @@ class MonitorTests(object):
             
     def setup_method(self, method):
         self.site = SiteInfo(settings, TEST_SITE.path)
+        self.site.refresh()
         self.exception_queue = Queue()
+        self.clean_queue()
         
 class TestSiteInfoMonitoring(MonitorTests):
     
     def change_checker(self, change, path):
         try:
-            changes = self.site.queue.get(block=True, timeout=20)
-            self.site.queue.task_done()
+            changes = self.queue.get(block=True, timeout=20)
+            self.queue.task_done()
             assert changes
             assert not changes['exception']
             assert changes['change'] == change
@@ -168,14 +171,12 @@ class TestSiteInfoMonitoring(MonitorTests):
             raise
             
     def test_monitor_stop(self):
-        clean_queue(self.site)
         m = self.site.monitor()
         self.site.dont_monitor()
         assert not m.isAlive()
             
     def test_modify(self):
-        clean_queue(self.site)
-        self.site.monitor()
+        self.site.monitor(self.queue)
         path = self.site.media_folder.child("css/base.css")
         t = Thread(target=self.change_checker, 
                     kwargs={"change":"Modified", "path":path})
@@ -185,8 +186,7 @@ class TestSiteInfoMonitoring(MonitorTests):
         assert self.exception_queue.empty()
         
     def test_add(self, direct=False):
-        clean_queue(self.site)
-        self.site.monitor()
+        self.site.monitor(self.queue)
         path = self.site.layout_folder.child("test.ggg")
         t = Thread(target=self.change_checker, 
                     kwargs={"change":"Added", "path":path})
@@ -196,10 +196,9 @@ class TestSiteInfoMonitoring(MonitorTests):
         t.join()
         if not direct:
             f.delete()
-        assert self.exception_queue.empty()        
+        assert self.exception_queue.empty()
         
     def test_delete(self):
-        clean_queue(self.site)        
         path = self.site.layout_folder.child("test.ggg")
         self.test_add(direct=True)
         t = Thread(target=self.change_checker, 
@@ -213,8 +212,8 @@ class TestYAMLProcessor(MonitorTests):
    
     def yaml_checker(self, path, vars):
            try:
-               changes = self.site.queue.get(block=True, timeout=5)
-               self.site.queue.task_done()
+               changes = self.queue.get(block=True, timeout=5)
+               self.queue.task_done()
                assert changes
                assert not changes['exception']
                resource = changes['resource']               
@@ -230,7 +229,6 @@ class TestYAMLProcessor(MonitorTests):
                raise    
     
     def test_variables_are_added(self):
-        clean_queue(self.site)        
         vars = {}
         vars["title"] = "Test Title"
         vars["created"] = datetime.now()
@@ -240,7 +238,7 @@ class TestYAMLProcessor(MonitorTests):
             content += "    %s: %s\n" % (key, value)
         content +=  "%}"
         out = File(self.site.content_folder.child("test_yaml.html"))
-        self.site.monitor()
+        self.site.monitor(self.queue)
         t = Thread(target=self.yaml_checker, 
                         kwargs={"path":out.path, "vars":vars})
         t.start()
@@ -253,4 +251,43 @@ class TestYAMLProcessor(MonitorTests):
         for key, value in vars.iteritems():
             assert hasattr(page, key)
             assert not getattr(page, key)
+
+class TestProcessing(MonitorTests):
+    def checker(self, asserter):
+           try:
+               changes = self.queue.get(block=True, timeout=5)
+               self.queue.task_done()
+               assert changes
+               assert not changes['exception']
+               resource = changes['resource']               
+               assert resource
+               asserter(resource)
+           except:
+               self.exception_queue.put(sys.exc_info())
+               raise    
+
+    def assert_valid_css(self, actual_css_resource):
+        expected_text = File(
+                TEST_ROOT.child("test_dest.css")).read_all()
+        self.generator.process(actual_css_resource)        
+        actual_text = actual_css_resource.file.read_all()
+        assert expected_text == actual_text
         
+    def test_process_css_with_templates(self):
+        original_MP = settings.MEDIA_PROCESSORS
+        original_site = settings.SITE_ROOT
+        settings.MEDIA_PROCESSORS = {"*":{".css":
+        ('hydeengine.media_processors.TemplateProcessor',)}}
+        settings.SITE_ROOT = "www.hyde-test.bogus/"
+        self.generator = Generator(TEST_SITE.path)
+        self.generator.build_siteinfo()
+        source = File(TEST_ROOT.child("test_src.css"))
+        self.site.monitor(self.queue)
+        t = Thread(target=self.checker, 
+                        kwargs={"asserter":self.assert_valid_css})
+        t.start()
+        source.copy_to(self.site.media_folder.child("test.css"))
+        t.join()
+        settings.MEDIA_PROCESSORS = original_MP
+        settings.SITE_ROOT = original_site
+        assert self.exception_queue.empty()

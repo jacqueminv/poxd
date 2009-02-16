@@ -14,6 +14,7 @@ BACKUP = False
 
 SITE_WWW_URL = "http://www.yoursite.com"
 SITE_NAME = "Hyde"
+SITE_ROOT = "/"
 
 # {folder : extension : (processors)}
 # The processors are run in the given order and are chained.
@@ -29,12 +30,18 @@ GENERATE_ABSOLUTE_FS_URLS = False
 
 MEDIA_PROCESSORS = {
     '*':{
-        '.css':('hydeengine.media_processors.YUICompressor',),
-        '.ccss':('hydeengine.media_processors.CleverCSS',
-                 'hydeengine.media_processors.YUICompressor',),
-        '.hss':('hydeengine.media_processors.HSS',
+        '.css':('hydeengine.media_processors.TemplateProcessor',
                 'hydeengine.media_processors.YUICompressor',),
-        '.js':('hydeengine.media_processors.YUICompressor',)
+        '.ccss':('hydeengine.media_processors.TemplateProcessor',
+                'hydeengine.media_processors.CleverCSS',
+                'hydeengine.media_processors.YUICompressor',),
+        '.hss':(
+                'hydeengine.media_processors.TemplateProcessor',
+                'hydeengine.media_processors.HSS',
+                'hydeengine.media_processors.YUICompressor',),
+        '.js':(
+                'hydeengine.media_processors.TemplateProcessor',
+                'hydeengine.media_processors.YUICompressor',)
     } 
 }
 
@@ -70,7 +77,7 @@ HSS_PATH = None # if you don't want to use HSS
 
 #Django settings
 
-TEMPLATE_DIRS = (LAYOUT_DIR, CONTENT_DIR, TMP_DIR)
+TEMPLATE_DIRS = (LAYOUT_DIR, CONTENT_DIR, TMP_DIR, MEDIA_DIR)
 
 INSTALLED_APPS = (
     'hydeengine',

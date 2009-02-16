@@ -113,6 +113,12 @@ class File(FileSystemEntity):
         fout.write(text)
         fout.close()
         
+    def read_all(self):
+        fin = codecs.open(self.path,'r')
+        read_text = fin.read()
+        fin.close()
+        return read_text
+        
 class Folder(FileSystemEntity):
     
     def __init__(self, path):
