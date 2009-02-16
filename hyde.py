@@ -1,4 +1,4 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
 import os, sys
 from optparse import OptionParser
 from hydeengine import Generator, Initializer, Server
@@ -10,19 +10,19 @@ PROG_ROOT = os.path.dirname(os.path.abspath( __file__ ))
 def main(argv):
     parser = OptionParser()
     parser.add_option("-s", "--sitepath", 
-                        dest = "site_path")
+                        dest = "site_path", help = "Change the path of the site folder.")
     parser.add_option("-i", "--init", action = 'store_true', 
-                        dest = "init", default = False)
+                        dest = "init", default = False, help = "Create a new hyde site.")
     parser.add_option("-f", "--force", action = 'store_true', 
-                        dest = "force_init", default=False)
+                        dest = "force_init", default = False, help = "")
     parser.add_option("-t", "--template", 
-                        dest = "template")
+                        dest = "template", help = "Choose which template you want to use.")
     parser.add_option("-g", "--generate", action = "store_true",
-                        dest = "generate", default = False)
+                        dest = "generate", default = False, help = "Generate the source for your hyde site.")
     parser.add_option("-d", "--deploy_to", 
-                        dest = "deploy_to")
+                        dest = "deploy_to", help = "Change the path of the deploy folder.")
     parser.add_option("-w", "--webserve", action = "store_true",
-                        dest = "webserve", default = False)
+                        dest = "webserve", default = False, help = "Start an instance of the CherryPy webserver.")
 
     (options, args) = parser.parse_args()
     
@@ -54,6 +54,9 @@ def main(argv):
             server.serve(options.deploy_to)
         except ValueError, err:
             parser.error(err)
+    
+    if argv == []:
+        print parser.format_option_help()
         
     
 if __name__ == "__main__":
