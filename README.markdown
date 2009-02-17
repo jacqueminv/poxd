@@ -23,11 +23,11 @@ The hyde engine has two entry points:
         python hyde.py -i -s path/to/your/site [-t template_name = default] [-f]
     During initialization hyde creates a basic website by copying the specified template (or default). This template contains the skeleton site layout, some content pages and settings.py.
     
-    Be careful with the -f setting though, it will overwrite your website.
+    Be careful with the -f setting, though: it will overwrite your website.
 
 2. Generation
 
-    python hyde.py -g -s path/to/your/site [-d deploy_dir=path/to/your/site/deploy]
+        python hyde.py -g -s path/to/your/site [-d deploy_dir=path/to/your/site/deploy]
     
     This will process the content and media and copy the generated website to your deploy directory.
     
@@ -47,7 +47,7 @@ These conventions will make it easier to configure hyde plugins.
 
 ## Configuring your website
 
-Most of the boiler plate configuration comes as a part of the initialized website. The only setting you _have to_ override is the SITE_NAME setting.
+Most of the boilerplate configuration comes as a part of the initialized website. The only setting you _have to_ override is the SITE_NAME setting.
 
 ### Media Processors
 
@@ -112,13 +112,13 @@ Every page in the template hierarchy gets these context variables: ``site`` and 
 
 Requires pyYAML. You can install pyYAML with  ``sudo easy_install pyYAML`` command. On your content pages you can define the page variables using the standard YAML format.
 
-{%hyde
-    title: A New Post
-    list: 
-        - One
-        - Two
-        - Three
-%}
+    {%hyde
+        title: A New Post
+        list: 
+            - One
+            - Two
+            - Three
+    %}
 
 
 #### PyContentProcessor
@@ -127,12 +127,12 @@ Requires pyYAML. You can install pyYAML with  ``sudo easy_install pyYAML`` comma
 
 Requires py.code. You can install py.code with ``sudo easy_install py`` command. The variables are defined using the python dictionary syntax. The same example from above:
 
-{%hyde
-{
-    "title": "A New Post"
-    "list": ["One", "Two", "Three"]
-}   
-%}
+    {%hyde
+    {
+        "title": "A New Post"
+        "list": ["One", "Two", "Three"]
+    }   
+    %}
 
 *Update:* This processor is no longer supported. The code is still around, since I exclusively use the YAMLContentProcessor for Ringce, I have not been able to ensure if this works as expected. Moreover, the YAML context has been much easier to work with.
 
