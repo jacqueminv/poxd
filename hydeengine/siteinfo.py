@@ -1,6 +1,8 @@
 import sys
+import re
 from threading import Thread, Event
 import time
+
 
 from hydeengine.file_system import File, Folder
 from hydeengine import url
@@ -43,7 +45,47 @@ class SiteResource(object):
         return str(self.file)
  
 class Page(SiteResource):
-    pass
+    def __init__(self, a_file, node):    
+        if not node:            
+            raise ValueError("Page cannot exist without a node")
+        super(Page, self).__init__(a_file, node) 
+        self.process()
+
+    def get_context_text(self):
+        start = re.compile(r'.*?{%\s*hyde\s*(.*?)(%}|$)')
+        end = re.compile(r'(.*?)(%})')
+        fin = open(self.file.path,'r')
+        started = False
+        text = ''
+        matcher = start
+        for line in fin:
+            match = matcher.match(line)
+            if match:
+                text = text + match.group(1)
+                if started: 
+                    break
+                else:
+                    matcher = end 
+                    started = True
+            elif started:
+                text = text + line
+        fin.close()
+        return text
+
+    def add_variables(self, page_vars):
+        if not page_vars: return
+        for key, value in page_vars.iteritems():
+            if not hasattr(Page, key):
+                setattr(Page, key, None)
+            setattr(self, key, value)
+
+    def process(self):
+        text = self.get_context_text()
+        import yaml
+        context = yaml.load(text)
+        if not context:
+            context = {}
+        self.add_variables(context) 
 
 class SiteNode(object):
     def __init__(self, folder, parent=None):
@@ -307,7 +349,7 @@ class SiteInfo(SiteNode):
             time.sleep(waittime)
      
     def find_and_add_resource(self, a_file):
-        resource = self.find_resource(a_file)
+        resource = self.find_resource(a_file)        
         if resource:
             return resource
         node = self.find_and_add_node(a_file.parent)

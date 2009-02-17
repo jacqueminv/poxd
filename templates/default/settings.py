@@ -45,9 +45,7 @@ MEDIA_PROCESSORS = {
     } 
 }
 
-CONTENT_PROCESSORS = {
-    '*': {'.html':('hydeengine.content_processors.YAMLContentProcessor',)}
-}
+CONTENT_PROCESSORS = {}
 
 SITE_POST_PROCESSORS = {
     # 'media/js': {

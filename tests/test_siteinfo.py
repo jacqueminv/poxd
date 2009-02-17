@@ -219,8 +219,8 @@ class TestYAMLProcessor(MonitorTests):
                resource = changes['resource']               
                assert resource
                assert resource.file.path == path
-               from hydeengine.content_processors import YAMLContentProcessor
-               YAMLContentProcessor.process(resource)
+               # from hydeengine.content_processors import YAMLContentProcessor
+               # YAMLContentProcessor.process(resource)
                for key, value in vars.iteritems():
                    assert hasattr(resource, key)
                    assert getattr(resource, key) == value
@@ -247,10 +247,14 @@ class TestYAMLProcessor(MonitorTests):
         assert self.exception_queue.empty()
         # Ensure default values are added for all pages
         #
-        page = Page(out, None)
+        temp = File(self.site.content_folder.child("test.html"))
+        temp.write('text')
+        page = Page(temp, self.site)
         for key, value in vars.iteritems():
             assert hasattr(page, key)
             assert not getattr(page, key)
+        temp.delete()
+        out.delete()
 
 class TestProcessing(MonitorTests):
     def checker(self, asserter):
