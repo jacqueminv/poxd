@@ -11,8 +11,6 @@ from django.template.loader import render_to_string
 
 from path_util import PathUtil
 from file_system import File, Folder
-from folders import MediaFolder, ContentFolder, TempFolder
-from renderer import build_sitemap, render_pages
 from processor import Processor
 from siteinfo import SiteInfo
 
@@ -137,29 +135,6 @@ class Generator(object):
         for resource in self.site.walk_resources():
             self.process(resource)
         
-        render_pages()
-        
-        TempFolder().walk()
-        
-        deploy_folder.delete()
-        deploy_folder.make()
-        deploy_folder.copy_contents_of(tmp_folder)
-        
-        # Now that the site has been generated once,
-        # if keep_watching is specified start monitoring the 
-        # site directory for changes.
-        #
-        import time
-        # TODO: Do this in a secondary thread. Investigate options for running 
-        # the server and the watcher simultaneously.
-        #
-        if keep_watching:
-            while 1:
-                MediaFolder(baseline).walk()
-                render_pages(baseline)
-                deploy_folder.copy_contents_of(tmp_folder, incremental=True)
-                baseline = datetime.now()
-                time.sleep(10)
         tmp_folder.delete()
     
 class Initializer(object):
