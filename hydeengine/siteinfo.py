@@ -8,8 +8,14 @@ from hydeengine import url
 class SiteResource(object):
     def __init__(self, a_file, node):
         super(SiteResource, self).__init__()
-        self.file = a_file
         self.node = node
+        self.file = a_file
+        self.source_file = self.file
+        if self.node.target_folder:
+            self.target_file = File(
+                        self.node.target_folder.child(self.file.name))
+            self.temp_file = File(
+                        self.node.temp_folder.child(self.file.name))
         self.last_known_modification_time = a_file.last_modified
     
     @property
@@ -33,18 +39,6 @@ class SiteResource(object):
             return None
         return url.join(self.node.full_url, self.file.name)
     
-    @property
-    def source_file(self):
-        return self.file
-        
-    @property
-    def target_file(self):
-        return File(self.node.target_folder.child(self.file.name))
-        
-    @property
-    def temp_file(self):
-        return File(self.node.temp_folder.child(self.file.name))
-        
     def __repr__(self):
         return str(self.file)
  

@@ -6,8 +6,8 @@ from file_system import File
 class TemplateProcessor:
     @staticmethod
     def process(resource):
-        rendered = render_to_string(resource.file.path, settings.CONTEXT)
-        fout = open(resource.file.path,'w')
+        rendered = render_to_string(resource.source_file.path, settings.CONTEXT)
+        fout = open(resource.source_file.path,'w')
         fout.write(rendered)
         fout.close()
 
@@ -16,24 +16,24 @@ class CleverCSS:
     @staticmethod
     def process(resource):
         import clevercss
-        data = resource.file.read_all()
+        data = resource.source_file.read_all()
         out = clevercss.convert(data)
-        resource.file.write(out)
+        resource.source_file.write(out)
 
 class HSS:
     @staticmethod
     def process(resource):
-        out_file = File(resource.file.path_without_extension + ".css")
+        out_file = File(resource.source_file.path_without_extension + ".css")
         hss = settings.HSS_PATH
         if not hss or not os.path.exists(hss):
             raise ValueError("HSS Processor cannot be found at [%s]" % hss)
         status, output = commands.getstatusoutput(
-        u"%s %s -output %s/" % (hss, resource.file.path, out_file.parent.path))
+        u"%s %s -output %s/" % (hss, resource.source_file.path, out_file.parent.path))
         if status > 0: 
             print output
             return None
-        resource.file.delete()
-        out_file.copy_to(resource.file.path)
+        resource.source_file.delete()
+        out_file.copy_to(resource.source_file.path)
         out_file.delete()
         
 class YUICompressor:
@@ -44,11 +44,11 @@ class YUICompressor:
             raise ValueError(
             "YUI Compressor cannot be found at [%s]" % compress)
             
-        tmp_file = File(resource.file.path + ".z-tmp")
+        tmp_file = File(resource.source_file.path + ".z-tmp")
         status, output = commands.getstatusoutput(
-        u"java -jar %s %s > %s" % (compress, resource.file.path, tmp_file.path))
+        u"java -jar %s %s > %s" % (compress, resource.source_file.path, tmp_file.path))
         if status > 0: 
             print output
         else:
-            resource.file.delete()
-            tmp_file.move_to(resource.file.path)
+            resource.source_file.delete()
+            tmp_file.move_to(resource.source_file.path)

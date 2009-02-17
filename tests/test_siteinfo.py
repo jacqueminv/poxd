@@ -255,6 +255,7 @@ class TestYAMLProcessor(MonitorTests):
 class TestProcessing(MonitorTests):
     def checker(self, asserter):
            try:
+               print "inside"
                changes = self.queue.get(block=True, timeout=5)
                self.queue.task_done()
                assert changes
@@ -269,8 +270,16 @@ class TestProcessing(MonitorTests):
     def assert_valid_css(self, actual_css_resource):
         expected_text = File(
                 TEST_ROOT.child("test_dest.css")).read_all()
-        self.generator.process(actual_css_resource)        
-        actual_text = actual_css_resource.file.read_all()
+        self.generator.process(actual_css_resource)
+
+        # Ensure source file is not changed
+        # The source should be copied to tmp and then
+        # the processor should do its thing.
+        original_source = File(
+                TEST_ROOT.child("test_src.css")).read_all()
+        source_text = actual_css_resource.file.read_all()
+        assert original_source == source_text        
+        actual_text = actual_css_resource.temp_file.read_all()        
         assert expected_text == actual_text
         
     def test_process_css_with_templates(self):
@@ -282,6 +291,7 @@ class TestProcessing(MonitorTests):
         self.generator = Generator(TEST_SITE.path)
         self.generator.build_siteinfo()
         source = File(TEST_ROOT.child("test_src.css"))
+        self.site.refresh()
         self.site.monitor(self.queue)
         t = Thread(target=self.checker, 
                         kwargs={"asserter":self.assert_valid_css})

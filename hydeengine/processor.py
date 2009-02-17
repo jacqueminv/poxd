@@ -22,7 +22,7 @@ class Processor(object):
             processors = self.settings.CONTENT_PROCESSORS
         else:
             return []
-            
+        
         current_processors = []
         this_node = node
         while this_node:
@@ -37,11 +37,19 @@ class Processor(object):
         return current_processors
         
     def process(self, resource):
+        if resource.node.type not in ("content", "media"):
+            return
         processor_config = self.get_node_processors(resource.node)
         processors = []
         for processer_map in processor_config:
             if resource.file.extension in processer_map:
                 processors.extend(processer_map[resource.file.extension])
+        resource.temp_file.parent.make()        
+        resource.source_file.copy_to(resource.temp_file)  
+        (original_source, resource.source_file) = (
+                                resource.source_file, resource.temp_file)
         for processor_name in processors:
             processor = load_processor(processor_name)
             processor.process(resource)
+        resource.source_file = original_source
+        

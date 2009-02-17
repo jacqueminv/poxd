@@ -111,12 +111,7 @@ class Generator(object):
         settings.CONTEXT['resource'] = resource
         processor.process(resource)
         
-    def build_siteinfo(self):
-        self.siteinfo  = SiteInfo(settings, self.site_path)
-        self.siteinfo.refresh()
-        settings.CONTEXT['site'] = self.siteinfo.content_node
-
-    def generate(self, deploy_path, keep_watching):
+    def build_siteinfo(self, deploy_path=None):
         tmp_folder = Folder(settings.TMP_DIR)
         deploy_folder = Folder(
                             (deploy_path, settings.DEPLOY_DIR)
@@ -132,11 +127,16 @@ class Generator(object):
         add_to_builtins('hydeengine.templatetags.hydetags')
         add_to_builtins('hydeengine.templatetags.aym')
         
+        self.siteinfo  = SiteInfo(settings, self.site_path)
+        self.siteinfo.refresh()
+        settings.CONTEXT['site'] = self.siteinfo.content_node
+
+    def generate(self, deploy_path, keep_watching):
         baseline = datetime.now()
+        self.build_siteinfo(deploy_path)
+        for resource in self.site.walk_resources():
+            self.process(resource)
         
-        build_sitemap()
-        
-        MediaFolder().walk() 
         render_pages()
         
         TempFolder().walk()
