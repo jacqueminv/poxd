@@ -60,6 +60,12 @@ CONTEXT = {
 
 }
 
+FILTER = { 
+    'include': (".htaccess",),
+    'exclude': (".*","*~")
+}        
+
+
 #Processor Configuration
 
 # path for YUICompressor, or None if you don't

@@ -37,6 +37,60 @@ def setup_module(module):
 def teardown_module(module):
     TEST_SITE.delete()
     
+class TestFilters:
+    
+    def setup_method(self, method):
+        self.files = []
+        
+    def teardown_method(self, method):
+        for f in self.files:
+            f.delete()
+    
+    def test_filters(self):
+        site = SiteInfo(settings, TEST_SITE.path)
+        for name in [".banjo", ".hidden", "junk.abc~"]:
+            f = File(site.content_folder.child(name))
+            self.files.append(f)
+            f.write("junk")
+            
+        original_exclude = settings.FILTER['exclude']
+        original_include = settings.FILTER['include']
+        settings.FILTER = {}
+        site = SiteInfo(settings, TEST_SITE.path)
+        site.refresh()
+        
+        for f in self.files:
+            assert site.find_resource(f)
+
+        settings.FILTER = { 
+            'include': (),
+            'exclude': (".*","*~")
+        }
+        
+        site = SiteInfo(settings, TEST_SITE.path)        
+        site.refresh()
+        
+        for f in self.files:
+            assert not site.find_resource(f)
+            
+        settings.FILTER = { 
+            'include': (".banjo",),
+            'exclude': (".*","*~")
+        }
+
+        site = SiteInfo(settings, TEST_SITE.path)        
+        site.refresh()
+
+        for f in self.files:
+            if f.name == ".banjo":
+                assert site.find_resource(f)
+            else:
+                assert not site.find_resource(f)    
+            
+        settings.FILTER['exclude']  = original_exclude
+        settings.FILTER['include']  = original_include
+        
+    
 class TestSiteInfo:
 
     def setup_method(self, method):
@@ -54,7 +108,6 @@ class TestSiteInfo:
                 
             def visit_file(self, a_file):
                 assert node.find_resource(a_file)
-                
         folder.list(Visitor())
 
     def test_population(self):
@@ -326,7 +379,6 @@ class TestProcessing(MonitorTests):
         actual_text = actual_html_resource.temp_file.read_all()        
         self.assert_html_equals(expected_text, actual_text)
         
-        
     def test_process_page_rendering(self):
         self.generator = Generator(TEST_SITE.path)
         self.generator.build_siteinfo()
@@ -339,4 +391,3 @@ class TestProcessing(MonitorTests):
         source.copy_to(self.site.content_folder.child("test.html"))
         t.join()
         assert self.exception_queue.empty()
-        

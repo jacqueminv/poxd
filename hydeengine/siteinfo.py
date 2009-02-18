@@ -369,6 +369,9 @@ class SiteInfo(SiteNode):
         #                    
         class Visitor(object):
             def visit_file(self, a_file):
+                if (not a_file.parent.allow(**site.settings.FILTER) or
+                   not a_file.allow(**site.settings.FILTER)):
+                   return
                 resource = site.find_resource(a_file)
                 change = None
                 if not resource:

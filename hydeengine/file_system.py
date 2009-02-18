@@ -21,6 +21,33 @@ class FileSystemEntity(object):
     def __repr__(self):
         return self.path
     
+    def allow(self, include=None, exclude=None):        
+        if not include:         
+            include = ()
+        if not exclude:
+            exclude =()   
+        if self.name == ".banjo":             
+            print include
+            print exclude
+            print "*****************************"    
+        if reduce(lambda result,
+         pattern: result or 
+            fnmatch.fnmatch(self.name, pattern), include, False):
+            return True
+            
+        if self.name == ".banjo":
+            print include
+            print "Junk"
+
+        if reduce(lambda result, pattern: 
+            result and not fnmatch.fnmatch(self.name, pattern), 
+                exclude, True):
+            return True
+        if self.name == ".banjo":
+            print exclude
+            print "Junk2"    
+        return False
+             
     @property
     def humblepath(self):
         return os.path.abspath(
@@ -266,8 +293,6 @@ class Folder(FileSystemEntity):
                 
     def walk(self, visitor = None, pattern = None):
         for root, dirs, a_files in os.walk(self.path):
-            PathUtil.filter_hidden_inplace(dirs)
-            PathUtil.filter_hidden_inplace(a_files)
             folder = Folder(root)
             self.visit_folder(visitor, folder)
             for a_file in a_files:

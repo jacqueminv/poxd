@@ -3,6 +3,8 @@ import sys
 import os
 import shutil
 from datetime import datetime
+from threading import Thread
+from Queue import Queue
 
 from django.conf import settings
 from django.core.management import setup_environ
@@ -46,8 +48,8 @@ def setup_env(site_path):
 class Server(object):
     """
     
-    Initializes and runs a cherrypy webserver servic static files from the deploy
-    directory
+    Initializes and runs a cherrypy webserver serving static files from the deploy
+    folder
     
     """
     def __init__(self, site_path):
@@ -85,23 +87,6 @@ class Generator(object):
         super(Generator, self).__init__()
         self.site_path = os.path.abspath(os.path.expandvars(
                                         os.path.expanduser(site_path)))
-                                        
-    # def start_processing(self, all_done, queue, process):
-    #     while True:
-    #         try:
-    #             processable = queue.get(15)
-    #             if processable['exception']:
-    #                 raise processable['exception']
-    #             resource = processable['resource']
-    #             change = processable['change']
-    #             process(resource, change)
-    #         except Empty:
-    #             # Nothing in the queue... check if we are all done.
-    #             if all_done.isSet():
-    #                 # Looks like we are done here. Break off.
-    #                 break
-    #                 
-    # def generate_all(self):
     
     def process(self, resource, change="Added"):
         processor = Processor(settings) 
@@ -128,14 +113,27 @@ class Generator(object):
         self.siteinfo  = SiteInfo(settings, self.site_path)
         self.siteinfo.refresh()
         settings.CONTEXT['site'] = self.siteinfo.content_node
+    
+    def watch(self):
+        while True:
+            pending = self.queue.get()
+            if 'exception' in pending:
+                raise pending['exception']
+            self.process(pending['resource'], pending['change'])
 
     def generate(self, deploy_path, keep_watching):
         baseline = datetime.now()
         self.build_siteinfo(deploy_path)
         for resource in self.site.walk_resources():
             self.process(resource)
-        
         tmp_folder.delete()
+        tmp_folder.make()
+        
+        if keep_watching:
+            self.queue = Queue()
+            self.watcher = Thread(target=self.watch)
+            self.watcher.start()
+            self.site.monitor(self.queue)
     
 class Initializer(object):
     def __init__(self, site_path):
