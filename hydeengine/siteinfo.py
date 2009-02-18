@@ -21,6 +21,10 @@ class SiteResource(object):
         self.last_known_modification_time = a_file.last_modified
     
     @property
+    def is_layout(self):
+        return self.file.name.startswith("_")
+    
+    @property
     def has_changes(self):
         return (not self.last_known_modification_time ==
                     self.file.last_modified)

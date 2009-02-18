@@ -39,7 +39,8 @@ class Processor(object):
         return current_processors
         
     def process(self, resource):
-        if resource.node.type not in ("content", "media"):
+        if (resource.node.type not in ("content", "media") or
+            resource.is_layout):
             return
         processor_config = self.get_node_processors(resource.node)
         processors = []

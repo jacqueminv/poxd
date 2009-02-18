@@ -391,3 +391,20 @@ class TestProcessing(MonitorTests):
         source.copy_to(self.site.content_folder.child("test.html"))
         t.join()
         assert self.exception_queue.empty()
+        
+    def assert_layout_not_rendered(self, actual_html_resource):
+        self.generator.process(actual_html_resource)
+        assert not actual_html_resource.temp_file.exists
+        
+    def test_underscored_pages_are_not_rendered(self):
+        self.generator = Generator(TEST_SITE.path)
+        self.generator.build_siteinfo()
+        source = File(TEST_ROOT.child("test_src.html"))
+        self.site.refresh()
+        self.site.monitor(self.queue)
+        t = Thread(target=self.checker, 
+                        kwargs={"asserter":self.assert_layout_not_rendered})
+        t.start()
+        source.copy_to(self.site.content_folder.child("_test.html"))
+        t.join()
+        assert self.exception_queue.empty()
