@@ -1,4 +1,5 @@
 import sys
+from media_processors import TemplateProcessor
 
 def load_processor(name):
     (module_name, _ , processor) = name.rpartition(".")
@@ -31,7 +32,8 @@ class Processor(object):
                 current_processors.append(processors[fragment])
             this_node = this_node.parent
         # Add the default processors to the list
-        current_processors.append(processors["*"])
+        if "*" in processors:
+            current_processors.append(processors["*"])
         self.processor_cache[node.fragment] = current_processors
         current_processors.reverse()
         return current_processors
@@ -51,5 +53,10 @@ class Processor(object):
         for processor_name in processors:
             processor = load_processor(processor_name)
             processor.process(resource)
-        resource.source_file = original_source
         
+        if resource.node.type == "content":
+            self.settings.CONTEXT['page'] = resource
+            TemplateProcessor.process(resource)
+            self.settings.CONTEXT['page'] = None
+            
+        resource.source_file = original_source
