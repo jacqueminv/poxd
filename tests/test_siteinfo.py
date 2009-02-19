@@ -318,7 +318,7 @@ class TestYAMLProcessor(MonitorTests):
         #
         temp = File(self.site.content_folder.child("test.html"))
         temp.write('text')
-        page = Page(temp, self.site)
+        page = Page(temp, self.site.content_node)
         assert not page.title
         assert page.created == datetime.strptime("2000-01-01", "%Y-%m-%d")
         assert page.updated == page.created
