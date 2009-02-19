@@ -2,6 +2,7 @@ import sys
 import re
 from threading import Thread, Event
 import time
+from datetime import datetime
 
 from hydeengine.file_system import File, Folder
 from hydeengine import url
@@ -48,11 +49,23 @@ class SiteResource(object):
         return str(self.file)
  
 class Page(SiteResource):
-    def __init__(self, a_file, node):    
+    def __init__(self, a_file, node):            
         if not node:            
             raise ValueError("Page cannot exist without a node")
         super(Page, self).__init__(a_file, node) 
+        self.created = self.updated = datetime.strptime(
+                                    "2000-01-01", 
+                                    "%Y-%m-%d")
+        self.listing = False
+        self.exclude = False
+        self.display_in_list = True                            
+        self.module = node.module
         self.process()
+        
+        
+    @property    
+    def page_name(self):
+        return self.file.name_without_extension
 
     def get_context_text(self):
         start = re.compile(r'.*?{%\s*hyde\s*(.*?)(%}|$)')
@@ -88,7 +101,12 @@ class Page(SiteResource):
         context = yaml.load(text)
         if not context:
             context = {}
-        self.add_variables(context) 
+        self.add_variables(context)
+        if self.file.name_without_extension.lower() == self.node.name.lower():
+            self.listing = True
+        self.display_in_list = (not self.listing and 
+                                not self.exclude and 
+                                self.file.kind == "html")    
 
 class SiteNode(object):
     def __init__(self, folder, parent=None):
@@ -103,6 +121,13 @@ class SiteNode(object):
 
     def __repr__(self):
         return str(self.folder)
+      
+    @property
+    def module(self):
+        module = self
+        while(module.parent and module.parent.parent):
+            module = module.parent
+        return module
         
     @property
     def isroot(self):
@@ -190,14 +215,25 @@ class SiteNode(object):
         return None
         
 class ContentNode(SiteNode):
+        
+    def __init__(self, folder, parent=None):
+        super(ContentNode, self).__init__(folder, parent)
+        self.listing_page = None
+    
 
+    walk_pages = SiteNode.walk_resources
+    
     @staticmethod
     def is_content(site, folder):
         return (site.content_folder.same_as(folder) or
                 site.content_folder.is_ancestor_of(folder))
    
     def _make_resource_from_file(self, a_file):
-        return Page(a_file, self)
+        page = Page(a_file, self)
+        if page.listing and not self.listing_page:
+            self.listing_page = page
+            
+        return page
     
     @property
     def target_folder(self):

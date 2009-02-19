@@ -128,6 +128,7 @@ class Generator(object):
                 self.site.temp_folder, incremental=True)            
 
     def generate(self, deploy_path, keep_watching=False):
+        setup_env(self.site_path)
         baseline = datetime.now()
         self.build_siteinfo(deploy_path)
         for resource in self.siteinfo.walk_resources():
@@ -139,8 +140,6 @@ class Generator(object):
             self.siteinfo.temp_folder, incremental=True)
         
         self.siteinfo.temp_folder.delete()
-        self.siteinfo.temp_folder.make()
-        
         
         if keep_watching:
             self.queue = Queue()

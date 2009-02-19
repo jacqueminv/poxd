@@ -59,7 +59,7 @@ class LatestExcerptNode(template.Node):
         if not self.words == 50:
             self.words = self.words.render(context)
         self.path = self.path.render(context).strip('"')
-        sitemap_node = context["site"].get_node_for(Folder(self.path))
+        sitemap_node = context["site"].find_node(Folder(self.path))
         if not sitemap_node:
             sitemap_node = context["site"]
         def later(page1, page2):
