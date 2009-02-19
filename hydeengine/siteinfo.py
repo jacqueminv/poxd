@@ -3,6 +3,7 @@ import re
 from threading import Thread, Event
 import time
 from datetime import datetime
+import operator
 
 from hydeengine.file_system import File, Folder
 from hydeengine import url
@@ -163,8 +164,7 @@ class SiteNode(object):
         return node
         
     def add_resource(self, a_file):
-        resource = self._make_resource_from_file(a_file)
-        self.resources.append(resource)
+        resource = self._add_resource(a_file)
         self.site.resource_added(resource)
         return resource
         
@@ -172,8 +172,10 @@ class SiteNode(object):
         self.resources.remove(resource)
         self.site.resource_removed(resource)
 
-    def _make_resource_from_file(self, a_file):
-        return SiteResource(a_file, self)
+    def _add_resource(self, a_file):
+        resource = SiteResource(a_file, self)
+        self.resources.append(resource)
+        return resource
         
     def find_node(self, folder):
         try:
@@ -221,20 +223,35 @@ class ContentNode(SiteNode):
         super(ContentNode, self).__init__(folder, parent)
         self.listing_page = None
 
-    def walk_pages(self):
-        pass
+    walk_pages = SiteNode.walk_resources
     
     @staticmethod
     def is_content(site, folder):
         return (site.content_folder.same_as(folder) or
                 site.content_folder.is_ancestor_of(folder))
    
-    def _make_resource_from_file(self, a_file):
+    def _add_resource(self, a_file):
         page = Page(a_file, self)
         if page.listing and not self.listing_page:
             self.listing_page = page
-            
+        self.resources.append(page)
+        page.node.sort()
         return page
+    
+    def sort(self):
+        self.resources.sort(key=operator.attrgetter("created"), reverse=True)
+        prev = None
+        for page in self.resources:
+            page.prev = None
+            page.next = None
+            if page.display_in_list:
+                if prev:
+                    prev.next = page
+                    page.prev = prev
+                page.next = None
+                prev = page
+        for node in self.children:
+            node.sort()
     
     @property
     def target_folder(self):

@@ -174,21 +174,23 @@ class TestSiteInfo:
         else:
             assert not resource.url
             assert not resource.full_url
-            
         if resource.node.type == "content":
-            if resource.page_name in (
-                    "about", "blog", "2008", "2009", "index"):
-                assert resource.listing
-                assert resource.node.listing_page
-                assert resource.node.listing_page == resource
-                assert not resource.display_in_list
-            else:
-                assert not resource.listing
-                assert resource.display_in_list
-            assert resource.module == resource.node.module        
+            self.assert_page_attributes(resource)
+            
+    def assert_page_attributes(self, page):
+        if page.page_name in (
+                "about", "blog", "2008", "2009", "index"):
+            assert page.listing
+            assert page.node.listing_page
+            assert page.node.listing_page == page
+            assert not page.display_in_list
+        else:
+            assert not page.listing
+            assert page.display_in_list
+        assert page.module == page.node.module        
         
-        assert resource.source_file.parent.same_as(node.folder)
-        assert resource.source_file.name == resource.file.name
+        assert page.source_file.parent.same_as(page.node.folder)
+        assert page.source_file.name == page.file.name
         
     def get_node_fragment(self, node):
         fragment = ''
@@ -226,7 +228,7 @@ class TestSiteInfoMonitoring(MonitorTests):
     
     def change_checker(self, change, path):
         try:
-            changes = self.queue.get(block=True, timeout=20)
+            changes = self.queue.get(block=True, timeout=15)
             self.queue.task_done()
             assert changes
             assert not changes['exception']
@@ -279,7 +281,7 @@ class TestYAMLProcessor(MonitorTests):
    
     def yaml_checker(self, path, vars):
            try:
-               changes = self.queue.get(block=True, timeout=5)
+               changes = self.queue.get(block=True, timeout=10)
                self.queue.task_done()
                assert changes
                assert not changes['exception']
@@ -323,10 +325,25 @@ class TestYAMLProcessor(MonitorTests):
         temp.delete()
         out.delete()
 
+class TestSorting(MonitorTests):
+    def test_pages_are_sorted(self):
+        prev_node = None
+        prev_page = None
+        for page in self.site.content_node.walk_pages():
+            if not prev_node or not prev_node == page.node:
+                assert not page.prev
+            elif prev_node == page.node and page.display_in_list:
+                assert page.prev
+                assert page.prev == prev_page
+                assert prev_page == page.prev
+            if page.display_in_list:    
+                prev_page = page
+            prev_node = page.node
+            
 class TestProcessing(MonitorTests):
     def checker(self, asserter):
            try:
-               changes = self.queue.get(block=True, timeout=5)
+               changes = self.queue.get(block=True, timeout=10)
                self.queue.task_done()
                assert changes
                assert not changes['exception']
@@ -451,12 +468,10 @@ class TestPostProcessors:
                 self.files.append(a_file.name)
                 
         tester = TestFlattener()
-        blog.list(tester)
-        
+        blog.list(tester)        
         blog_src = Folder(settings.CONTENT_DIR).child_folder("blog")
         
-        class VerifyFlattener:
-            
+        class VerifyFlattener:            
             @staticmethod
             def visit_file(a_file):
                 try:
