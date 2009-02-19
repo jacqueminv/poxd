@@ -113,6 +113,10 @@ class Generator(object):
         self.siteinfo  = SiteInfo(settings, self.site_path)
         self.siteinfo.refresh()
         settings.CONTEXT['site'] = self.siteinfo.content_node
+        
+    def post_process(self, node):
+        processor = Processor(settings)
+        processor.post_process(self.siteinfo)
     
     def watch(self):
         while True:
@@ -120,20 +124,29 @@ class Generator(object):
             if 'exception' in pending:
                 raise pending['exception']
             self.process(pending['resource'], pending['change'])
+            self.site.deploy_folder.copy_contents_of(
+                self.site.temp_folder, incremental=True)            
 
-    def generate(self, deploy_path, keep_watching):
+    def generate(self, deploy_path, keep_watching=False):
         baseline = datetime.now()
         self.build_siteinfo(deploy_path)
-        for resource in self.site.walk_resources():
+        for resource in self.siteinfo.walk_resources():
             self.process(resource)
-        tmp_folder.delete()
-        tmp_folder.make()
+            
+        self.post_process(self.siteinfo)
+            
+        self.siteinfo.target_folder.copy_contents_of(
+            self.siteinfo.temp_folder, incremental=True)
+        
+        self.siteinfo.temp_folder.delete()
+        self.siteinfo.temp_folder.make()
+        
         
         if keep_watching:
             self.queue = Queue()
             self.watcher = Thread(target=self.watch)
             self.watcher.start()
-            self.site.monitor(self.queue)
+            self.siteinfo.monitor(self.queue)
     
 class Initializer(object):
     def __init__(self, site_path):

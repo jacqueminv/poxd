@@ -23,7 +23,10 @@ class Processor(object):
             processors = self.settings.CONTENT_PROCESSORS
         else:
             return []
+        return self.extract_processors(node, processors, self.processor_cache)
+
         
+    def extract_processors(self, node, processors, cache):
         current_processors = []
         this_node = node
         while this_node:
@@ -34,10 +37,10 @@ class Processor(object):
         # Add the default processors to the list
         if "*" in processors:
             current_processors.append(processors["*"])
-        self.processor_cache[node.fragment] = current_processors
+        cache[node.fragment] = current_processors
         current_processors.reverse()
         return current_processors
-        
+                
     def process(self, resource):
         if (resource.node.type not in ("content", "media") or
             resource.is_layout):
@@ -61,3 +64,15 @@ class Processor(object):
             self.settings.CONTEXT['page'] = None
             
         resource.source_file = original_source
+          
+    def post_process(self, node):
+        for child in node.walk():
+            if not child.type in ("content", "media"):
+                continue
+            fragment = child.temp_folder.get_fragment(node.site.temp_folder)
+            fragment = fragment.rstrip("/")
+            if fragment in self.settings.SITE_POST_PROCESSORS:
+                processor_config = self.settings.SITE_POST_PROCESSORS[fragment]
+                for processor_name, params in processor_config.iteritems():
+                    processor = load_processor(processor_name)
+                    processor.process(child.temp_folder, params)

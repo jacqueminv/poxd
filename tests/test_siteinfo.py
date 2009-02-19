@@ -26,6 +26,7 @@ sys.path = [ROOT] + sys.path
 from hydeengine.file_system import File, Folder
 from hydeengine import url, Initializer, Generator, setup_env
 from hydeengine.siteinfo import SiteNode, SiteInfo, Page
+from hydeengine.site_post_processors import FolderFlattener
 
 TEST_ROOT = Folder(TEST_ROOT)
 TEST_SITE = TEST_ROOT.child_folder("test_site")
@@ -408,3 +409,46 @@ class TestProcessing(MonitorTests):
         source.copy_to(self.site.content_folder.child("_test.html"))
         t.join()
         assert self.exception_queue.empty()
+
+class TestPostProcessors:
+            
+    def test_folder_flattener(self):
+        settings.MEDIA_PROCESSORS = {}
+        settings.CONTENT_PROCESSORS = {}
+        settings.SITE_POST_PROCESSORS = {
+            "blog" : {
+                "hydeengine.site_post_processors.FolderFlattener" : {
+                        'remove_processed_folders': True,
+                        'pattern':"*.html"
+                }
+            }
+        }
+        self.generator = Generator(TEST_SITE.path)
+        self.generator.generate(settings.DEPLOY_DIR)
+        
+        blog = Folder(settings.DEPLOY_DIR).child_folder("blog")
+        
+        class TestFlattener:
+            def __init__(self):
+                self.files = []
+                
+            def visit_folder(self, folder):
+                assert folder.name in ("blog")
+                
+            def visit_file(self, a_file):
+                self.files.append(a_file.name)
+                
+        tester = TestFlattener()
+        blog.list(tester)
+        
+        blog_src = Folder(settings.CONTENT_DIR).child_folder("blog")
+        
+        class VerifyFlattener:
+            
+            @staticmethod
+            def visit_file(a_file):
+                try:
+                    tester.files.index(a_file.name)
+                except:
+                    assert False    
+        blog_src.walk(VerifyFlattener)    
