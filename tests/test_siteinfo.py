@@ -174,6 +174,13 @@ class TestSiteInfo:
         else:
             assert not resource.url
             assert not resource.full_url
+            
+        if resource.node.type == "content":
+            if resource.page_name in ("about", "2008", "2009", "index"):
+                assert resource.listing
+                assert resource.node.listing_page
+                assert resource.node.listing_page == resource
+            assert resource.module == resource.node.module        
         
         assert resource.source_file.parent.same_as(node.folder)
         assert resource.source_file.name == resource.file.name
@@ -305,9 +312,9 @@ class TestYAMLProcessor(MonitorTests):
         temp = File(self.site.content_folder.child("test.html"))
         temp.write('text')
         page = Page(temp, self.site)
-        for key, value in vars.iteritems():
-            assert hasattr(page, key)
-            assert not getattr(page, key)
+        assert not page.title
+        assert page.created == datetime.strptime("2000-01-01", "%Y-%m-%d")
+        assert page.updated == page.created
         temp.delete()
         out.delete()
 

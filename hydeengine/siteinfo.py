@@ -102,7 +102,8 @@ class Page(SiteResource):
         if not context:
             context = {}
         self.add_variables(context)
-        if self.file.name_without_extension.lower() == self.node.name.lower():
+        if (self.file.name_without_extension.lower() ==
+                self.node.folder.name.lower()):
             self.listing = True
         self.display_in_list = (not self.listing and 
                                 not self.exclude and 
@@ -219,9 +220,9 @@ class ContentNode(SiteNode):
     def __init__(self, folder, parent=None):
         super(ContentNode, self).__init__(folder, parent)
         self.listing_page = None
-    
 
-    walk_pages = SiteNode.walk_resources
+    def walk_pages(self):
+        pass
     
     @staticmethod
     def is_content(site, folder):
@@ -258,6 +259,10 @@ class ContentNode(SiteNode):
     @property            
     def type(self):
       return "content"
+      
+    @property
+    def listing_url(self):
+        return self.listing_page.url
           
 class LayoutNode(SiteNode):
     
