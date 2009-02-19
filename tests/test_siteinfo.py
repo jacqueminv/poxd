@@ -176,10 +176,15 @@ class TestSiteInfo:
             assert not resource.full_url
             
         if resource.node.type == "content":
-            if resource.page_name in ("about", "2008", "2009", "index"):
+            if resource.page_name in (
+                    "about", "blog", "2008", "2009", "index"):
                 assert resource.listing
                 assert resource.node.listing_page
                 assert resource.node.listing_page == resource
+                assert not resource.display_in_list
+            else:
+                assert not resource.listing
+                assert resource.display_in_list
             assert resource.module == resource.node.module        
         
         assert resource.source_file.parent.same_as(node.folder)
