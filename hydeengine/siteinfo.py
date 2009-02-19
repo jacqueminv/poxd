@@ -125,13 +125,6 @@ class SiteNode(object):
         return str(self.folder)
       
     @property
-    def module(self):
-        module = self
-        while(module.parent and module.parent.parent):
-            module = module.parent
-        return module
-        
-    @property
     def isroot(self):
         return not self.parent
         
@@ -224,6 +217,18 @@ class ContentNode(SiteNode):
         self.listing_page = None
 
     walk_pages = SiteNode.walk_resources
+    
+    @property
+    def module(self):
+        module = self
+        while (module.parent and 
+                not module.parent == self.site.content_node):
+            module = module.parent
+        return module
+    
+    @property
+    def pages(self):
+        return self.resources
     
     @staticmethod
     def is_content(site, folder):
