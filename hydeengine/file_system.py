@@ -21,31 +21,22 @@ class FileSystemEntity(object):
     def __repr__(self):
         return self.path
     
-    def allow(self, include=None, exclude=None):        
+    def allow(self, include=None, exclude=None):
         if not include:         
             include = ()
         if not exclude:
-            exclude =()   
-        if self.name == ".banjo":             
-            print include
-            print exclude
-            print "*****************************"    
+            exclude = ()   
+            
         if reduce(lambda result,
          pattern: result or 
-            fnmatch.fnmatch(self.name, pattern), include, False):
+            fnmatch.fnmatch(self.name, pattern), include, False):   
             return True
             
-        if self.name == ".banjo":
-            print include
-            print "Junk"
-
         if reduce(lambda result, pattern: 
             result and not fnmatch.fnmatch(self.name, pattern), 
                 exclude, True):
             return True
-        if self.name == ".banjo":
-            print exclude
-            print "Junk2"    
+            
         return False
              
     @property
@@ -294,15 +285,23 @@ class Folder(FileSystemEntity):
     def walk(self, visitor = None, pattern = None):
         for root, dirs, a_files in os.walk(self.path):
             folder = Folder(root)
-            self.visit_folder(visitor, folder)
+            if not self.visit_folder(visitor, folder):
+                dirs[:] = []
+                continue
             for a_file in a_files:
                 if not pattern or fnmatch.fnmatch(a_file, pattern):
                     self.visit_file(visitor, File(folder.child(a_file)))
         self.visit_complete(visitor)
                 
     def visit_folder(self, visitor, folder):
+        process_folder = True
         if visitor and hasattr(visitor,'visit_folder'):
-            visitor.visit_folder(folder)
+            process_folder = visitor.visit_folder(folder)
+            # If there is no return value assume true
+            #
+            if process_folder is None:
+                process_folder = True
+        return process_folder
 
     def visit_file(self, visitor, a_file):
         if visitor and hasattr(visitor,'visit_file'):

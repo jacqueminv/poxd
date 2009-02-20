@@ -9,6 +9,7 @@ http://codespeak.net/py/dist/test.html
 """
 import os
 import sys
+import time
 from datetime import datetime, timedelta
 import unittest
 from threading import Thread
@@ -53,6 +54,15 @@ class TestFilters:
             f = File(site.content_folder.child(name))
             self.files.append(f)
             f.write("junk")
+        
+        git = site.content_folder.child_folder(".git")
+        git_child = git.child_folder("child")
+        git_child_pack = File(git_child.child("pack"))
+        git.make()
+        git_child.make()
+        git_index = File(git.child("index"))
+        git_index.write("junk")
+        git_child_pack.write("junk")
             
         original_exclude = settings.FILTER['exclude']
         original_include = settings.FILTER['include']
@@ -62,6 +72,11 @@ class TestFilters:
         
         for f in self.files:
             assert site.find_resource(f)
+            
+        assert site.find_node(git)
+        assert site.find_resource(git_index)
+        assert site.find_node(git_child)
+        assert site.find_resource(git_child_pack)
 
         settings.FILTER = { 
             'include': (),
@@ -73,6 +88,11 @@ class TestFilters:
         
         for f in self.files:
             assert not site.find_resource(f)
+            
+        assert not site.find_node(git)
+        assert not site.find_resource(git_index)  
+        assert not site.find_node(git_child)
+        assert not site.find_resource(git_child_pack)  
             
         settings.FILTER = { 
             'include': (".banjo",),
@@ -87,9 +107,14 @@ class TestFilters:
                 assert site.find_resource(f)
             else:
                 assert not site.find_resource(f)    
+                
+        assert not site.find_node(git)
+        assert not site.find_resource(git_index)        
             
         settings.FILTER['exclude']  = original_exclude
         settings.FILTER['include']  = original_include
+        
+        self.files.append(git)
         
     
 class TestSiteInfo:
@@ -97,7 +122,7 @@ class TestSiteInfo:
     def setup_method(self, method):
         self.site = SiteInfo(settings, TEST_SITE.path)
         self.site.refresh()
-
+        
     def assert_node_complete(self, node, folder):
         assert node.folder.path == folder.path
         test_case = self
@@ -125,6 +150,7 @@ class TestSiteInfo:
         assert_node_type(settings.CONTENT_DIR, "content")
         assert_node_type(settings.MEDIA_DIR, "media")
         assert_node_type(settings.LAYOUT_DIR, "layout")
+            
         
     def test_attributes(self):
         for node in self.site.walk():
@@ -228,7 +254,7 @@ class TestSiteInfoMonitoring(MonitorTests):
     
     def change_checker(self, change, path):
         try:
-            changes = self.queue.get(block=True, timeout=15)
+            changes = self.queue.get(block=True, timeout=20)
             self.queue.task_done()
             assert changes
             assert not changes['exception']

@@ -23,7 +23,8 @@ class SiteResource(object):
     
     @property
     def is_layout(self):
-        return self.file.name.startswith("_")
+        return (self.node.type == "layout" or
+            self.file.name.startswith("_"))
     
     @property
     def has_changes(self):
@@ -434,9 +435,11 @@ class SiteInfo(SiteNode):
         # to get notification in a platform independent manner
         #                    
         class Visitor(object):
+            def visit_folder(self, folder):
+                return folder.allow(**site.settings.FILTER)
+                
             def visit_file(self, a_file):
-                if (not a_file.parent.allow(**site.settings.FILTER) or
-                   not a_file.allow(**site.settings.FILTER)):
+                if not a_file.allow(**site.settings.FILTER):
                    return
                 resource = site.find_resource(a_file)
                 change = None
@@ -445,6 +448,7 @@ class SiteInfo(SiteNode):
                    change = "Added"
                 elif resource.has_changes:
                    change = "Modified"
+                   resource.last_known_modification_time = a_file.last_modified
                 if change:
                     if queue:
                        queue.put({
@@ -452,7 +456,6 @@ class SiteInfo(SiteNode):
                            "resource": resource,
                            "exception": False
                        })
-                    resource.last_known_modification_time = a_file.last_modified
      
         self.folder.walk(visitor=Visitor())
         for resource in self.walk_resources():

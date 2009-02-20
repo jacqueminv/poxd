@@ -4,6 +4,7 @@ import os
 import shutil
 from datetime import datetime
 from threading import Thread
+from threading import Event
 from Queue import Queue
 
 from django.conf import settings
@@ -87,6 +88,7 @@ class Generator(object):
         super(Generator, self).__init__()
         self.site_path = os.path.abspath(os.path.expandvars(
                                         os.path.expanduser(site_path)))
+        self.regenerate_request = Event()                                
     
     def process(self, resource, change="Added"):
         processor = Processor(settings) 
@@ -118,34 +120,65 @@ class Generator(object):
         processor = Processor(settings)
         processor.post_process(self.siteinfo)
     
+    def process_all(self):
+        for resource in self.siteinfo.walk_resources():
+            self.process(resource)
+        self.post_process(self.siteinfo)
+        self.siteinfo.target_folder.copy_contents_of(
+            self.siteinfo.temp_folder, incremental=True)
+    
+    def regenerator(self):
+        pending = False
+        while True:
+            # Wait for the regeneration event to be set
+            self.regenerate_request.wait(5)
+
+            # Wait until there are no more requests            
+            # Got a request, we dont want to process it
+            # immedietely since other changes may be under way.
+            
+            # Another request coming in renews the initil request.
+            # When there are no more requests, we go ahead and process
+            # the event.
+            if not self.regenerate_request.isSet() and pending:
+                pending = False
+                self.process_all()
+            elif self.regenerate_request.isSet():
+                pending = True
+                self.regenerate_request.clear()
+
+
     def watch(self):
         while True:
             pending = self.queue.get()
-            if 'exception' in pending:
-                raise pending['exception']
-            self.process(pending['resource'], pending['change'])
-            self.site.deploy_folder.copy_contents_of(
-                self.site.temp_folder, incremental=True)            
+            self.queue.task_done()
+            if pending.setdefault("exception", False):
+                raise
+            resource = pending['resource']
+
+            if resource.is_layout:
+                self.regenerate_request.set()
+                continue
+
+            if self.process(resource, pending['change']):
+                self.post_process(resource.node)
+                self.siteinfo.target_folder.copy_contents_of(
+                    self.siteinfo.temp_folder, incremental=True)
+                
 
     def generate(self, deploy_path, keep_watching=False):
         setup_env(self.site_path)
-        baseline = datetime.now()
         self.build_siteinfo(deploy_path)
-        for resource in self.siteinfo.walk_resources():
-            self.process(resource)
-            
-        self.post_process(self.siteinfo)
-            
-        self.siteinfo.target_folder.copy_contents_of(
-            self.siteinfo.temp_folder, incremental=True)
-        
+        self.process_all()
         self.siteinfo.temp_folder.delete()
         
         if keep_watching:
+            self.siteinfo.temp_folder.make()
             self.queue = Queue()
             self.watcher = Thread(target=self.watch)
             self.watcher.start()
             self.siteinfo.monitor(self.queue)
+            self.watcher.join()
     
 class Initializer(object):
     def __init__(self, site_path):
@@ -155,8 +188,7 @@ class Initializer(object):
     def initialize(self, root, template=None, force=False):
         if not template:
             template = "default"
-        root_folder = Folder(root)
-            
+        root_folder = Folder(root)            
         template_dir = root_folder.child_folder("templates", template)
         
         if not template_dir.exists:
