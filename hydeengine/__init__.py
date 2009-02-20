@@ -88,13 +88,13 @@ class Generator(object):
         super(Generator, self).__init__()
         self.site_path = os.path.abspath(os.path.expandvars(
                                         os.path.expanduser(site_path)))
-        self.regenerate_request = Event()                                
+        self.regenerate_request = Event()    
+        self.processor = Processor(settings)
     
     def process(self, resource, change="Added"):
-        processor = Processor(settings) 
         settings.CONTEXT['node'] = resource.node
         settings.CONTEXT['resource'] = resource
-        processor.process(resource)
+        self.processor.process(resource)
         
     def build_siteinfo(self, deploy_path=None):
         tmp_folder = Folder(settings.TMP_DIR)
@@ -117,15 +117,14 @@ class Generator(object):
         settings.CONTEXT['site'] = self.siteinfo.content_node
         
     def post_process(self, node):
-        processor = Processor(settings)
-        processor.post_process(self.siteinfo)
+        self.processor.post_process(self.siteinfo)
     
     def process_all(self):
-        for resource in self.siteinfo.walk_resources():
+        for resource in self.siteinfo.walk_resources():            
             self.process(resource)
         self.post_process(self.siteinfo)
         self.siteinfo.target_folder.copy_contents_of(
-            self.siteinfo.temp_folder, incremental=True)
+               self.siteinfo.temp_folder, incremental=True)
     
     def regenerator(self):
         pending = False
@@ -159,7 +158,6 @@ class Generator(object):
             if resource.is_layout:
                 self.regenerate_request.set()
                 continue
-
             if self.process(resource, pending['change']):
                 self.post_process(resource.node)
                 self.siteinfo.target_folder.copy_contents_of(
@@ -171,14 +169,15 @@ class Generator(object):
         self.build_siteinfo(deploy_path)
         self.process_all()
         self.siteinfo.temp_folder.delete()
-        
         if keep_watching:
-            self.siteinfo.temp_folder.make()
-            self.queue = Queue()
-            self.watcher = Thread(target=self.watch)
-            self.watcher.start()
-            self.siteinfo.monitor(self.queue)
-            self.watcher.join()
+           self.siteinfo.temp_folder.make()
+           self.queue = Queue()
+           self.watcher = Thread(target=self.watch)
+           self.watcher.start()
+           self.regenerator = Thread(target=self.regenerator)
+           self.regenerator.start()
+           self.siteinfo.monitor(self.queue)
+           self.watcher.join()
     
 class Initializer(object):
     def __init__(self, site_path):

@@ -138,7 +138,12 @@ class TestSiteInfo:
 
     def test_population(self):
         assert self.site.name == "test_site"
-        self.assert_node_complete(self.site, TEST_SITE)
+        self.assert_node_complete(self.site.content_node,
+                                    TEST_SITE.child_folder("content"))
+        self.assert_node_complete(self.site.media_node,
+                                    TEST_SITE.child_folder("media"))
+        self.assert_node_complete(self.site.layout_node, 
+                                    TEST_SITE.child_folder("layout"))
         
     def test_type(self):
         def assert_node_type(node_dir, type):
@@ -369,7 +374,7 @@ class TestSorting(MonitorTests):
 class TestProcessing(MonitorTests):
     def checker(self, asserter):
            try:
-               changes = self.queue.get(block=True, timeout=10)
+               changes = self.queue.get(block=True, timeout=15)
                self.queue.task_done()
                assert changes
                assert not changes['exception']
@@ -482,7 +487,7 @@ class TestPostProcessors:
         self.generator.generate(settings.DEPLOY_DIR)
         
         blog = Folder(settings.DEPLOY_DIR).child_folder("blog")
-        
+                
         class TestFlattener:
             def __init__(self):
                 self.files = []

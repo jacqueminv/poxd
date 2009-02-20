@@ -457,7 +457,11 @@ class SiteInfo(SiteNode):
                            "exception": False
                        })
      
-        self.folder.walk(visitor=Visitor())
+        visitor = Visitor()
+        self.layout_folder.walk(visitor)
+        self.content_folder.walk(visitor)
+        self.media_folder.walk(visitor)
+        
         for resource in self.walk_resources():
             if not resource.file.exists:
                 if queue:
