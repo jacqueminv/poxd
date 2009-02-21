@@ -1,4 +1,5 @@
 import os
+import sys
 from django.conf import settings
 from django.template.loader import render_to_string
 from folders import ContentFolder
@@ -31,5 +32,9 @@ def render_pages():
         render_page(page)
             
 def render_page(page):
-    rendered = render_to_string(str(page), settings.CONTEXT)    
-    page.write(rendered)
+    try:
+        rendered = render_to_string(str(page), settings.CONTEXT)
+        page.write(rendered)
+    except:
+       print >> sys.stderr, "Error while rendering page %s" % (os.path.join(page.node.name, page.name))
+       raise # re-raise original exception
