@@ -20,6 +20,6 @@
     </ul>
 </div>
 {% endblock %}
-{% block content_header %}{% ifnotequal page.module site.module %}<div id="content-header"><h2>{{ page.title }}</h2></div>{% endifnotequal %}{% endblock %}
+{% block content_header %}{% ifnotequal page.module site.module %}<div class="article title"><h3>{{ page.title }}</h3></div>{% endifnotequal %}{% endblock %}
 {% block content_body %}{% endblock %}
 {% endblock %}
