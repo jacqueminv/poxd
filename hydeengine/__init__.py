@@ -3,6 +3,7 @@ import sys
 import os
 import shutil
 from datetime import datetime
+import threading
 from threading import Thread
 from threading import Event
 from Queue import Queue
@@ -89,9 +90,12 @@ class Generator(object):
         self.site_path = os.path.abspath(os.path.expandvars(
                                         os.path.expanduser(site_path)))
         self.regenerate_request = Event()    
+        self.regeneration_complete = Event()    
         self.processor = Processor(settings)
+        threading.stack_size(1<<19)
     
     def process(self, resource, change="Added"):
+        
         settings.CONTEXT['node'] = resource.node
         settings.CONTEXT['resource'] = resource
         self.processor.process(resource)
@@ -140,14 +144,17 @@ class Generator(object):
             # When there are no more requests, we go ahead and process
             # the event.
             if not self.regenerate_request.isSet() and pending:
-                pending = False
-                self.process_all()
+                pending = False                
+                self.process_all()                
+                self.regeneration_complete.set()
             elif self.regenerate_request.isSet():
+                # self.regeneration_complete.clear()
                 pending = True
-                self.regenerate_request.clear()
+                # self.regenerate_request.clear()
 
 
     def watch(self):
+        regenerating = False
         while True:
             pending = self.queue.get()
             self.queue.task_done()
@@ -155,9 +162,14 @@ class Generator(object):
                 raise
             resource = pending['resource']
 
-            if resource.is_layout:
+            # if self.regeneration_complete.isSet():
+            #     regenerating = False
+                
+            if resource.is_layout or regenerating:
+                regenerating = True
                 self.regenerate_request.set()
                 continue
+                    
             if self.process(resource, pending['change']):
                 self.post_process(resource.node)
                 self.siteinfo.target_folder.copy_contents_of(
@@ -178,6 +190,7 @@ class Generator(object):
            self.regenerator.start()
            self.siteinfo.monitor(self.queue)
            self.watcher.join()
+           self.regenerator.join()
     
 class Initializer(object):
     def __init__(self, site_path):

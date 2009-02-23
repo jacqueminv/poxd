@@ -23,7 +23,7 @@ class Processor(object):
             return self.settings.logger
             
         loglevel = logging.INFO    
-        if hasattr(self.settings, "loglevel"):
+        if hasattr(self.settings, "LOG_LEVEL"):
             loglevel = self.settings.loglevel
             
         logger = logging.getLogger("hyde_processor")
@@ -69,7 +69,7 @@ class Processor(object):
             resource.is_layout):
             self.logger.debug("Skipping resource: %s" % str(resource.file))
             return False
-        self.logger.info("Processing %s" % str(resource.file))
+        self.logger.info("Processing %s" % resource.url)
         processor_config = self.get_node_processors(resource.node)
         processors = []
         for processer_map in processor_config:
