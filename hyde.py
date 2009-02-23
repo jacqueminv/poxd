@@ -37,23 +37,14 @@ def main(argv):
     
     if options.init:
         initializer = Initializer(options.site_path)
-        try:
-            initializer.initialize(PROG_ROOT,
-                        options.template, options.force_init)
-        except ValueError, err:
-            parser.error(err)
+        initializer.initialize(PROG_ROOT,
+                    options.template, options.force_init)
     if options.generate:
         generator = Generator(options.site_path)
-        try:
-            generator.generate(options.deploy_to)
-        except ValueError, err:
-            parser.error(err)
+        generator.generate(options.deploy_to)
     if options.webserve:
         server = Server(options.site_path)
-        try:
-            server.serve(options.deploy_to)
-        except ValueError, err:
-            parser.error(err)
+        server.serve(options.deploy_to)
     
     if argv == []:
         print parser.format_option_help()

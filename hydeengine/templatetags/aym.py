@@ -1,7 +1,7 @@
 from django import template
 from django.utils import safestring
 
-import md5
+import hashlib
 
 try:
     import markdown
@@ -71,5 +71,5 @@ def md5_querystring(value, arg=None):
         print "Couldn't find path to generate hash querystring for %s" % value
         return value
 
-    m = md5.new(f.read()).hexdigest()
+    m = hashlib.md5(f.read()).hexdigest()
     return "%s?%s" % (value, m)        
