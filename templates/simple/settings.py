@@ -31,7 +31,7 @@ GENERATE_ABSOLUTE_FS_URLS = False
 MEDIA_PROCESSORS = {
     '*':{
         '.css':('hydeengine.media_processors.YUICompressor',),
-        '.hss':('hydeengine.media_processors.HSS',),
+        '.hss':('hydeengine.media_processors.HSS',
                 'hydeengine.media_processors.YUICompressor',),
         '.js':('hydeengine.media_processors.YUICompressor',)
     } 

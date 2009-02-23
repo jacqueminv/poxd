@@ -115,3 +115,8 @@ div.article {
     color: #111;
     font-style: normal;
 }
+
+#footer{
+    text-align:center;
+    font-size:0.6em;
+}
