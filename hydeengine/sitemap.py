@@ -3,6 +3,7 @@ from file_system import Folder
 import os
 import operator 
 from datetime import datetime
+from datetime import date
 
 def make_url(root, child):
     return root.rstrip("/") + "/" + child.lstrip("/")
@@ -163,9 +164,15 @@ class SitemapNode(object):
         if not hasattr(page, "created") or not page.created:
             page.created = datetime.strptime(
                             "2000-01-01", 
-                            "%Y-%m-%d")
+                            "%Y-%m-%d")			
         if not hasattr(page, "updated") or not page.updated:
             page.updated = page.created
+
+        #if the created or updated is a date, we should convert to a
+        if (hasattr(page, "created") and type(getattr(page, "created")) == date):
+            page.created = datetime(page.created.year, page.created.month, page.created.day)
+        if (hasattr(page, "updated") and type(getattr(page, "updated")) == date):
+            page.updated = datetime(page.updated.year, page.updated.month, page.updated.day)
             
         if page.name_without_extension.lower() == self.name.lower() or \
            page.name_without_extension.lower() in settings.LISTING_PAGE_NAMES:
