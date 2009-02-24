@@ -92,6 +92,7 @@ class Processor(object):
             self.settings.CONTEXT['page'] = None
             
         resource.source_file = original_source
+        self.logger.debug("        Processing Complete")
         return True
           
     def post_process(self, node):

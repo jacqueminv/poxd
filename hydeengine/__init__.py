@@ -100,7 +100,7 @@ class Generator(object):
         
         settings.CONTEXT['node'] = resource.node
         settings.CONTEXT['resource'] = resource
-        self.processor.process(resource)
+        return self.processor.process(resource)
         
     def build_siteinfo(self, deploy_path=None):
         tmp_folder = Folder(settings.TMP_DIR)
