@@ -12,19 +12,19 @@ class Processor(object):
     def __init__(self, settings):
         self.settings = settings 
         self.processor_cache = {}
-        self.logger = None
-        self.logger = self.get_logger()
+        self._logger = None
         
-    def get_logger(self):
-        if self.logger:
-            return self.logger
+    @property
+    def logger(self):
+        if self._logger:
+            return self._logger
             
         if hasattr(self.settings, "logger"):
             return self.settings.logger
             
         loglevel = logging.INFO    
         if hasattr(self.settings, "LOG_LEVEL"):
-            loglevel = self.settings.loglevel
+            loglevel = self.settings.LOG_LEVEL
             
         logger = logging.getLogger("hyde_processor")
         logger.setLevel(loglevel)
@@ -33,6 +33,7 @@ class Processor(object):
         formatter = logging.Formatter("%(levelname)s:%(message)s[%(asctime)s]")
         ch.setFormatter(formatter)
         logger.addHandler(ch)
+        self._logger = logger
         return logger
         
     def get_node_processors(self, node):
