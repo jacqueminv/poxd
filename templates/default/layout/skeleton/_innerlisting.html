@@ -21,16 +21,5 @@
         {%endif%}
     </li>{%endif%}{% endifnotequal %}{% endfor %}
 </ul>
-<ul>
-{% with node as parent%}        
-{% for node in parent.children %}
-    <li class="node">
-{% block inner_listing %}
-    {% include "skeleton/_innerlisting.html" %}
-{% endblock %}        
-    </li>
-{% endfor %}
-{% endwith %}
-</ul>
 {%endspaceless%}
 {% endblock %}
