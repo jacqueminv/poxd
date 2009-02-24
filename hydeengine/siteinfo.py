@@ -126,6 +126,17 @@ class SiteNode(object):
         return str(self.folder)
       
     @property
+    def ancestors(self):
+        node = self
+        ancestors = []
+        while not node.isroot:
+            ancestors.append(node)
+            node = node.parent
+        ancestors.append(node)
+        ancestors.reverse()
+        return ancestors
+              
+    @property
     def isroot(self):
         return not self.parent
         

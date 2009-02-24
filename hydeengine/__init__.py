@@ -148,9 +148,9 @@ class Generator(object):
                 self.process_all()                
                 self.regeneration_complete.set()
             elif self.regenerate_request.isSet():
-                # self.regeneration_complete.clear()
+                self.regeneration_complete.clear()
                 pending = True
-                # self.regenerate_request.clear()
+                self.regenerate_request.clear()
 
 
     def watch(self):
@@ -162,8 +162,8 @@ class Generator(object):
                 raise
             resource = pending['resource']
 
-            # if self.regeneration_complete.isSet():
-            #     regenerating = False
+            if self.regeneration_complete.isSet():
+                regenerating = False
                 
             if resource.is_layout or regenerating:
                 regenerating = True
