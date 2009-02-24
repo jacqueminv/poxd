@@ -177,10 +177,11 @@ class TestSiteInfo:
             assert not node.url
             assert not node.full_url
 
-        for ancestor in node.ancestors:
-            assert( 
-                ancestor.folder.is_ancestor_of(node.folder) or 
-                ancestor.folder.same_as(node.folder))
+        if node.type == "content":    
+            for ancestor in node.ancestors:
+                assert( 
+                    ancestor.folder.is_ancestor_of(node.folder) or 
+                    ancestor.folder.same_as(node.folder))
                 
         assert node.source_folder == node.folder
         if not node == self.site and node.type not in ("content", "media"):

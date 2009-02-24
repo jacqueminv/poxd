@@ -126,17 +126,6 @@ class SiteNode(object):
         return str(self.folder)
       
     @property
-    def ancestors(self):
-        node = self
-        ancestors = []
-        while not node.isroot:
-            ancestors.append(node)
-            node = node.parent
-        ancestors.append(node)
-        ancestors.reverse()
-        return ancestors
-              
-    @property
     def isroot(self):
         return not self.parent
         
@@ -239,8 +228,26 @@ class ContentNode(SiteNode):
         return module
     
     @property
+    def name(self):
+        if self == self.site.content_node:
+            return self.site.name
+        else:
+            return super(ContentNode, self).name
+    
+    @property
     def pages(self):
         return self.resources
+        
+    @property
+    def ancestors(self):
+        node = self
+        ancestors = []
+        while not node.isroot:
+            ancestors.append(node)
+            node = node.parent
+        ancestors.reverse()
+        return ancestors
+        
     
     @staticmethod
     def is_content(site, folder):
