@@ -65,12 +65,12 @@ class Server(object):
                             [not deploy_path])
         import cherrypy
         from cherrypy.lib.static import serve_file
-        
+        server = self
         class WebRoot:
             @cherrypy.expose
             def index(self):
                 if not 'site' in settings.CONTEXT:
-                    generator = Generator(self.site_path)
+                    generator = Generator(server.site_path)
                     generator.create_siteinfo()
                     
                 page =  settings.CONTEXT['site'].listing_page
