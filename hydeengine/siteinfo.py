@@ -359,6 +359,10 @@ class SiteInfo(SiteNode):
         self._stop = Event()
         self.nodemap = {site_path:self}
         self.resourcemap = {}
+        
+    @property
+    def name(self):
+        return self.settings.SITE_NAME
 
     @property
     def content_node(self):

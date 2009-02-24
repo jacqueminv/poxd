@@ -137,7 +137,7 @@ class TestSiteInfo:
         folder.list(Visitor())
 
     def test_population(self):
-        assert self.site.name == "test_site"
+        assert self.site.name == "Hyde"
         self.assert_node_complete(self.site.content_node,
                                     TEST_SITE.child_folder("content"))
         self.assert_node_complete(self.site.media_node,
