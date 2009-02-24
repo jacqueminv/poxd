@@ -70,7 +70,9 @@ class Server(object):
             @cherrypy.expose
             def index(self):
                 if not 'site' in settings.CONTEXT:
-                    build_sitemap()
+                    generator = Generator(self.site_path)
+                    generator.create_siteinfo()
+                    
                 page =  settings.CONTEXT['site'].listing_page
                 return serve_file(deploy_folder.child(page.name))
             
@@ -115,10 +117,13 @@ class Generator(object):
         settings.DEPLOY_DIR = deploy_folder.path
         add_to_builtins('hydeengine.templatetags.hydetags')
         add_to_builtins('hydeengine.templatetags.aym')
-        
+        self.create_siteinfo()
+    
+    def create_siteinfo(self):
         self.siteinfo  = SiteInfo(settings, self.site_path)
         self.siteinfo.refresh()
         settings.CONTEXT['site'] = self.siteinfo.content_node
+        
         
     def post_process(self, node):
         self.processor.post_process(self.siteinfo)

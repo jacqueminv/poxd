@@ -40,6 +40,10 @@ class SiteResource(object):
     @property
     def last_modified(self):
         return self.file.last_modified
+        
+    @property
+    def name(self):
+        return self.file.name
     
     @property
     def full_url(self):

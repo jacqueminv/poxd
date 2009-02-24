@@ -198,6 +198,7 @@ class TestSiteInfo:
     def assert_resource_attributes(self, resource):
         node = resource.node
         fragment = self.get_node_fragment(node)
+        assert resource.name == resource.file.name
         if resource.node.type in ("content", "media"):
             assert (resource.url ==  
                         url.join(node.url, resource.file.name))
