@@ -9,8 +9,7 @@ http://codespeak.net/py/dist/test.html
 """
 import os
 import sys
-import time
-from datetime import datetime, timedelta
+from datetime import time, datetime, timedelta
 import unittest
 from threading import Thread
 from Queue import Queue
@@ -364,6 +363,23 @@ class TestYAMLProcessor(MonitorTests):
         assert page.updated == page.created
         temp.delete()
         out.delete()
+
+    def test_dates_are_converted_to_datetime(self):
+        vars = {}
+        vars["created"] = datetime.now().date()
+        vars["updated"] = (datetime.now() + timedelta(hours=1)).date()
+        content = "{%hyde\n"
+        for key, value in vars.iteritems():
+            content += "    %s: %s\n" % (key, value)
+        content +=  "%}"
+        out = File(self.site.content_folder.child("test_yaml.html"))
+        out.write(content)
+        page = Page(out, self.site.content_node)
+        assert not page.title
+        assert page.created == datetime.combine(vars["created"], time())
+        assert page.updated == datetime.combine(vars["updated"], time())
+        out.delete()
+
 
 class TestSorting(MonitorTests):
     def test_pages_are_sorted(self):

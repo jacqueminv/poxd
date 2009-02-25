@@ -1,9 +1,9 @@
 import sys
 import re
-import time
+import time as sleeper
 import operator
 
-from datetime import date, datetime
+from datetime import date, datetime, time
 from threading import Thread, Event
 
 from hydeengine import url
@@ -71,13 +71,9 @@ class Page(SiteResource):
         self.module = node.module
         self.process()
         if type(self.created) == date:
-            self.created = datetime(
-                            self.created.year, 
-                            self.created.month, self.created.day)
+            self.created = datetime.combine(self.created, time())
         if type(self.updated) == date:
-            self.updated = datetime(
-                            self.updated.year, 
-                            self.updated.month, self.updated.day)                            
+            self.updated = datetime.combine(self.updated, time())                          
         
     @property    
     def page_name(self):
@@ -476,7 +472,7 @@ class SiteInfo(SiteNode):
                 raise
             if self._stop.isSet():
                 break        
-            time.sleep(waittime)
+            sleeper.sleep(waittime)
      
     def find_and_add_resource(self, a_file):
         resource = self.find_resource(a_file)        

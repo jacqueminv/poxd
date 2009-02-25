@@ -227,7 +227,6 @@ class Folder(FileSystemEntity):
         shutil.rmtree(str(source))
 
     def copy_folder_from(self, source, incremental=False):
-        dir_util.create_tree(str(source))
         dir_util.copy_tree(str(source), 
                         self.child(source.name), 
                         update=incremental)
