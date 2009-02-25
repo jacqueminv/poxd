@@ -2,10 +2,11 @@ import imp
 import sys
 import os
 import shutil
-from datetime import datetime
 import threading
-from threading import Thread
-from threading import Event
+
+from collections import defaultdict
+from datetime import datetime
+from threading import Thread, Event
 from Queue import Queue
 
 from django.conf import settings
@@ -18,6 +19,17 @@ from file_system import File, Folder
 from processor import Processor
 from siteinfo import SiteInfo
 
+class hyde_defaults:
+    
+    GENERATE_CLEAN_URLS = True
+    GENERATE_ABSOLUTE_FS_URLS = False
+    LISTING_PAGE_NAMES = ['index', 'default', 'listing']
+    APPEND_SLASH = False
+    MEDIA_PROCESSORS = {}
+    CONTENT_PROCESSORS = {}
+    SITE_POST_PROCESSORS = {} 
+    CONTEXT = {}
+    
 def setup_env(site_path):
     """
     
@@ -25,27 +37,43 @@ def setup_env(site_path):
     
     """
     try:
-        imp.load_source("hyde_site_settings",
+       hyde_site_settings = imp.load_source("hyde_site_settings",
                         os.path.join(site_path,"settings.py"))
+    except SyntaxError, err:
+        print "The given site_path [%s] contains a settings file " \
+              "that could not be loaded due syntax errors." % site_path
+        print err
+        exit()
     except Exception, err:
         print "Cannot Import Site Settings"
         print err
         raise ValueError(
-        "The given site_path [%s] does not contain a hyde site. \
-        Give a valid path or run -init to create a new site."  
+        "The given site_path [%s] does not contain a hyde site. "
+        "Give a valid path or run -init to create a new site."
         %  site_path
         )
         
     try:
-        os.environ['DJANGO_SETTINGS_MODULE'] = u"hyde_site_settings"
+        from django.conf import global_settings
+        defaults = global_settings.__dict__
+        defaults.update(hyde_site_settings.__dict__)
+        settings.configure(hyde_defaults, **defaults)
     except Exception, err:
         print "Site settings are not defined properly"
         print err
         raise ValueError(
-        "The given site_path [%s] has invalid settings. \
-        Give a valid path or run -init to create a new site."  
+        "The given site_path [%s] has invalid settings. "
+        "Give a valid path or run -init to create a new site."
         %  site_path
         )
+
+def validate_settings(settings):
+    if settings.GENERATE_CLEAN_URLS and settings.GENERATE_ABSOLUTE_FS_URLS:
+        raise ValueError(
+        "GENERATE_CLEAN_URLS and GENERATE_ABSOLUTE_FS_URLS cannot "
+        "be enabled at the same time."
+        )
+
 
 class Server(object):
     """
@@ -60,29 +88,77 @@ class Server(object):
                                         os.path.expanduser(site_path)))
     def serve(self, deploy_path):
         setup_env(self.site_path)
+        validate_settings(settings)
         deploy_folder = Folder(
                             (deploy_path, settings.DEPLOY_DIR)
                             [not deploy_path])
+        if not 'site' in settings.CONTEXT:
+            generator = Generator(server.site_path)
+            generator.create_siteinfo()
+        site = settings.CONTEXT['site']
+        url_file_mapping = defaultdict(bool)
+        # This following bit is for supporting listing pages with arbitrary
+        # filenames.
+        if settings.GENERATE_CLEAN_URLS:
+            for page in site.walk_pages(): # build url to file mapping
+                if page.listing and page.name_without_extension not in \
+                   (settings.LISTING_PAGE_NAMES + [page.node.name]):
+                    filename = os.path.join(settings.DEPLOY_DIR, page.name)
+                    url = page.url.strip('/')
+                    url_file_mapping[url] = filename
+
         import cherrypy
         from cherrypy.lib.static import serve_file
         server = self
         class WebRoot:
             @cherrypy.expose
             def index(self):
-                if not 'site' in settings.CONTEXT:
-                    generator = Generator(server.site_path)
-                    generator.create_siteinfo()
-                    
-                page =  settings.CONTEXT['site'].listing_page
+                page =  site.listing_page
                 return serve_file(deploy_folder.child(page.name))
+                
+            if settings.GENERATE_CLEAN_URLS:
+                @cherrypy.expose
+                def default(self, *args):
+                   # first, see if the url is in the url_file_mapping
+                   # dictionary
+                   file = url_file_mapping[os.sep.join(args)]
+                   if file:
+                       return serve_file(file)
+                   # next, try to find a listing page whose filename is the
+                   # same as its enclosing folder's name
+                   file = os.path.join(deploy_folder.path, os.sep.join(args),
+                       args[-1] + '.html') 
+                   if os.path.isfile(file):
+                       return serve_file(file)
+                   # try each filename in LISTING_PAGE_NAMES setting
+                   for listing_name in settings.LISTING_PAGE_NAMES:
+                       file = os.path.join(deploy_folder.path, os.sep.join(args),
+                           listing_name + '.html') 
+                       if os.path.isfile(file):
+                           return serve_file(file)
+                   # failing that, search for a non-listing page
+                   file = os.path.join(deploy_folder.path, os.sep.join(args[:-1]),
+                       args[-1] + '.html') 
+                   if os.path.isfile(file):
+                       return serve_file(file)
+                   # failing that, page not found
+                   raise cherrypy.NotFound
             
         cherrypy.config.update({'environment': 'production',
                                   'log.error_file': 'site.log',
                                   'log.screen': True})
-        conf = {'/': {
-        'tools.staticdir.dir': deploy_folder.path, 
-        'tools.staticdir.on':True
-        }}
+                                  
+        # even if we're still using clean urls, we still need to serve media.
+        if settings.GENERATE_CLEAN_URLS:
+            conf = {'/media': {
+            'tools.staticdir.dir':os.path.join(deploy_folder.path, 'media'), 
+            'tools.staticdir.on':True
+            }}
+        else:
+            conf = {'/': {
+            'tools.staticdir.dir': deploy_folder.path, 
+            'tools.staticdir.on':True
+            }}
         cherrypy.quickstart(WebRoot(), '/', config = conf)
    
 
@@ -97,7 +173,6 @@ class Generator(object):
         threading.stack_size(1<<19)
     
     def process(self, resource, change="Added"):
-        
         settings.CONTEXT['node'] = resource.node
         settings.CONTEXT['resource'] = resource
         return self.processor.process(resource)
@@ -117,13 +192,13 @@ class Generator(object):
         settings.DEPLOY_DIR = deploy_folder.path
         add_to_builtins('hydeengine.templatetags.hydetags')
         add_to_builtins('hydeengine.templatetags.aym')
+        add_to_builtins('hydeengine.templatetags.typogrify')
         self.create_siteinfo()
     
     def create_siteinfo(self):
         self.siteinfo  = SiteInfo(settings, self.site_path)
         self.siteinfo.refresh()
         settings.CONTEXT['site'] = self.siteinfo.content_node
-        
         
     def post_process(self, node):
         self.processor.post_process(self.siteinfo)
@@ -183,6 +258,7 @@ class Generator(object):
 
     def generate(self, deploy_path, keep_watching=False):
         setup_env(self.site_path)
+        validate_settings(settings)
         self.build_siteinfo(deploy_path)
         self.process_all()
         self.siteinfo.temp_folder.delete()

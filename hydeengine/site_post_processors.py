@@ -1,4 +1,7 @@
+import os
+import string
 from django.conf import settings
+from django.template.loader import render_to_string
 from file_system import File
 from datetime import datetime
 from hydeengine.templatetags.hydetags import xmldatetime
@@ -78,3 +81,5 @@ priority=%(priority).1f\n"
             print output
         File(config_file).delete()
         File(url_list_file).delete()
+
+

@@ -4,8 +4,11 @@ from django.template import Template
 from django.template.loader import render_to_string
 from django.template.defaultfilters import truncatewords_html
 from django.template import Library
+from django.utils.safestring import mark_safe
 from hydeengine.file_system import Folder
 import re
+import string
+import os
 from datetime import datetime
 from datetime import timedelta
 
@@ -184,3 +187,36 @@ def unslugify(slug):
                         replace(".", "").split()
                         
     return ' '.join(map(lambda str: str.capitalize(), words))
+
+@register.tag(name="hyde_listing_page_rewrite_rules")
+def hyde_listing_page_rewrite_rules(parser, token):
+    """Prints the Apache Mod_Rewrite RewriteRules for clean urls for pages in
+    LISTING_PAGE_NAMES.  These rules are designed to be placed in a .htaccess
+    file; they have not been tested inside of httpd.conf
+
+    This only generates RewriteRules; it does not enable url rewriting or set
+    RewriteBase.
+    """
+    return RenderHydeListingPageRewriteRulesNode()
+
+
+LPN_REWRITE_RULE = string.Template(\
+r"""
+RewriteCond %{REQUEST_FILENAME}/${name}.html -f
+RewriteRule ^(.*) $1/${name}.html
+"""
+)
+
+class RenderHydeListingPageRewriteRulesNode(template.Node):
+    def render(self, context):
+        if not settings.LISTING_PAGE_NAMES:
+            return ''
+        rules = [] # for LISTING_PAGE_NAMES listings
+        for name in settings.LISTING_PAGE_NAMES:
+            rules.append(LPN_REWRITE_RULE.safe_substitute( \
+                {'name': name}))
+        return \
+            "###  BEGIN GENERATED REWRITE RULES  ####\n" \
+          + ''.join(rules) \
+          + "\n####  END GENERATED REWRITE RULES  ####"
+

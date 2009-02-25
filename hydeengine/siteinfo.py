@@ -1,9 +1,10 @@
 import sys
 import re
-from threading import Thread, Event
 import time
-from datetime import datetime
 import operator
+
+from datetime import date, datetime
+from threading import Thread, Event
 
 from hydeengine.file_system import File, Folder
 from hydeengine import url
@@ -67,7 +68,14 @@ class Page(SiteResource):
         self.display_in_list = True                            
         self.module = node.module
         self.process()
-        
+        if type(self.created) == date:
+            self.created = datetime(
+                            self.created.year, 
+                            self.created.month, self.created.day)
+        if type(self.updated) == date:
+            self.updated = datetime(
+                            self.updated.year, 
+                            self.updated.month, self.updated.day)                            
         
     @property    
     def page_name(self):

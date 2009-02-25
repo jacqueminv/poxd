@@ -23,11 +23,11 @@ The hyde engine has two entry points:
         python hyde.py -i -s path/to/your/site [-t template_name = default] [-f]
     During initialization hyde creates a basic website by copying the specified template (or default). This template contains the skeleton site layout, some content pages and settings.py.
     
-    Be careful with the -f setting though, it will overwrite your website.
+    Be careful with the -f setting, though: it will overwrite your website.
 
 2. Generation
 
-    python hyde.py -g -s path/to/your/site [-d deploy_dir=path/to/your/site/deploy]
+        python hyde.py -g -s path/to/your/site [-d deploy_dir=path/to/your/site/deploy]
     
     This will process the content and media and copy the generated website to your deploy directory.
     
@@ -47,7 +47,7 @@ These conventions will make it easier to configure hyde plugins.
 
 ## Configuring your website
 
-Most of the boiler plate configuration comes as a part of the initialized website. The only setting you _have to_ override is the SITE_NAME setting.
+Most of the boilerplate configuration comes as a part of the initialized website. The only setting you _have to_ override is the SITE_NAME setting.
 
 ### Media Processors
 
@@ -59,7 +59,7 @@ Media processors are defined in the following format:
     
 The processors are executed in the order in which they are defined. The output from the first processor becomes the input of the next.
 
-A * instead of folder will apply the setting to all folders. There is no wildcard support for folder name yet, * is just a catch all special case.
+A \* instead of folder will apply the setting to all folders. There is no wildcard support for folder name yet, \* is just a catch all special case.
 
 File extensions should be specified as .css, .js, .png etc. Again no wildcard support yet. 
 
@@ -82,7 +82,7 @@ be a path to a [YUI Compressor][yuic] jar on your computer.
 
 Runs through the all the files defined in the configuration associated with ``'hydeengine.media_processors.CleverCSS'`` and converts them to css. 
 
-You need to install Clever CSS using ``sudo easy-install CleverCSS`` command for this processor to work.
+You need to install Clever CSS using ``sudo easy_install CleverCSS`` command for this processor to work.
 
 [clever_css]: http://sandbox.pocoo.org/clevercss/
 
@@ -90,7 +90,7 @@ You need to install Clever CSS using ``sudo easy-install CleverCSS`` command for
 
 Runs through the all the files defined in the configuration associated with ``'hydeengine.media_processors.HSS'`` and converts them to css. 
 
-You need to download HSS from [hss] and set the ``HSS_PATH`` variable to the downloaded path.
+You need to download HSS from [the project website][hss] and set the ``HSS_PATH`` variable to the downloaded path. A version for OS X is installed in the ``lib`` folder by default. To use it, just uncomment the ``HSS_PATH`` line in the settings.py file of your template.
 
 [hss]: http://ncannasse.fr/projects/hss
 
@@ -112,13 +112,13 @@ Every page in the template hierarchy gets these context variables: ``site`` and 
 
 Requires pyYAML. You can install pyYAML with  ``sudo easy_install pyYAML`` command. On your content pages you can define the page variables using the standard YAML format.
 
-{%hyde
-    title: A New Post
-    list: 
-        - One
-        - Two
-        - Three
-%}
+    {%hyde
+        title: A New Post
+        list: 
+            - One
+            - Two
+            - Three
+    %}
 
 
 #### PyContentProcessor
@@ -127,12 +127,12 @@ Requires pyYAML. You can install pyYAML with  ``sudo easy_install pyYAML`` comma
 
 Requires py.code. You can install py.code with ``sudo easy_install py`` command. The variables are defined using the python dictionary syntax. The same example from above:
 
-{%hyde
-{
-    "title": "A New Post"
-    "list": ["One", "Two", "Three"]
-}   
-%}
+    {%hyde
+    {
+        "title": "A New Post"
+        "list": ["One", "Two", "Three"]
+    }   
+    %}
 
 *Update:* This processor is no longer supported. The code is still around, since I exclusively use the YAMLContentProcessor for Ringce, I have not been able to ensure if this works as expected. Moreover, the YAML context has been much easier to work with.
 
@@ -195,6 +195,12 @@ Render Excerpt takes a page variable and optional number of words argument to re
 
 Latest Excerpt takes a content folder path and optional number of words as input. It parses through the content pages looking for page variables named ``created`` and gets the page with the maximum value and renders the excerpt from that page.
 
+### Typogrify
+
+To enable Typogrify, use ``{% filter typogrify %}`` in your code. Typogrify is "a collection of Django template filters that help prettify your web typography by preventing ugly quotes and widows", according to the [project web site][typogrify_site]. It is automatically enabled in the default template.
+
+[typogrify_site]:http://code.google.com/p/typogrify/
+
 ## Base Templates
 
 The default site layout contains templates for basic site structure, navigation, breadcrumbs, listing and posts. However, no CSS is included yet. 
@@ -204,3 +210,10 @@ The default site layout contains templates for basic site structure, navigation,
 The [Ringce][ringce] website source is available as a reference implementation.
 
 [ringce]:http://github.com/lakshmivyas/ringce/tree/master
+
+# CONTRIBUTORS
+
+- [lakshmivyas](http://github.com/lakshmivyas)
+- [joshrosen](http://github.com/JoshRosen)
+- [Harry Lachenmayer](http://github.com/h3yl9r)
+- [Kailoa Kadano](http://github.com/kailoa)

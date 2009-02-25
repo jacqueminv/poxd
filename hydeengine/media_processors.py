@@ -6,10 +6,15 @@ from file_system import File
 class TemplateProcessor:
     @staticmethod
     def process(resource):
-        rendered = render_to_string(resource.source_file.path, settings.CONTEXT)
-        fout = open(resource.source_file.path,'w')
-        fout.write(rendered)
-        fout.close()
+        try:
+            rendered = render_to_string(resource.source_file.path, settings.CONTEXT)
+            resource.source_file.write(rendered)
+        except:
+            print >> sys.stderr, \
+            "Error while rendering page %s" % \
+            resource.url
+             
+    
 
 ## aym-cms code refactored into processors.
 class CleverCSS:    
