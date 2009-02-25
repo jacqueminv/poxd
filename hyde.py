@@ -10,19 +10,28 @@ PROG_ROOT = os.path.dirname(os.path.abspath( __file__ ))
 def main(argv):
     parser = OptionParser()
     parser.add_option("-s", "--sitepath", 
-                        dest = "site_path", help = "Change the path of the site folder.")
+                        dest = "site_path", 
+                        help = "Change the path of the site folder.")
     parser.add_option("-i", "--init", action = 'store_true', 
-                        dest = "init", default = False, help = "Create a new hyde site.")
+                        dest = "init", default = False, 
+                        help = "Create a new hyde site.")
     parser.add_option("-f", "--force", action = 'store_true', 
                         dest = "force_init", default = False, help = "")
     parser.add_option("-t", "--template", 
-                        dest = "template", help = "Choose which template you want to use.")
+                        dest = "template", 
+                        help = "Choose which template you want to use.")
     parser.add_option("-g", "--generate", action = "store_true",
-                        dest = "generate", default = False, help = "Generate the source for your hyde site.")
+                        dest = "generate", default = False, 
+                        help = "Generate the source for your hyde site.")
+    parser.add_option("-k", "--keep_watching", action = "store_true",
+                        dest = "keep_watching", default = False,
+                        help = "Start monitoring the source folder for changes.")                    
     parser.add_option("-d", "--deploy_to", 
-                        dest = "deploy_to", help = "Change the path of the deploy folder.")
+                        dest = "deploy_to", 
+                        help = "Change the path of the deploy folder.")
     parser.add_option("-w", "--webserve", action = "store_true",
-                        dest = "webserve", default = False, help = "Start an instance of the CherryPy webserver.")
+                        dest = "webserve", default = False, 
+                        help = "Start an instance of the CherryPy webserver.")
 
     (options, args) = parser.parse_args()
     

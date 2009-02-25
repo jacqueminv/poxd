@@ -21,7 +21,7 @@ from siteinfo import SiteInfo
 
 class hyde_defaults:
     
-    GENERATE_CLEAN_URLS = True
+    GENERATE_CLEAN_URLS = False
     GENERATE_ABSOLUTE_FS_URLS = False
     LISTING_PAGE_NAMES = ['index', 'default', 'listing']
     APPEND_SLASH = False
@@ -96,7 +96,7 @@ class Server(object):
                             (deploy_path, settings.DEPLOY_DIR)
                             [not deploy_path])
         if not 'site' in settings.CONTEXT:
-            generator = Generator(server.site_path)
+            generator = Generator(self.site_path)
             generator.create_siteinfo()
         site = settings.CONTEXT['site']
         url_file_mapping = defaultdict(bool)
@@ -104,7 +104,7 @@ class Server(object):
         # filenames.
         if settings.GENERATE_CLEAN_URLS:
             for page in site.walk_pages(): # build url to file mapping
-                if page.listing and page.name_without_extension not in \
+                if page.listing and page.file.name_without_extension not in \
                    (settings.LISTING_PAGE_NAMES + [page.node.name]):
                     filename = os.path.join(settings.DEPLOY_DIR, page.name)
                     url = page.url.strip('/')
@@ -112,7 +112,6 @@ class Server(object):
 
         import cherrypy
         from cherrypy.lib.static import serve_file
-        server = self
         class WebRoot:
             @cherrypy.expose
             def index(self):
