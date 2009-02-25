@@ -213,6 +213,7 @@ The [Ringce][ringce] website source is available as a reference implementation.
 
 # CONTRIBUTORS
 
-- lakshmivyas
-- joshrosen
-- Harry Lachenmayer
+- [lakshmivyas](http://github.com/lakshmivyas)
+- [joshrosen](http://github.com/JoshRosen)
+- [Harry Lachenmayer](http://github.com/h3yl9r)
+- [Kailoa Kadano](http://github.com/kailoa)
