@@ -6,8 +6,9 @@ import operator
 from datetime import date, datetime
 from threading import Thread, Event
 
-from hydeengine.file_system import File, Folder
 from hydeengine import url
+from hydeengine.file_system import File, Folder
+
 
 class SiteResource(object):
     def __init__(self, a_file, node):
@@ -63,7 +64,8 @@ class Page(SiteResource):
         self.created = self.updated = datetime.strptime(
                                     "2000-01-01", 
                                     "%Y-%m-%d")
-        self.listing = False
+        listing_pages = self.node.site.settings.LISTING_PAGE_NAMES                            
+        self.listing = a_file.name_without_extension in listing_pages
         self.exclude = False
         self.display_in_list = True                            
         self.module = node.module
@@ -82,7 +84,7 @@ class Page(SiteResource):
         return self.file.name_without_extension
 
     def get_context_text(self):
-        start = re.compile(r'.*?{%\s*hyde\s*(.*?)(%}|$)')
+        start = re.compile(r'.*?{%\s*hyde\s+(.*?)(%}|$)')
         end = re.compile(r'(.*?)(%})')
         fin = open(self.file.path,'r')
         started = False
@@ -121,8 +123,35 @@ class Page(SiteResource):
             self.listing = True
         self.display_in_list = (not self.listing and 
                                 not self.exclude and 
-                                self.file.kind == "html")    
-
+                                self.file.kind == "html")
+                                
+    def _make_clean_url(self, page_url):
+        if self.node.listing_page == self:
+            page_url = self.node.url
+        else:
+            page_url = url.clean_url(page_url)
+        if self.node.site.settings.APPEND_SLASH or not page_url:
+            page_url += "/"
+        return page_url
+        
+    @property                            
+    def url(self):
+        page_url = super(Page, self).url
+        # clean url generation requires knowing whether or not a page is a
+        # listing page prior to generating its url
+        if self.node.site.settings.GENERATE_CLEAN_URLS:
+            page_url = self._make_clean_url(page_url)
+        return page_url
+        
+    @property
+    def full_url(self):
+        page_url = super(Page, self).full_url
+        # clean url generation requires knowing whether or not a page is a
+        # listing page prior to generating its url
+        if self.node.site.settings.GENERATE_CLEAN_URLS:
+            page_url = self._make_clean_url(page_url)
+        return page_url
+                
 class SiteNode(object):
     def __init__(self, folder, parent=None):
         super(SiteNode, self).__init__()

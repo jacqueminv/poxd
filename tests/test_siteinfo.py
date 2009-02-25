@@ -221,10 +221,12 @@ class TestSiteInfo:
             assert page.listing
             assert page.node.listing_page
             assert page.node.listing_page == page
+            
             assert not page.display_in_list
         else:
             assert not page.listing
-            assert page.display_in_list
+            if page.file.kind == "html":
+                assert page.display_in_list
         assert page.module == page.node.module        
         
         assert page.source_file.parent.same_as(page.node.folder)
@@ -490,8 +492,9 @@ class TestPostProcessors:
                 }
             }
         }
+        
         self.generator = Generator(TEST_SITE.path)
-        self.generator.generate(settings.DEPLOY_DIR)
+        self.generator.generate()
         
         blog = Folder(settings.DEPLOY_DIR).child_folder("blog")
                 

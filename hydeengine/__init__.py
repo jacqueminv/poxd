@@ -36,6 +36,9 @@ def setup_env(site_path):
     Initializes Django Environment
     
     """
+    # Don't do it twice
+    if hasattr(settings, "CONTEXT"):
+        return
     try:
        hyde_site_settings = imp.load_source("hyde_site_settings",
                         os.path.join(site_path,"settings.py"))
@@ -190,6 +193,8 @@ class Generator(object):
         tmp_folder.delete()
         tmp_folder.make()
         settings.DEPLOY_DIR = deploy_folder.path
+        if not deploy_folder.exists:
+            deploy_folder.make()
         add_to_builtins('hydeengine.templatetags.hydetags')
         add_to_builtins('hydeengine.templatetags.aym')
         add_to_builtins('hydeengine.templatetags.typogrify')
@@ -253,10 +258,9 @@ class Generator(object):
             if self.process(resource, pending['change']):
                 self.post_process(resource.node)
                 self.siteinfo.target_folder.copy_contents_of(
-                    self.siteinfo.temp_folder, incremental=True)
-                
+                    self.siteinfo.temp_folder, incremental=True)                
 
-    def generate(self, deploy_path, keep_watching=False):
+    def generate(self, deploy_path=None, keep_watching=False):
         setup_env(self.site_path)
         validate_settings(settings)
         self.build_siteinfo(deploy_path)
