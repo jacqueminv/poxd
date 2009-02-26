@@ -21,20 +21,29 @@ Get the hyde source by git cloning this repository.
 
 ## Running with Hyde
 
-The hyde engine has two entry points:
+The hyde engine has three entry points:
 
-1. Initialization
+1. Initializer
 
         python hyde.py -i -s path/to/your/site [-t template_name = default] [-f]
     During initialization hyde creates a basic website by copying the specified template (or default). This template contains the skeleton site layout, some content pages and settings.py.
     
     Be careful with the -f setting, though: it will overwrite your website.
 
-2. Generation
+2. Generator
 
-        python hyde.py -g -s path/to/your/site [-d deploy_dir=path/to/your/site/deploy]
+        python hyde.py -g -s path/to/your/site [-d deploy_dir=path/to/your/site/deploy] [-k]
     
-    This will process the content and media and copy the generated website to your deploy directory.
+    This will process the content and media and copy the generated website to your deploy directory. 
+
+    If the -k option is specified, hyde will monitor the source folder for changes and automatically process them when the changes are encountered. This option is very handy when tweaking css or markup to quickly check the results. Note of caution: This option does not update listing files or excerpt files. It is recommended that you run -g again before you deploy the website.
+
+3. Web Server
+
+        python hyde.py -w -s path/to/your/site [-d deploy_dir=path/to/your/site/deploy]
+    
+    This will start an instance of a cherrypy server and serve the generated website at localhost:8080.
+
     
 ## Site structure
 
