@@ -1,5 +1,7 @@
 # HYDE
 
+0.1 Alpha 
+
 Hyde is a static website generator with the power of Django templates behind it. You can read more about its conception, history and features [here][1] and [here][2].
 
 [1]: http://www.ringce.com/products/hyde/hyde.html

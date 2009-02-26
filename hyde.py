@@ -8,7 +8,7 @@ from hydeengine import Generator, Initializer, Server
 PROG_ROOT = os.path.dirname(os.path.abspath( __file__ ))
 
 def main(argv):
-    parser = OptionParser()
+    parser = OptionParser(usage="%prog [-f] [-q]", version="%prog 0.1a")
     parser.add_option("-s", "--sitepath", 
                         dest = "site_path", 
                         help = "Change the path of the site folder.")
