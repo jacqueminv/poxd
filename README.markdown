@@ -1,6 +1,8 @@
 # HYDE
 
-0.1 Alpha 
+0.2 Beta
+
+This document should give enough information to get you up and running check the [wiki](http://wiki.github.com/lakshmivyas/hyde) for detailed documentation.
 
 Hyde is a static website generator with the power of Django templates behind it. You can read more about its conception, history and features [here][1] and [here][2].
 
@@ -9,9 +11,10 @@ Hyde is a static website generator with the power of Django templates behind it.
 
 ## Basic Installation
 
-The very basic installation of hyde only needs Django. More python goodies are needed based on the features you may use.
+The very basic installation of hyde only needs Django and pyYAML. More python goodies are needed based on the features you may use.
 
     sudo easy_install django
+    sudo easy_install pyYAML
 
 Get the hyde source by git cloning this repository.
 
@@ -98,9 +101,12 @@ You need to download HSS from [the project website][hss] and set the ``HSS_PATH`
 
 ### Content Processors
 
-Content processors are run against all files in the content folder where as the media processors are run against the media folder.
+Content processors are run against all files in the content folder where as the media processors are run against the media folder. No content processors have been created yet.
 
-These processors allow content pages to define their own context variables that are passed to the entire template hierarchy when the page is processed. This is accomplished by using a special tag at the top of the content page(after any extends tags you may have).
+
+## Page Context Variables
+
+Pages can define their own context variables that are passed to the entire template hierarchy when the page is processed. This is accomplished by using a special tag at the top of the content page(after any extends tags you may have).
 
     {%hyde
         <Your variables>
@@ -108,11 +114,7 @@ These processors allow content pages to define their own context variables that 
 
 Every page in the template hierarchy gets these context variables: ``site`` and ``page``. The site variable contains information about the entire site. The ``page`` variable represents the current content page that is being processed. The variables defined at the top of the content pages using the {% hyde %} tags are available through the page variable as attributes.
 
-#### YAMLContentProcessor
-
-``'hydeengine.content_processors.YAMLContentProcessor'``
-
-Requires pyYAML. You can install pyYAML with  ``sudo easy_install pyYAML`` command. On your content pages you can define the page variables using the standard YAML format.
+On your content pages you can define the page variables using the standard YAML format.
 
     {%hyde
         title: A New Post
@@ -122,21 +124,6 @@ Requires pyYAML. You can install pyYAML with  ``sudo easy_install pyYAML`` comma
             - Three
     %}
 
-
-#### PyContentProcessor
-
-``'hydeengine.content_processors.PyContentProcessor'``
-
-Requires py.code. You can install py.code with ``sudo easy_install py`` command. The variables are defined using the python dictionary syntax. The same example from above:
-
-    {%hyde
-    {
-        "title": "A New Post"
-        "list": ["One", "Two", "Three"]
-    }   
-    %}
-
-*Update:* This processor is no longer supported. The code is still around, since I exclusively use the YAMLContentProcessor for Ringce, I have not been able to ensure if this works as expected. Moreover, the YAML context has been much easier to work with.
 
 ## Template Tags
 
