@@ -2,7 +2,7 @@
 
 0.2 Beta
 
-This document should give enough information to get you up and running check the [wiki](http://wiki.github.com/lakshmivyas/hyde) for detailed documentation.
+This document should give enough information to get you up and running. Check the [wiki](http://wiki.github.com/lakshmivyas/hyde) for detailed documentation.
 
 Hyde is a static website generator with the power of Django templates behind it. You can read more about its conception, history and features [here][1] and [here][2].
 
