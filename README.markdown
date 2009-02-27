@@ -110,7 +110,7 @@ You need to download HSS from [the project website][hss] and set the ``HSS_PATH`
 
 ### Content Processors
 
-Content processors are run against all files in the content folder where as the media processors are run against the media folder. No content processors have been created yet.
+Content processors are run against all files in the content folder whereas the media processors are run against the media folder. No content processors have been created yet.
 
 
 ## Page Context Variables
@@ -138,19 +138,15 @@ On your content pages you can define the page variables using the standard YAML 
 
 Hyde retains the markdown and syntax template tags from aym_cms. Additionally hyde introduces a few tags for excerpts. These tags are added to the Django built in tags so there is no need for the load statements.
 
-### AYM Template Tags
+### Markdown
 
-For these tags to work markdown and pygments have to be installed. 
+Requires markdown to be installed.
 
     sudo easy_install markdown
-    sudo easy_install Pygments
-
-#### Markdown
 
 ``markdown`` renders the enclosed text as Markdown markup.
 It is used as follows:
 
-    <del>{% load aym %}</del>
     <p> I love templates. </p>
     {% markdown %}
     Render this **content all in Markdown**.
@@ -162,7 +158,33 @@ It is used as follows:
     2.  What about you?
     {% endmarkdown %}
 
-#### Syntax
+### Textile
+
+Requires textile to be installed.
+
+    sudo easy_install textile
+
+``textile`` renders the enclosed text as Markdown markup.
+It is used as follows:
+
+    <p> I love templates. </p>
+    {% textile %}
+    Render this *content all in Textile*.
+
+    bq.  Writing in Textile is also quicker than
+         writing in HTML.
+
+    # Or at least that is my opinion.
+    # What about you?
+    
+    {% endtextile %}
+
+
+### Syntax
+
+Requires Pygments.
+
+    sudo easy_install Pygments
 
 ``syntax`` uses Pygments to render the enclosed text with
 a code syntax highlighter. Usage is:
@@ -177,19 +199,19 @@ a code syntax highlighter. Usage is:
 They are both intended to make writing static content
 quicker and less painful.
 
-### Hyde Template Tags
+### Hyde
 
 The ``{%hyde%}`` tag is used for the page variables, as a template tag all it does is swallow the contents and prevent them from showing up in the html. The even safer approach is to define this tag outside of all blocks so that it is automatically ignored.
 
-#### Excerpt
+### Excerpt
 
 The ``{%excerpt%}{%endexcerpt%}`` tag decorates the output with html comments that mark the excerpt area. Excerpts marked in this manner can be referenced in other pages using the ``{%render_excerpt%}`` or the ``{%latest_excerpt%}`` tag.
 
-#### Render Excerpt
+### Render Excerpt
 
 Render Excerpt takes a page variable and optional number of words argument to render the excerpt from the target page.
 
-#### Latest Excerpt
+### Latest Excerpt
 
 Latest Excerpt takes a content folder path and optional number of words as input. It parses through the content pages looking for page variables named ``created`` and gets the page with the maximum value and renders the excerpt from that page.
 
