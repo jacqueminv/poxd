@@ -480,6 +480,21 @@ class TestProcessing(MonitorTests):
         actual_text = actual_html_resource.temp_file.read_all()        
         self.assert_html_equals(expected_text, actual_text)
         
+    def assert_valid_textile(self, actual_html_resource):
+        expected_text = File(
+                TEST_ROOT.child("dst_test_textile.html")).read_all()
+        self.generator.process(actual_html_resource)
+
+        # Ensure source file is not changed
+        # The source should be copied to tmp and then
+        # the processor should do its thing.
+        original_source = File(
+                TEST_ROOT.child("src_test_textile.html")).read_all()
+        source_text = actual_html_resource.file.read_all()
+        assert original_source == source_text        
+        actual_text = actual_html_resource.temp_file.read_all()        
+        self.assert_html_equals(expected_text, actual_text)
+        
     def test_process_page_rendering(self):
         self.generator = Generator(TEST_SITE.path)
         self.generator.build_siteinfo()
@@ -518,6 +533,19 @@ class TestProcessing(MonitorTests):
         self.site.monitor(self.queue)
         t = Thread(target=self.checker, 
                         kwargs={"asserter":self.assert_valid_markdown})
+        t.start()
+        source.copy_to(self.site.content_folder.child("test.html"))
+        t.join()
+        assert self.exception_queue.empty()
+        
+    def test_textile(self):
+        self.generator = Generator(TEST_SITE.path)
+        self.generator.build_siteinfo()
+        source = File(TEST_ROOT.child("src_test_textile.html"))
+        self.site.refresh()
+        self.site.monitor(self.queue)
+        t = Thread(target=self.checker, 
+                        kwargs={"asserter":self.assert_valid_textile})
         t.start()
         source.copy_to(self.site.content_folder.child("test.html"))
         t.join()

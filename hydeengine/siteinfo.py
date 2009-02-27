@@ -119,6 +119,7 @@ class Page(SiteResource):
             self.listing = True
         self.display_in_list = (not self.listing and 
                                 not self.exclude and 
+                                not self.file.name.startswith("_") and
                                 self.file.kind == "html")
                                 
     def _make_clean_url(self, page_url):

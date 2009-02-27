@@ -3,19 +3,27 @@ from django.utils import safestring
 
 import hashlib
 
-try:
-    import markdown
-except ImportError:
-    print u"Requires Markdown library to use Markdown tag."
-
-try:
-    import pygments
-    from pygments import lexers
-    from pygments import formatters
-except ImportError:
-    print u"Requires Pygments library to use syntax highlighting tags."
-
 register = template.Library()
+
+@register.tag(name="textile")
+def textileParser(parser, token):
+    nodelist = parser.parse(('endtextile',))
+    parser.delete_first_token()
+    return TextileNode(nodelist)
+
+class TextileNode(template.Node):
+    def __init__(self, nodelist):
+        self.nodelist = nodelist
+
+    def render(self, context):
+        output = self.nodelist.render(context)
+        try:
+            import textile
+        except ImportError:
+            print u"Requires Textile library to use textile tag."
+            raise
+        return textile.textile(output)
+
 
 @register.tag(name="markdown")
 def markdownParser(parser, token):
@@ -29,6 +37,11 @@ class MarkdownNode(template.Node):
 
     def render(self, context):
         output = self.nodelist.render(context)
+        try:
+            import markdown
+        except ImportError:
+            print u"Requires Markdown library to use Markdown tag."
+            raise
         return markdown.markdown(output)
 
 
@@ -55,6 +68,13 @@ class SyntaxHighlightNode(template.Node):
         self.lexer = lexer
 
     def render(self, context):
+        try:
+            import pygments
+            from pygments import lexers
+            from pygments import formatters
+        except ImportError:
+            print u"Requires Pygments library to use syntax highlighting tags."
+        
         output = self.nodelist.render(context)
         lexer = get_lexer(output, self.lexer)
         formatter = formatters.HtmlFormatter()

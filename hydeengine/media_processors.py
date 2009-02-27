@@ -1,4 +1,4 @@
-import os, commands
+import os, commands, sys
 from django.template.loader import render_to_string
 from django.conf import settings
 from file_system import File
@@ -13,6 +13,7 @@ class TemplateProcessor:
             print >> sys.stderr, \
             "Error while rendering page %s" % \
             resource.url
+            raise
              
     
 
