@@ -144,7 +144,7 @@ Requires markdown to be installed.
 
     sudo easy_install markdown
 
-``markdown`` renders the enclosed text as Markdown markup.
+``markdown`` renders the enclosed text as [Markdown](http://daringfireball.net/projects/markdown/) markup.
 It is used as follows:
 
     <p> I love templates. </p>
@@ -164,7 +164,7 @@ Requires textile to be installed.
 
     sudo easy_install textile
 
-``textile`` renders the enclosed text as Markdown markup.
+``textile`` renders the enclosed text as [Textile](http://www.textism.com/tools/textile/) markup.
 It is used as follows:
 
     <p> I love templates. </p>
