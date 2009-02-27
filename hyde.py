@@ -1,5 +1,8 @@
 #!/usr/bin/env python
-import os, sys
+import os
+import sys
+import threading
+
 from optparse import OptionParser
 from hydeengine import Generator, Initializer, Server
 
@@ -8,6 +11,7 @@ from hydeengine import Generator, Initializer, Server
 PROG_ROOT = os.path.dirname(os.path.abspath( __file__ ))
 
 def main(argv):
+    
     parser = OptionParser(usage="%prog [-f] [-q]", version="%prog 0.2b")
     parser.add_option("-s", "--sitepath", 
                         dest = "site_path", 
@@ -48,14 +52,39 @@ def main(argv):
         initializer = Initializer(options.site_path)
         initializer.initialize(PROG_ROOT,
                         options.template, options.force_init)
-            
+
+    generator = None
+    server = None         
+               
+    def quit(*args, **kwargs):
+        if server and server.alive:
+            server.quit()
+        if generator:
+            generator.quit()
+        
+
     if options.generate:
         generator = Generator(options.site_path)
-        generator.generate(options.deploy_to, options.keep_watching)
-            
+        generator.generate(options.deploy_to, options.keep_watching)        
+
     if options.webserve:
         server = Server(options.site_path)
-        server.serve(options.deploy_to)
+        server.serve(options.deploy_to, quit)
+        
+    if ((options.generate and options.keep_watching)   
+                    or
+                    options.webserve):
+        try:
+            print "Letting the server and/or the generator do their thing..."
+            if server:
+                server.block()
+                if generator:
+                    generator.quit()
+            elif server:
+                server.block()
+        except:
+            print sys.exc_info()
+            quit()
     
     if argv == []:
         print parser.format_option_help()

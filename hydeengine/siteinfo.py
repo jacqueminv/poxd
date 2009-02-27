@@ -467,6 +467,10 @@ class SiteInfo(SiteNode):
         while not self._stop.isSet():
             try:
                 self.refresh(queue)
+            except(KeyboardInterrupt, SystemExit):
+                if queue:
+                    queue.put({"exception": True})
+                raise
             except:
                 if queue:
                     queue.put({"exception": True})
