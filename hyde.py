@@ -12,7 +12,7 @@ PROG_ROOT = os.path.dirname(os.path.abspath( __file__ ))
 
 def main(argv):
     
-    parser = OptionParser(usage="%prog [-f] [-q]", version="%prog 0.2b")
+    parser = OptionParser(usage="%prog [-f] [-q]", version="%prog 0.3b")
     parser.add_option("-s", "--sitepath", 
                         dest = "site_path", 
                         help = "Change the path of the site folder.")
