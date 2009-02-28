@@ -168,8 +168,7 @@ class Server(object):
             'tools.staticdir.dir': deploy_folder.path, 
             'tools.staticdir.on':True
             }}
-        cherrypy.config.update(conf)
-        cherrypy.tree.mount(WebRoot())
+        cherrypy.tree.mount(WebRoot(), "/", conf)
         if exit_listner:
             cherrypy.engine.subscribe('exit', exit_listner)
         cherrypy.engine.start()
