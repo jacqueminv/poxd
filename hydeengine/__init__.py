@@ -263,9 +263,8 @@ class Generator(object):
                     self.regeneration_complete.clear()
                     pending = True
                     self.regenerate_request.clear()
-            except(KeyboardInterrupt, SystemExit):   
-                self.quit_event.set()
-                print "Exiting watcher"
+            except:   
+                self.quit()
                 raise
                 
     def watch(self):
@@ -300,9 +299,8 @@ class Generator(object):
                     self.post_process(resource.node)
                     self.siteinfo.target_folder.copy_contents_of(
                         self.siteinfo.temp_folder, incremental=True)                
-            except(KeyboardInterrupt, SystemExit):   
-                self.quit_event.set()
-                print "Exiting watcher"
+            except:   
+                self.quit()
                 raise
 
 
@@ -323,28 +321,29 @@ class Generator(object):
                self.regenerator.start()
                self.siteinfo.monitor(self.queue)
             except (KeyboardInterrupt, IOError, SystemExit):
-                print 'Keyboard Interrupt: shutting down'
+                self.quit()
                 raise
             except:
-                print 'Exception'
+                self.quit()
                 raise
 
     
     def block(self):
         try:
-            if self.watcher:
-                self.watcher.join()
-            if self.regenerator:
-                self.regenerator.join()
+            while self.watcher.isAlive():
+                self.watcher.join(0.1)
+            while self.regenerator.isAlive():
+                self.regenerator.join(0.1)
             self.siteinfo.dont_monitor()
         except (KeyboardInterrupt, IOError, SystemExit):
-            print 'Keyboard Interrupt: shutting down'
+            self.quit()
             raise
         except:
-            print 'Exception'
+            self.quit()
             raise
         
     def quit(self):
+        print "Shutting down..."
         self.siteinfo.dont_monitor()
         self.quit_event.set()
     

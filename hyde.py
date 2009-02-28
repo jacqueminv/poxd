@@ -80,8 +80,8 @@ def main(argv):
                 server.block()
                 if generator:
                     generator.quit()
-            elif server:
-                server.block()
+            elif generator:
+                generator.block()
         except:
             print sys.exc_info()
             quit()
