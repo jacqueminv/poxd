@@ -127,7 +127,7 @@ class File(FileSystemEntity):
         return self._get_destination(destination)
         
     def write(self, text):
-        fout = codecs.open(self.path,'w')
+        fout = codecs.open(self.path,'w', "utf_8")
         fout.write(text)
         fout.close()
         
