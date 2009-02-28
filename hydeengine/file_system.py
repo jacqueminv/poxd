@@ -1,5 +1,9 @@
-import os, shutil, codecs
+import os
+import shutil
+import codecs
 import fnmatch
+from datetime import datetime
+from distutils import dir_util, file_util
 from path_util import PathUtil
 
 
@@ -16,6 +20,36 @@ class FileSystemEntity(object):
         
     def __repr__(self):
         return self.path
+    
+    def allow(self, include=None, exclude=None):
+        if not include:         
+            include = ()
+        if not exclude:
+            exclude = ()   
+            
+        if reduce(lambda result,
+         pattern: result or 
+            fnmatch.fnmatch(self.name, pattern), include, False):   
+            return True
+            
+        if reduce(lambda result, pattern: 
+            result and not fnmatch.fnmatch(self.name, pattern), 
+                exclude, True):
+            return True
+            
+        return False
+             
+    @property
+    def humblepath(self):
+        return os.path.abspath(
+        os.path.normpath(
+        os.path.normcase(
+        os.path.expandvars(
+        os.path.expanduser(self.path)))))
+        
+    def same_as(self, other):
+        return (self.humblepath.rstrip(os.sep) == 
+                        other.humblepath.rstrip(os.sep))
         
     @property    
     def exists(self):
@@ -57,6 +91,17 @@ class File(FileSystemEntity):
         if self.exists:
             os.remove(self.path)
             
+    @property        
+    def last_modified(self):
+        return datetime.fromtimestamp(os.path.getmtime(self.path))
+            
+    def changed_since(self, basetime):
+        return self.last_modified > basetime
+        
+    def older_than(self, another_file):
+        return another_file.last_modified > self.last_modified
+                                
+
     @property
     def path_without_extension(self):
         return os.path.splitext(self.path)[0]
@@ -86,6 +131,12 @@ class File(FileSystemEntity):
         fout.write(text)
         fout.close()
         
+    def read_all(self):
+        fin = codecs.open(self.path,'r')
+        read_text = fin.read()
+        fin.close()
+        return read_text
+        
 class Folder(FileSystemEntity):
     
     def __init__(self, path):
@@ -101,6 +152,9 @@ class Folder(FileSystemEntity):
         if self.exists:
             shutil.rmtree(self.path)
     
+    def depth(self):
+        return len(self.path.split(os.sep))
+    
     def make(self):
         try:
             if not self.exists:
@@ -109,21 +163,25 @@ class Folder(FileSystemEntity):
             pass
         return self
         
-        
-    def same_as(self, other_folder):
-        return os.path.samefile(self.path, other_folder.path)
-    
     def is_parent_of(self, other_entity):
         return self.same_as(other_entity.parent)
+        
+    def is_ancestor_of(self, other_entity):
+        folder = other_entity
+        while not folder.parent.same_as(folder):
+            folder = folder.parent
+            if self.same_as(folder):
+                return True                
+        return False    
 
     def child(self, name):
         return os.path.join(self.path, name)
-        
+    
     def child_folder(self, *args):
         return Folder(os.path.join(self.path, *args))
     
     def child_folder_with_fragment(self, fragment):
-        return Folder(os.path.join(self.path, fragment))
+        return Folder(os.path.join(self.path, fragment.lstrip(os.sep)))
         
     def get_fragment(self, root):
         return PathUtil.get_path_fragment(str(root), self.path)
@@ -164,38 +222,43 @@ class Folder(FileSystemEntity):
         shutil.copytree(self.path, str(destination))
         return self._get_destination(destination)
         
-    def move_folder_from(self, source):
-        self.copy_folder_from(source)
+    def move_folder_from(self, source, incremental=False):        
+        self.copy_folder_from(source, incremental)
         shutil.rmtree(str(source))
 
-    def copy_folder_from(self, source):
-        shutil.copytree(str(source), self.child(source.name))
-        
-    def move_contents_of(self, source, move_empty_folders=True):
+    def copy_folder_from(self, source, incremental=False):
+        dir_util.copy_tree(str(source), 
+                        self.child(source.name), 
+                        update=incremental)
+                        
+    def move_contents_of(self, source, move_empty_folders=True, 
+                        incremental=False):
         class Mover:
             @staticmethod
             def visit_folder(folder):
-                self.move_folder_from(folder)
+                self.move_folder_from(folder, incremental)
             @staticmethod                
             def visit_file(a_file):
-                self.move_file_from(a_file)
+                self.move_file_from(a_file, incremental)
         source.list(Mover, move_empty_folders)
          
-    def copy_contents_of(self, source, copy_empty_folders=True):
+    def copy_contents_of(self, source, copy_empty_folders=True,
+                        incremental=False):
         class Copier:
             @staticmethod
             def visit_folder(folder):
-                self.copy_folder_from(folder)
+                self.copy_folder_from(folder, incremental)
             @staticmethod                
             def visit_file(a_file):
-                self.copy_file_from(a_file)
+                self.copy_file_from(a_file, incremental)
         source.list(Copier, copy_empty_folders)    
         
-    def move_file_from(self, source):
-        shutil.move(str(source), self.path)
+    def move_file_from(self, source, incremental=False):
+        self.copy_file_from(source, incremental)
+        source.delete()
 
-    def copy_file_from(self, source):
-        shutil.copy(str(source), self.path) 
+    def copy_file_from(self, source, incremental=False):
+        file_util.copy_file(str(source), self.path, update=incremental)
 
     def list(self, visitor, list_empty_folders=True):
         a_files = os.listdir(self.path)
@@ -221,18 +284,24 @@ class Folder(FileSystemEntity):
                 
     def walk(self, visitor = None, pattern = None):
         for root, dirs, a_files in os.walk(self.path):
-            PathUtil.filter_hidden_inplace(dirs)
-            PathUtil.filter_hidden_inplace(a_files)
             folder = Folder(root)
-            self.visit_folder(visitor, folder)
+            if not self.visit_folder(visitor, folder):
+                dirs[:] = []
+                continue
             for a_file in a_files:
                 if not pattern or fnmatch.fnmatch(a_file, pattern):
                     self.visit_file(visitor, File(folder.child(a_file)))
         self.visit_complete(visitor)
                 
     def visit_folder(self, visitor, folder):
+        process_folder = True
         if visitor and hasattr(visitor,'visit_folder'):
-            visitor.visit_folder(folder)
+            process_folder = visitor.visit_folder(folder)
+            # If there is no return value assume true
+            #
+            if process_folder is None:
+                process_folder = True
+        return process_folder
 
     def visit_file(self, visitor, a_file):
         if visitor and hasattr(visitor,'visit_file'):

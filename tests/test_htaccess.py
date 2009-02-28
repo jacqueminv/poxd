@@ -15,9 +15,9 @@ ROOT = os.path.abspath(TEST_ROOT + "/..")
 sys.path = [ROOT] + sys.path
 
 from hydeengine.file_system import File, Folder
-from hydeengine import Initializer, setup_env, Generator
-from hydeengine.templatetags.hydetags import RenderHydeListingPageRewriteRulesNode as htaccessgen
-from hydeengine.renderer import build_sitemap
+from hydeengine import url, Initializer, setup_env
+from hydeengine.templatetags.hydetags \
+        import RenderHydeListingPageRewriteRulesNode as htaccessgen
 
 TEST_SITE = Folder(TEST_ROOT).child_folder("test_site")
 

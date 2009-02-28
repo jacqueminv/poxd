@@ -1,6 +1,6 @@
 import os
 
-ROOT_PATH = os.path.dirname(__file__)
+ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 
 #Directories
 LAYOUT_DIR = os.path.join(ROOT_PATH, 'layout')
@@ -15,6 +15,7 @@ BACKUP = False
 SITE_ROOT = "/"
 SITE_WWW_URL = "http://www.yoursite.com"
 SITE_NAME = "Hyde"
+SITE_ROOT = "/"
 
 #Url Configuration
 GENERATE_ABSOLUTE_FS_URLS = False
@@ -52,18 +53,22 @@ APPEND_SLASH = False
 
 MEDIA_PROCESSORS = {
     '*':{
-        '.css':('hydeengine.media_processors.YUICompressor',),
-        '.ccss':('hydeengine.media_processors.CleverCSS',
-                 'hydeengine.media_processors.YUICompressor',),
-        '.hss':('hydeengine.media_processors.HSS',
+        '.css':('hydeengine.media_processors.TemplateProcessor',
                 'hydeengine.media_processors.YUICompressor',),
-        '.js':('hydeengine.media_processors.YUICompressor',)
+        '.ccss':('hydeengine.media_processors.TemplateProcessor',
+                'hydeengine.media_processors.CleverCSS',
+                'hydeengine.media_processors.YUICompressor',),
+        '.hss':(
+                'hydeengine.media_processors.TemplateProcessor',
+                'hydeengine.media_processors.HSS',
+                'hydeengine.media_processors.YUICompressor',),
+        '.js':(
+                'hydeengine.media_processors.TemplateProcessor',
+                'hydeengine.media_processors.YUICompressor',)
     } 
 }
 
-CONTENT_PROCESSORS = {
-    '*': {'.html':('hydeengine.content_processors.YAMLContentProcessor',)}
-}
+CONTENT_PROCESSORS = {}
 
 SITE_POST_PROCESSORS = {
     # 'media/js': {
@@ -77,6 +82,12 @@ SITE_POST_PROCESSORS = {
 CONTEXT = {
     'GENERATE_CLEAN_URLS': GENERATE_CLEAN_URLS
 }
+
+FILTER = { 
+    'include': (".htaccess",),
+    'exclude': (".*","*~")
+}        
+
 
 #Processor Configuration
 
@@ -93,7 +104,7 @@ HSS_PATH = None # if you don't want to use HSS
 
 #Django settings
 
-TEMPLATE_DIRS = (LAYOUT_DIR, CONTENT_DIR, TMP_DIR)
+TEMPLATE_DIRS = (LAYOUT_DIR, CONTENT_DIR, TMP_DIR, MEDIA_DIR)
 
 INSTALLED_APPS = (
     'hydeengine',
