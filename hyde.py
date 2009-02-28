@@ -65,7 +65,7 @@ def main(argv):
 
     if options.generate:
         generator = Generator(options.site_path)
-        generator.generate(options.deploy_to, options.keep_watching)        
+        generator.generate(options.deploy_to, options.keep_watching, quit)        
 
     if options.webserve:
         server = Server(options.site_path)

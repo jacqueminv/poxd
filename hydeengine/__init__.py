@@ -194,7 +194,7 @@ class Generator(object):
         self.regenerate_request = Event()    
         self.regeneration_complete = Event()    
         self.processor = Processor(settings)
-        threading.stack_size(1<<19)
+        self.quitting = False
     
     def process(self, resource, change="Added"):
         settings.CONTEXT['node'] = resource.node
@@ -241,7 +241,7 @@ class Generator(object):
         while True:
             try:
                 if self.quit_event.isSet():
-                    print "Exiting regnerator"
+                    print "Exiting regenerator..."
                     break
 
                 # Wait for the regeneration event to be set
@@ -271,7 +271,7 @@ class Generator(object):
         while True:
             try:
                 if self.quit_event.isSet():
-                    print "Exiting watcher"
+                    print "Exiting watcher..."
                     break
                 try:
                     pending = self.queue.get(timeout=10)
@@ -303,7 +303,8 @@ class Generator(object):
                 raise
 
 
-    def generate(self, deploy_path=None, keep_watching=False):
+    def generate(self, deploy_path=None, keep_watching=False, exit_listner=None):
+        self.exit_listner = exit_listner
         self.quit_event = Event()
         setup_env(self.site_path)
         validate_settings(settings)
@@ -342,9 +343,14 @@ class Generator(object):
             raise
         
     def quit(self):
+        if self.quitting:
+            return
+        self.quitting = True
         print "Shutting down..."
         self.siteinfo.dont_monitor()
         self.quit_event.set()
+        if self.exit_listner:
+            self.exit_listner()
     
 class Initializer(object):
     def __init__(self, site_path):

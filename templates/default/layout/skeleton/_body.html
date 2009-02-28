@@ -2,10 +2,11 @@
 {% block title %}{{site.name}} : {{page.module.name}} : {{page.title}} {% endblock %}
 {% block content %}
 {% block breadcrumbs %}{% include "skeleton/_breadcrumbs.html"%}{% endblock %}
+{% block context_nav %}{% endblock %}
 {% block sitenav %}
 <div id="sitenav">
     <ul>
-        <li{% ifequal page.module site.module %} class="home-selected" {% endifequal %}>
+        <li{% ifequal page.module site.module %} class="selected" {% endifequal %}>
             <a href="{{site.listing_url}}">Home</a>
         </li>    
         {% for module in site.children %}
