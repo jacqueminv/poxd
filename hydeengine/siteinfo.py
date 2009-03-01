@@ -9,7 +9,6 @@ from threading import Thread, Event
 from hydeengine import url
 from hydeengine.file_system import File, Folder
 
-
 class SiteResource(object):
     def __init__(self, a_file, node):
         super(SiteResource, self).__init__()
@@ -46,7 +45,7 @@ class SiteResource(object):
     @property
     def name(self):
         return self.file.name
-    
+        
     @property
     def full_url(self):
         if not self.node.full_url:
@@ -115,8 +114,12 @@ class Page(SiteResource):
             context = {}
         self.add_variables(context)
         if (self.file.name_without_extension.lower() ==
-                self.node.folder.name.lower()):
+                self.node.folder.name.lower()   or
+            self.file.name_without_extension.lower() in                 
+                self.node.site.settings.LISTING_PAGE_NAMES):
+                
             self.listing = True
+            
         self.display_in_list = (not self.listing and 
                                 not self.exclude and 
                                 not self.file.name.startswith("_") and
@@ -169,7 +172,15 @@ class SiteNode(object):
         
     @property
     def name(self):
-        return self.folder.name
+        return self.folder.name        
+        
+    @property
+    def author(self):
+        return self.site.settings.SITE_AUTHOR
+    
+    @property
+    def has_listing(self):
+        return not self.listing_page is None
         
     def walk(self):
         yield self

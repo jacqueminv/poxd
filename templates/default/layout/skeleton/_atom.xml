@@ -11,11 +11,10 @@
  <updated>{{now|xmldatetime}}</updated>
  <id>{{site.full_url}}</id>
  {% for node_page in page.node.walk_pages %}
- {% ifnotequal node_page page %}
- {% if not node_page.listing and not node_page.exclude %}
+ {% if node_page.display_in_list %}
  <entry>
    <title>{{node_page.title}}</title>
-   <author><name>Lakshmi Vyas</name></author>
+   <author><name>{{site.author}}</name></author>
    <link href="{{node_page.full_url}}"/>
    <updated>{{node_page.updated|default:node_page.created|xmldatetime}}</updated>
    <published>{{node_page.created|xmldatetime}}</published>
@@ -26,7 +25,6 @@
    </content>
  </entry>
  {%endif%}
- {%endifnotequal%}
  {% endfor %}
 </feed>
 {%endspaceless%}

@@ -1,21 +1,23 @@
 import imp
-import sys
 import os
+import sys
 import shutil
+import thread
 import threading
 
 from collections import defaultdict
 from datetime import datetime
+from Queue import Queue, Empty
 from threading import Thread, Event
-from Queue import Queue
 
 from django.conf import settings
 from django.core.management import setup_environ
 from django.template import add_to_builtins
 from django.template.loader import render_to_string
 
-from path_util import PathUtil
+
 from file_system import File, Folder
+from path_util import PathUtil
 from processor import Processor
 from siteinfo import SiteInfo
 
@@ -89,7 +91,14 @@ class Server(object):
         super(Server, self).__init__()
         self.site_path = os.path.abspath(os.path.expandvars(
                                         os.path.expanduser(site_path)))
-    def serve(self, deploy_path):
+    def serve(self, deploy_path, exit_listner):
+        try:
+            import cherrypy
+            from cherrypy.lib.static import serve_file
+        except ImportError:
+            print "Cherry Py is required to run the webserver"
+            raise
+            
         setup_env(self.site_path)
         validate_settings(settings)
         deploy_folder = Folder(
@@ -110,8 +119,6 @@ class Server(object):
                     url = page.url.strip('/')
                     url_file_mapping[url] = filename
 
-        import cherrypy
-        from cherrypy.lib.static import serve_file
         class WebRoot:
             @cherrypy.expose
             def index(self):
@@ -161,8 +168,23 @@ class Server(object):
             'tools.staticdir.dir': deploy_folder.path, 
             'tools.staticdir.on':True
             }}
-        cherrypy.quickstart(WebRoot(), '/', config = conf)
+        cherrypy.tree.mount(WebRoot(), "/", conf)
+        if exit_listner:
+            cherrypy.engine.subscribe('exit', exit_listner)
+        cherrypy.engine.start()
    
+    @property
+    def alive(self):
+        import cherrypy
+        return cherrypy.engine.state == cherrypy.engine.states.STARTED
+   
+    def block(self):
+        import cherrypy
+        cherrypy.engine.block()
+       
+    def quit(self):
+        import cherrypy
+        cherrypy.engine.exit()
 
 class Generator(object):
     def __init__(self, site_path):
@@ -172,7 +194,7 @@ class Generator(object):
         self.regenerate_request = Event()    
         self.regeneration_complete = Event()    
         self.processor = Processor(settings)
-        threading.stack_size(1<<19)
+        self.quitting = False
     
     def process(self, resource, change="Added"):
         settings.CONTEXT['node'] = resource.node
@@ -217,64 +239,118 @@ class Generator(object):
     def regenerator(self):
         pending = False
         while True:
-            # Wait for the regeneration event to be set
-            self.regenerate_request.wait(5)
+            try:
+                if self.quit_event.isSet():
+                    print "Exiting regenerator..."
+                    break
 
-            # Wait until there are no more requests            
-            # Got a request, we dont want to process it
-            # immedietely since other changes may be under way.
-            
-            # Another request coming in renews the initil request.
-            # When there are no more requests, we go ahead and process
-            # the event.
-            if not self.regenerate_request.isSet() and pending:
-                pending = False                
-                self.process_all()                
-                self.regeneration_complete.set()
-            elif self.regenerate_request.isSet():
-                self.regeneration_complete.clear()
-                pending = True
-                self.regenerate_request.clear()
+                # Wait for the regeneration event to be set
+                self.regenerate_request.wait(5)
 
-
+                # Wait until there are no more requests            
+                # Got a request, we dont want to process it
+                # immedietely since other changes may be under way.
+    
+                # Another request coming in renews the initil request.
+                # When there are no more requests, we go ahead and process
+                # the event.
+                if not self.regenerate_request.isSet() and pending:
+                    pending = False                
+                    self.process_all()                
+                    self.regeneration_complete.set()
+                elif self.regenerate_request.isSet():
+                    self.regeneration_complete.clear()
+                    pending = True
+                    self.regenerate_request.clear()
+            except:   
+                self.quit()
+                raise
+                
     def watch(self):
         regenerating = False
         while True:
-            pending = self.queue.get()
-            self.queue.task_done()
-            if pending.setdefault("exception", False):
-                raise
-            resource = pending['resource']
-
-            if self.regeneration_complete.isSet():
-                regenerating = False
+            try:
+                if self.quit_event.isSet():
+                    print "Exiting watcher..."
+                    break
+                try:
+                    pending = self.queue.get(timeout=10)
+                except Empty:
+                    continue
                 
-            if resource.is_layout or regenerating:
-                regenerating = True
-                self.regenerate_request.set()
-                continue
-                    
-            if self.process(resource, pending['change']):
-                self.post_process(resource.node)
-                self.siteinfo.target_folder.copy_contents_of(
-                    self.siteinfo.temp_folder, incremental=True)                
+                self.queue.task_done()
+                if pending.setdefault("exception", False):
+                    self.quit_event.set()
+                    print "Exiting watcher"
+                    break
+                
+                resource = pending['resource']
 
-    def generate(self, deploy_path=None, keep_watching=False):
+                if self.regeneration_complete.isSet():
+                    regenerating = False
+            
+                if resource.is_layout or regenerating:
+                    regenerating = True
+                    self.regenerate_request.set()
+                    continue
+                
+                if self.process(resource, pending['change']):
+                    self.post_process(resource.node)
+                    self.siteinfo.target_folder.copy_contents_of(
+                        self.siteinfo.temp_folder, incremental=True)                
+            except:   
+                self.quit()
+                raise
+
+
+    def generate(self, deploy_path=None, keep_watching=False, exit_listner=None):
+        self.exit_listner = exit_listner
+        self.quit_event = Event()
         setup_env(self.site_path)
         validate_settings(settings)
         self.build_siteinfo(deploy_path)
         self.process_all()
         self.siteinfo.temp_folder.delete()
         if keep_watching:
-           self.siteinfo.temp_folder.make()
-           self.queue = Queue()
-           self.watcher = Thread(target=self.watch)
-           self.watcher.start()
-           self.regenerator = Thread(target=self.regenerator)
-           self.regenerator.start()
-           self.siteinfo.monitor(self.queue)
-           self.watcher.join()
-           self.regenerator.join()
+            try:    
+               self.siteinfo.temp_folder.make()
+               self.queue = Queue()
+               self.watcher = Thread(target=self.watch)
+               self.watcher.start()
+               self.regenerator = Thread(target=self.regenerator)
+               self.regenerator.start()
+               self.siteinfo.monitor(self.queue)
+            except (KeyboardInterrupt, IOError, SystemExit):
+                self.quit()
+                raise
+            except:
+                self.quit()
+                raise
+
+    
+    def block(self):
+        try:
+            while self.watcher.isAlive():
+                self.watcher.join(0.1)
+            while self.regenerator.isAlive():
+                self.regenerator.join(0.1)
+            self.siteinfo.dont_monitor()
+        except (KeyboardInterrupt, IOError, SystemExit):
+            self.quit()
+            raise
+        except:
+            self.quit()
+            raise
+        
+    def quit(self):
+        if self.quitting:
+            return
+        self.quitting = True
+        print "Shutting down..."
+        self.siteinfo.dont_monitor()
+        self.quit_event.set()
+        if self.exit_listner:
+            self.exit_listner()
     
 class Initializer(object):
     def __init__(self, site_path):

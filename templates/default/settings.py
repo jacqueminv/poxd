@@ -14,7 +14,8 @@ BACKUP = False
 
 SITE_ROOT = "/"
 SITE_WWW_URL = "http://www.yoursite.com"
-SITE_NAME = "Hyde"
+SITE_NAME = "Your Site"
+SITE_AUTHOR = "Your Name"
 SITE_ROOT = "/"
 
 #Url Configuration
@@ -34,7 +35,7 @@ GENERATE_CLEAN_URLS = False
 # A list of filenames (without extensions) that will be considered listing
 # pages for their enclosing folders.
 # LISTING_PAGE_NAMES = ['index']
-LISTING_PAGE_NAMES = []
+LISTING_PAGE_NAMES = ['listing', 'index', 'default']
 
 # Determines whether or not to append a trailing slash to generated urls when
 # clean urls are enabled.

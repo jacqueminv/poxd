@@ -1,6 +1,6 @@
 # HYDE
 
-0.2 Beta
+0.3 Beta
 
 This document should give enough information to get you up and running. Check the [wiki](http://wiki.github.com/lakshmivyas/hyde) for detailed documentation.
 
@@ -215,6 +215,14 @@ Render Excerpt takes a page variable and optional number of words argument to re
 
 Latest Excerpt takes a content folder path and optional number of words as input. It parses through the content pages looking for page variables named ``created`` and gets the page with the maximum value and renders the excerpt from that page.
 
+### Article
+
+The ``{%article%}{%endarticle%}`` tags mark content enclosed in them to be included as inline content when the atom feed is generated.
+
+### Render Article
+
+Render Article renders the html content bracketed by the `{%article%}` tag from the given page.
+
 ### Typogrify
 
 To enable Typogrify, use ``{% filter typogrify %}`` in your code. Typogrify is "a collection of Django template filters that help prettify your web typography by preventing ugly quotes and widows", according to the [project web site][typogrify_site]. It is automatically enabled in the default template.
@@ -223,7 +231,10 @@ To enable Typogrify, use ``{% filter typogrify %}`` in your code. Typogrify is "
 
 ## Base Templates
 
-The default site layout contains templates for basic site structure, navigation, breadcrumbs, listing and posts. However, no CSS is included yet. 
+There are two layouts currently available: default and simple.
+
+The default site layout contains templates for basic site structure, navigation, breadcrumbs, listing, posts and Atom feed and a very basic stylesheet. 
+
 
 # Examples
 
