@@ -1,6 +1,6 @@
 {% extends "skeleton/_body.html" %}
 {% block content_body %}
-{% with page.node as node %}
+{% for node in page.node.walk %}
 {% include "skeleton/_innerindex.html" %}
-{% endwith %} 
+{% endfor %} 
 {% endblock %}

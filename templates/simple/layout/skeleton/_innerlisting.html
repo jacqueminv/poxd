@@ -1,36 +1,16 @@
 {% extends "skeleton/_root.html" %}
 {% block all %}
 {%spaceless%}
-{%ifnotequal node page.node %}
-{% if node.has_listing %}<a href="{{node.listing_url}}">{% endif %}
-<h2>{{node.name|unslugify}}</h2>
-{% if node.has_listing %}</a>{% endif %}
-{%endifnotequal%}
-<ul>
+<ul id="archives">
     {% for list_page in node.pages %}
     {% ifnotequal list_page node.listing_page %}
     {% if not list_page.exclude %}
-    <li>
-        <span>{{list_page.created|date:"Y-m-d" }}  </span>
+    <li class="archives">
         <a href="{{list_page.url}}">
-        {% with list_page.name_without_extension|remove_date_prefix|unslugify as default_title %}
-            {{list_page.title|default_if_none:default_title }}
-        {%endwith%}</a>
-        {% if page.excerpt %}
-        {% render_excerpt list_page %}
-        {%endif%}
-    </li>{%endif%}{% endifnotequal %}{% endfor %}
-</ul>
-<ul>
-{% with node as parent%}        
-{% for node in parent.children %}
-    <li class="node">
-{% block inner_listing %}
-    {% include "skeleton/_innerlisting.html" %}
-{% endblock %}        
+        {% with list_page.name_without_extension|remove_date_prefix|unslugify as default_title %}{{list_page.title|default_if_none:default_title }}{%endwith%}
+        </a>
     </li>
-{% endfor %}
-{% endwith %}
+    {%endif%}{% endifnotequal %}{% endfor %}
 </ul>
 {%endspaceless%}
 {% endblock %}
