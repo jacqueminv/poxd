@@ -10,7 +10,7 @@ import commands
 class FolderFlattener:
     
     @staticmethod
-    def process(folder, params):
+    def process(folder, params): 
         class Flattener:
             def __init__(self, folder, params):
                 self.folder = folder
@@ -56,7 +56,7 @@ class GoogleSitemapGenerator:
         config_file =  File(sitemap_path).parent.child("sitemap_config.xml")
         urllist = open(url_list_file, 'w')
         for page in site.walk_pages():
-            if not page.kind == "html" or page.exclude:
+            if not page.display_in_list or page.listing:
                 continue
             created = xmldatetime(page.created)
             updated = xmldatetime(page.updated)
@@ -64,12 +64,12 @@ class GoogleSitemapGenerator:
             priority = 0.5
             if page.listing:
                 priority = 1.0
-            changefreq = "weekly"
+            changefreq = "weekly"   
             urllist.write(
                 "%(url)s lastmod=%(updated)s changefreq=%(changefreq)s \
 priority=%(priority).1f\n" 
                 % locals())
-        urllist.close()
+        urllist.close() 
         base_url = settings.SITE_WWW_URL
         config = open(config_file, 'w')
         config.write(SITEMAP_CONFIG % locals())        

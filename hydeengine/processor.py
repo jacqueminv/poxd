@@ -103,9 +103,11 @@ class Processor(object):
             self.logger.debug("       Finalizing %s" % str(child.folder))    
             fragment = child.temp_folder.get_fragment(node.site.temp_folder)
             fragment = fragment.rstrip("/")
+            if not fragment:
+                fragment = "/"
             if fragment in self.settings.SITE_POST_PROCESSORS:
                 processor_config = self.settings.SITE_POST_PROCESSORS[fragment]
                 for processor_name, params in processor_config.iteritems():
-                    self.logger.debug("           Executing %s" % processor_name)
+                    self.logger.debug("           Executing %s" % processor_name) 
                     processor = load_processor(processor_name)
                     processor.process(child.temp_folder, params)
