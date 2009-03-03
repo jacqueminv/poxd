@@ -535,32 +535,46 @@ class TestProcessing(MonitorTests):
         assert self.exception_queue.empty()
         
     
-    def test_markdown(self): 
-        self.generator = Generator(TEST_SITE.path)
-        self.generator.build_siteinfo()
-        source = File(TEST_ROOT.child("src_test_markdown.html"))
-        self.site.refresh()
-        assert self.queue.empty()
-        self.site.monitor(self.queue)
-        t = Thread(target=self.checker, 
-                        kwargs={"asserter":self.assert_valid_markdown})
-        t.start()
-        source.copy_to(self.site.content_folder.child("test.html"))
-        t.join()
-        assert self.exception_queue.empty()
+    def test_markdown(self):
+        try:
+            import markdown
+        except ImportError:
+            markdown = False
+            print "Markdown not found, skipping unit tests"
+        
+        if markdown:            
+            self.generator = Generator(TEST_SITE.path)
+            self.generator.build_siteinfo()
+            source = File(TEST_ROOT.child("src_test_markdown.html"))
+            self.site.refresh()
+            assert self.queue.empty()
+            self.site.monitor(self.queue)
+            t = Thread(target=self.checker, 
+                            kwargs={"asserter":self.assert_valid_markdown})
+            t.start()
+            source.copy_to(self.site.content_folder.child("test.html"))
+            t.join()
+            assert self.exception_queue.empty()            
         
     def test_textile(self):
-        self.generator = Generator(TEST_SITE.path)
-        self.generator.build_siteinfo()
-        source = File(TEST_ROOT.child("src_test_textile.html"))
-        self.site.refresh()
-        self.site.monitor(self.queue)
-        t = Thread(target=self.checker, 
-                        kwargs={"asserter":self.assert_valid_textile})
-        t.start()
-        source.copy_to(self.site.content_folder.child("test.html"))
-        t.join()
-        assert self.exception_queue.empty()
+        try:
+            import textile 
+        except ImportError: 
+            textile = False
+            print "Textile not found, skipping unit tests"
+
+        if textile:            
+            self.generator = Generator(TEST_SITE.path)
+            self.generator.build_siteinfo()
+            source = File(TEST_ROOT.child("src_test_textile.html"))
+            self.site.refresh()
+            self.site.monitor(self.queue)
+            t = Thread(target=self.checker, 
+                            kwargs={"asserter":self.assert_valid_textile})
+            t.start()
+            source.copy_to(self.site.content_folder.child("test.html"))
+            t.join()
+            assert self.exception_queue.empty()
 
 class TestPostProcessors:
             
