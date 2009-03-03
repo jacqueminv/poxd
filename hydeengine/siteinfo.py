@@ -458,7 +458,7 @@ class SiteInfo(SiteNode):
     def resource_removed(self, resource):
         del self.resourcemap[resource.file.path]
     
-    def monitor(self, queue=None, waittime=10):
+    def monitor(self, queue=None, waittime=1):
         if self.m and self.m.isAlive():
             raise "A monitor is currently running."
         self._stop.clear()    
