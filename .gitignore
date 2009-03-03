@@ -5,3 +5,4 @@ deploy/*
 *.cprof
 *.profile
 *.log
+pylint*

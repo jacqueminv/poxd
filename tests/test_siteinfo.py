@@ -35,7 +35,6 @@ TEST_SITE = TEST_ROOT.child_folder("test_site")
 import atexit
 @atexit.register
 def done():
-    print "**********************************done"
     TEST_SITE.delete()
 
 def setup_module(module): 
