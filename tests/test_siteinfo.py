@@ -9,6 +9,7 @@ http://codespeak.net/py/dist/test.html
 """
 import os
 import sys
+import time as sleeper
 from datetime import time, datetime, timedelta
 import unittest
 from threading import Thread
@@ -31,13 +32,19 @@ from hydeengine.site_post_processors import FolderFlattener
 TEST_ROOT = Folder(TEST_ROOT)
 TEST_SITE = TEST_ROOT.child_folder("test_site")
 
-def setup_module(module):
-    Initializer(TEST_SITE.path).initialize(ROOT, force=True)
-    setup_env(TEST_SITE.path)
+import atexit
+@atexit.register
+def done():
+    TEST_SITE.delete()
+
+def setup_module(module): 
+    if not TEST_SITE.exists:
+        Initializer(TEST_SITE.path).initialize(ROOT, force=True)
+        setup_env(TEST_SITE.path)
     
 def teardown_module(module):
-    TEST_SITE.delete()
-    
+    pass
+
 class TestFilters:
     
     def setup_method(self, method):
@@ -136,7 +143,7 @@ class TestSiteInfo:
         folder.list(Visitor())
 
     def test_population(self):
-        assert self.site.name == "Hyde"
+        assert self.site.name == "Your Site"
         self.assert_node_complete(self.site.content_node,
                                     TEST_SITE.child_folder("content"))
         self.assert_node_complete(self.site.media_node,
@@ -262,12 +269,13 @@ class MonitorTests(object):
         self.site.refresh()
         self.exception_queue = Queue()
         self.clean_queue()
+        assert self.queue.empty()
         
 class TestSiteInfoMonitoring(MonitorTests):
     
     def change_checker(self, change, path):
         try:
-            changes = self.queue.get(block=True, timeout=20)
+            changes = self.queue.get(block=True, timeout=30)
             self.queue.task_done()
             assert changes
             assert not changes['exception']
@@ -320,7 +328,7 @@ class TestYAMLProcessor(MonitorTests):
    
     def yaml_checker(self, path, vars):
            try:
-               changes = self.queue.get(block=True, timeout=10)
+               changes = self.queue.get(block=True, timeout=30)
                self.queue.task_done()
                assert changes
                assert not changes['exception']
@@ -399,7 +407,7 @@ class TestSorting(MonitorTests):
 class TestProcessing(MonitorTests):
     def checker(self, asserter):
            try:
-               changes = self.queue.get(block=True, timeout=15)
+               changes = self.queue.get(block=True, timeout=30)
                self.queue.task_done()
                assert changes
                assert not changes['exception']
@@ -469,7 +477,6 @@ class TestProcessing(MonitorTests):
         expected_text = File(
                 TEST_ROOT.child("dst_test_markdown.html")).read_all()
         self.generator.process(actual_html_resource)
-
         # Ensure source file is not changed
         # The source should be copied to tmp and then
         # the processor should do its thing.
@@ -516,20 +523,24 @@ class TestProcessing(MonitorTests):
         self.generator = Generator(TEST_SITE.path)
         self.generator.build_siteinfo()
         source = File(TEST_ROOT.child("test_src.html"))
+        target = File(self.site.content_folder.child("_test.html"))
         self.site.refresh()
         self.site.monitor(self.queue)
         t = Thread(target=self.checker, 
                         kwargs={"asserter":self.assert_layout_not_rendered})
         t.start()
-        source.copy_to(self.site.content_folder.child("_test.html"))
+        source.copy_to(target)
         t.join()
+        target.delete()
         assert self.exception_queue.empty()
+        
     
-    def test_markdown(self):
+    def test_markdown(self): 
         self.generator = Generator(TEST_SITE.path)
         self.generator.build_siteinfo()
         source = File(TEST_ROOT.child("src_test_markdown.html"))
         self.site.refresh()
+        assert self.queue.empty()
         self.site.monitor(self.queue)
         t = Thread(target=self.checker, 
                         kwargs={"asserter":self.assert_valid_markdown})
