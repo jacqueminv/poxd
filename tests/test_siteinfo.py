@@ -32,18 +32,12 @@ from hydeengine.site_post_processors import FolderFlattener
 TEST_ROOT = Folder(TEST_ROOT)
 TEST_SITE = TEST_ROOT.child_folder("test_site")
 
-import atexit
-@atexit.register
-def done():
-    TEST_SITE.delete()
-
-def setup_module(module): 
-    if not TEST_SITE.exists:
-        Initializer(TEST_SITE.path).initialize(ROOT, force=True)
-        setup_env(TEST_SITE.path)
+def setup_module(module):
+    Initializer(TEST_SITE.path).initialize(ROOT, force=True)
+    setup_env(TEST_SITE.path)
     
 def teardown_module(module):
-    pass
+    TEST_SITE.delete()
 
 class TestFilters:
     
