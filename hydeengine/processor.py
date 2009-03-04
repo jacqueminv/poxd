@@ -64,7 +64,17 @@ class Processor(object):
         cache[node.fragment] = current_processors
         current_processors.reverse()
         return current_processors
-                
+
+    def remove(self, item):
+        if hasattr(item, "resources"):
+            self.logger.info("Removing Node %s" % item.url)
+            item.target_folder.delete()
+            item.temp_folder.delete()
+        else:
+            self.logger.info("Removing Resource %s" % item.url)
+            item.target_file.delete()
+            item.temp_file.delete()
+        
     def process(self, resource):
         if (resource.node.type not in ("content", "media") or
             resource.is_layout):

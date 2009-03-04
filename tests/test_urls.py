@@ -22,19 +22,12 @@ from hydeengine.siteinfo import SiteNode, SiteInfo, Page
 
 TEST_SITE = Folder(TEST_ROOT).child_folder("test_site")
         
-import atexit
-
-@atexit.register
-def done():
-    TEST_SITE.delete()
-
 def setup_module(module):
-    if not TEST_SITE.exists:
-        Initializer(TEST_SITE.path).initialize(ROOT, template="default", force=True)
-        setup_env(TEST_SITE.path)
+    Initializer(TEST_SITE.path).initialize(ROOT, template="default", force=True)
+    setup_env(TEST_SITE.path)
 
 def teardown_module(module):
-    pass
+    TEST_SITE.delete()
 
 class TestNormalUrls:
     """This is to make sure that the clean url generator hasn't interfered with

@@ -32,18 +32,12 @@ from hydeengine.site_post_processors import FolderFlattener
 TEST_ROOT = Folder(TEST_ROOT)
 TEST_SITE = TEST_ROOT.child_folder("test_site")
 
-import atexit
-@atexit.register
-def done():
-    TEST_SITE.delete()
-
-def setup_module(module): 
-    if not TEST_SITE.exists:
-        Initializer(TEST_SITE.path).initialize(ROOT, force=True)
-        setup_env(TEST_SITE.path)
+def setup_module(module):
+    Initializer(TEST_SITE.path).initialize(ROOT, force=True)
+    setup_env(TEST_SITE.path)
     
 def teardown_module(module):
-    pass
+    TEST_SITE.delete()
 
 class TestFilters:
     
@@ -285,7 +279,7 @@ class TestSiteInfoMonitoring(MonitorTests):
         except:
             self.exception_queue.put(sys.exc_info())
             raise
-            
+
     def test_monitor_stop(self):
         m = self.site.monitor()
         self.site.dont_monitor()
@@ -312,16 +306,48 @@ class TestSiteInfoMonitoring(MonitorTests):
         t.join()
         if not direct:
             f.delete()
-        assert self.exception_queue.empty()
+        assert self.exception_queue.empty() 
         
     def test_delete(self):
-        path = self.site.layout_folder.child("test.ggg")
-        self.test_add(direct=True)
+        f = File(self.site.content_folder.child("test.ddd"))
+        f.write("test")        
+        self.site.refresh() 
+        self.clean_queue() 
+        self.site.monitor(self.queue)
         t = Thread(target=self.change_checker, 
-                    kwargs={"change":"Deleted", "path":path})
+                    kwargs={"change":"Deleted", "path":f.path})
         t.start()      
-        File(path).delete()
+        f.delete()
         t.join()
+        assert self.exception_queue.empty()
+
+    def node_remove_checker(self, path):
+        try:
+            changes = self.queue.get(block=True, timeout=30)
+            self.queue.task_done()
+            assert changes
+            assert not changes['exception']
+            assert changes['change'] == change
+            assert changes['node']
+            assert changes['node'].folder.path == path            
+        except:
+            self.exception_queue.put(sys.exc_info())
+            raise
+
+    def test_delete_dir(self):
+        d = self.site.content_folder.child_folder("test_test")
+        f = File(d.child("test.nnn"))
+        d.make()
+        f.write("test")
+        self.site.refresh() 
+        self.clean_queue()
+        self.site.monitor(self.queue)
+        t = Thread(target=self.node_remove_checker, 
+                    kwargs={"change":"NodeRemoved", "path":d.path})
+        t.start()      
+        d.delete()
+        t.join()
+        d.delete()
         assert self.exception_queue.empty()
         
 class TestYAMLProcessor(MonitorTests):
