@@ -210,7 +210,7 @@ class SiteNode(object):
         resource = self._add_resource(a_file)
         self.site.resource_added(resource)
         return resource
-        
+
     def remove_resource(self, resource):
         self.resources.remove(resource)
         self.site.resource_removed(resource)
@@ -457,6 +457,13 @@ class SiteInfo(SiteNode):
         
     def resource_removed(self, resource):
         del self.resourcemap[resource.file.path]
+        
+    def remove_node(self, node):
+        for node in node.walk():
+            del self.nodemap[node.folder.path]
+        for resource in node.walk_resources():
+            self.resource_removed(resource)
+        node.parent.children.remove(node)                 
     
     def monitor(self, queue=None, waittime=1):
         if self.m and self.m.isAlive():
@@ -533,6 +540,19 @@ class SiteInfo(SiteNode):
         self.content_folder.walk(visitor)
         self.media_folder.walk(visitor)
         
+        nodes_to_remove = []
+        for node in self.walk():
+            if not node.folder.exists:
+                queue.put({
+                    "change":"NodeRemoved",
+                    "node":node,
+                    "exception": False
+                })
+                nodes_to_remove += [node]
+                  
+        for node in nodes_to_remove:
+            self.remove_node(node)
+                    
         for resource in self.walk_resources():
             if not resource.file.exists:
                 if queue:
