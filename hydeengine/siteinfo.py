@@ -187,6 +187,12 @@ class SiteNode(object):
         for child in self.children:
             for node in child.walk():                
                 yield node
+
+    def walk_reverse(self):
+        yield self
+        for child in reversed(self.children):
+            for node in child.walk_reverse():                
+                yield node
                 
     def walk_resources(self):
         for node in self.walk():
