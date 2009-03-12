@@ -199,6 +199,11 @@ class SiteNode(object):
             for resource in node.resources:
                 yield resource
 
+    def walk_resources_reverse(self):
+        for node in self.walk_reverse():
+            for resource in reversed(node.resources):
+                yield resource
+
     def add_child(self, folder):
         if ContentNode.is_content(self.site, folder):
             node = ContentNode(folder, parent=self)
