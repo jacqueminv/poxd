@@ -56,7 +56,7 @@ class GoogleSitemapGenerator:
         config_file =  File(sitemap_path).parent.child("sitemap_config.xml")
         urllist = open(url_list_file, 'w')
         for page in site.walk_pages():
-            if not page.display_in_list or page.listing:
+            if not page.display_in_list and not page.listing:
                 continue
             created = xmldatetime(page.created)
             updated = xmldatetime(page.updated)
