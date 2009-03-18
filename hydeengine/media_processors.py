@@ -46,6 +46,11 @@ class YUICompressor:
     @staticmethod
     def process(resource):
         compress = settings.YUI_COMPRESSOR
+        if not os.path.exists(compress):
+            compress = os.path.join(
+                    os.path.dirname(
+                    os.path.abspath(__file__)), "..", compress)
+        
         if not compress or not os.path.exists(compress):
             raise ValueError(
             "YUI Compressor cannot be found at [%s]" % compress)
