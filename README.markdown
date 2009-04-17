@@ -248,3 +248,4 @@ The [Ringce][ringce] website source is available as a reference implementation.
 - [joshrosen](http://github.com/JoshRosen)
 - [Harry Lachenmayer](http://github.com/h3yl9r)
 - [Kailoa Kadano](http://github.com/kailoa)
+- [Tom von Schwerdtner](http://github.com/tvon)

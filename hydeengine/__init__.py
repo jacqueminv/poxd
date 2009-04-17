@@ -95,7 +95,7 @@ class Server(object):
     
     """
     
-    def __init__(self, site_path, address='127.0.0.1', port='8080'):
+    def __init__(self, site_path, address='localhost', port=8080):
         super(Server, self).__init__()
         self.site_path = os.path.abspath(os.path.expandvars(
                                         os.path.expanduser(site_path))) 
