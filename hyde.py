@@ -37,7 +37,8 @@ def main(argv):
                         dest = "webserve", default = False, 
                         help = "Start an instance of the CherryPy webserver.")
     parser.add_option("-p", "--port",
-                        dest = "port", default=8080,
+                        dest = "port", default=8080, 
+                        type='int',
                         help = "Port webserver should listen on (8080).")
     parser.add_option("-a", "--address",
                         dest = "address", default='localhost',
