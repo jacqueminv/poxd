@@ -600,13 +600,14 @@ class TestProcessing(MonitorTests):
             t.start()
             source.copy_to(self.site.content_folder.child("test.html"))
             t.join()
-            assert self.exception_queue.empty()
+            assert self.exception_queue.empty()   
+            
+        
 
 class TestPostProcessors:
             
     def test_folder_flattener(self):
         settings.MEDIA_PROCESSORS = {}
-        settings.CONTENT_PROCESSORS = {}
         settings.SITE_POST_PROCESSORS = {
             "blog" : {
                 "hydeengine.site_post_processors.FolderFlattener" : {
