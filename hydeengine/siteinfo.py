@@ -14,7 +14,8 @@ class SiteResource(object):
         super(SiteResource, self).__init__()
         self.node = node
         self.file = a_file
-        self.source_file = self.file
+        self.source_file = self.file     
+        self.prerendered = False
         if self.node.target_folder:
             self.target_file = File(
                         self.node.target_folder.child(self.file.name))
