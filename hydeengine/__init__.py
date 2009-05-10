@@ -94,10 +94,13 @@ class Server(object):
     folder
     
     """
-    def __init__(self, site_path):
+    
+    def __init__(self, site_path, address='localhost', port=8080):
         super(Server, self).__init__()
         self.site_path = os.path.abspath(os.path.expandvars(
                                         os.path.expanduser(site_path))) 
+        self.address = address
+        self.port = port
                                         
     def serve(self, deploy_path, exit_listner):
         """
@@ -170,8 +173,11 @@ class Server(object):
         
         cherrypy.config.update({'environment': 'production',
                                   'log.error_file': 'site.log',
-                                  'log.screen': True})
-        
+                                  'log.screen': True,
+                                  'server.socket_host': self.address,
+                                  'server.socket_port': self.port,
+                                  })
+
         # even if we're still using clean urls, we still need to serve media.
         if settings.GENERATE_CLEAN_URLS:
             conf = {'/media': {
@@ -394,7 +400,9 @@ class Generator(object):
         if self.exit_listner:
             self.exit_listner()
 
+
 class Initializer(object):
+    
     def __init__(self, site_path):
         super(Initializer, self).__init__()
         self.site_path = Folder(site_path)
