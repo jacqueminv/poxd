@@ -126,14 +126,20 @@ class TestSiteInfo:
     def assert_node_complete(self, node, folder):
         assert node.folder.path == folder.path
         test_case = self
-        class Visitor(object):
+        class Visitor(object):        
+            
             def visit_folder(self, folder):
+                if not folder.allow(**test_case.site.settings.FILTER): 
+                    return
                 child = node.find_child(folder)
                 assert child
                 test_case.assert_node_complete(child, folder)
-                
+
             def visit_file(self, a_file):
+                if not a_file.allow(**test_case.site.settings.FILTER):
+                    return
                 assert node.find_resource(a_file)
+                
         folder.list(Visitor())
 
     def test_population(self):
