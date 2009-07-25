@@ -94,8 +94,8 @@ class PostsLoader(template.Node):
         from hydeengine.file_system import Folder
         settings.CONTEXT['posts'] = []
         nbPosts = self.nbPosts
-        for i, post in enumerate(context["site"].find_node(Folder(settings.CONTENT_DIR)).walk_pages()):
-           if post.listing == False:
+        for i, post in enumerate(context["site"].find_node(Folder(settings.BLOG_DIR)).walk_pages()):
+            if post.listing == False:
                 if nbPosts != None and i >= nbPosts:
                     break;
                 settings.CONTEXT['posts'].append(post)
