@@ -81,6 +81,33 @@ class LatestExcerptNode(template.Node):
             return truncatewords_html(rendered[start:end], self.words)
         else:
             return ""
+            
+class PostsLoader(template.Node):
+    '''
+    Loads the list posts (pages in the CONTENT_DIR node) until reaching the nbPosts limit. 
+    By default, no limit.
+    '''
+    def __init__(self, nbPosts=None):
+        self.nbPosts=nbPosts
+        
+    def render(self, context):
+        from hydeengine.file_system import File, Folder
+        settings.CONTEXT['posts'] = []
+        nbPosts = self.nbPosts
+        for i, post in enumerate(context["site"].find_node(Folder(settings.CONTENT_DIR)).walk_pages()):
+           if post.listing == False:
+                if nbPosts != None and i >= nbPosts:
+                    break;
+                settings.CONTEXT['posts'].append(post)
+        return ""
+            
+@register.tag(name="load_posts")
+def load_posts(parser, token):
+    tokens = token.split_contents()
+    nbPosts = None
+    if len(tokens) > 1:
+        nbPosts = Template(tokens[1])
+    return PostsLoader(nbPosts)
         
 @register.tag(name="latest_excerpt")
 def latest_excerpt(parser, token):
@@ -219,4 +246,3 @@ class RenderHydeListingPageRewriteRulesNode(template.Node):
             "###  BEGIN GENERATED REWRITE RULES  ####\n" \
           + ''.join(rules) \
           + "\n####  END GENERATED REWRITE RULES  ####"
-
