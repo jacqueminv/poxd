@@ -91,7 +91,7 @@ class PostsLoader(template.Node):
         self.nbPosts=nbPosts
         
     def render(self, context):
-        from hydeengine.file_system import File, Folder
+        from hydeengine.file_system import Folder
         settings.CONTEXT['posts'] = []
         nbPosts = self.nbPosts
         for i, post in enumerate(context["site"].find_node(Folder(settings.CONTENT_DIR)).walk_pages()):
