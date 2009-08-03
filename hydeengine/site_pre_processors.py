@@ -11,8 +11,8 @@ from hydeengine.file_system import Folder
 
 class CategoriesManager:
     """
-    Fetch the category(ies) from every post under BLOG_DIR
-    in CONTEXT available then.
+    Fetch the category(ies) from every post under BLOG_DIR node
+    and creates a reference on them in CONTEXT.
     """
     @staticmethod
     def process(folder, params):
@@ -27,6 +27,6 @@ class CategoriesManager:
                         categories[category] = set()
                     categories[category].add(post)
         if context.has_key('blog') == False:
-            site['blog'] = {}
+            context['blog'] = {}
         context['blog']['categories'] = categories
                        
