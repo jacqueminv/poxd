@@ -26,7 +26,5 @@ class CategoriesManager:
                     if categories.has_key(category) == False:
                         categories[category] = set()
                     categories[category].add(post)
-        if context.has_key('blog') == False:
-            context['blog'] = {}
         context['blog']['categories'] = categories
                        

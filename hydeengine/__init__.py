@@ -35,7 +35,7 @@ class _HydeDefaults:
     CONTENT_PROCESSORS = {}
     SITE_PRE_PROCESSORS = {}
     SITE_POST_PROCESSORS = {}
-    CONTEXT = {}
+    CONTEXT = {'blog': {}}
 
 def setup_env(site_path):
     """    

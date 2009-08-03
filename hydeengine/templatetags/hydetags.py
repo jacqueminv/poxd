@@ -93,8 +93,6 @@ class PostsLoader(template.Node):
         
     def render(self, context):
         site = context['site']
-        if context.has_key('blog') == False:
-            context['blog'] = {}
         context['blog']['posts'] = []
         nbPosts = self.nbPosts
         for i, post in enumerate(site.find_node(Folder(settings.BLOG_DIR)).walk_pages()):
