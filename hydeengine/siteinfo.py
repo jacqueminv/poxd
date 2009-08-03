@@ -134,6 +134,7 @@ class Page(SiteResource):
             page_url += "/"
         return page_url
         
+        
     @property                            
     def url(self):
         page_url = super(Page, self).url
@@ -150,8 +151,8 @@ class Page(SiteResource):
         # listing page prior to generating its url
         if self.node.site.settings.GENERATE_CLEAN_URLS:
             page_url = self._make_clean_url(page_url)
-        return page_url
-                
+        return page_url   
+             
 class SiteNode(object):
     def __init__(self, folder, parent=None):
         super(SiteNode, self).__init__()
@@ -244,7 +245,7 @@ class SiteNode(object):
             return self.site.resourcemap[a_file.path]
         except KeyError:
             return None
-
+            
     @property
     def source_folder(self):
         return self.folder
@@ -278,7 +279,7 @@ class ContentNode(SiteNode):
         self.listing_page = None
 
     walk_pages = SiteNode.walk_resources
-    
+
     @property
     def module(self):
         module = self

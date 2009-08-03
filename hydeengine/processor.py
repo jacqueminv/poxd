@@ -89,7 +89,7 @@ class Processor(object):
         resource.temp_file.parent.make()        
         resource.source_file.copy_to(resource.temp_file)  
         (original_source, resource.source_file) = (
-                                resource.source_file, resource.temp_file)
+                               resource.source_file, resource.temp_file)
         for processor_name in processors:
             processor = load_processor(processor_name)
             self.logger.debug("       Executing %s" % processor_name)
@@ -104,20 +104,27 @@ class Processor(object):
         resource.source_file = original_source
         self.logger.debug("        Processing Complete")
         return True
+
+    def pre_process(self, node):
+        self.logger.info("Pre processing %s" % str(node.folder))
+        self.__around_process__(node, self.settings.SITE_PRE_PROCESSORS)
           
     def post_process(self, node):
         self.logger.info("Post processing %s" % str(node.folder))
+        self.__around_process__(node, self.settings.SITE_POST_PROCESSORS)
+       
+    def __around_process__(self, node, processors):
         for child in node.walk():
             if not child.type in ("content", "media"):
                 continue
-            self.logger.debug("       Finalizing %s" % str(child.folder))    
             fragment = child.temp_folder.get_fragment(node.site.temp_folder)
             fragment = fragment.rstrip("/")
             if not fragment:
                 fragment = "/"
-            if fragment in self.settings.SITE_POST_PROCESSORS:
-                processor_config = self.settings.SITE_POST_PROCESSORS[fragment]
+            if fragment in processors:
+                processor_config = processors[fragment]
                 for processor_name, params in processor_config.iteritems():
-                    self.logger.debug("           Executing %s" % processor_name) 
+                    self.logger.debug("           Executing %s" % processor_name)
                     processor = load_processor(processor_name)
                     processor.process(child.temp_folder, params)
+

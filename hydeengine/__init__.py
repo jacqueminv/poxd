@@ -33,6 +33,7 @@ class _HydeDefaults:
     APPEND_SLASH = False
     MEDIA_PROCESSORS = {}
     CONTENT_PROCESSORS = {}
+    SITE_PRE_PROCESSORS = {}
     SITE_POST_PROCESSORS = {}
     CONTEXT = {}
 
@@ -233,6 +234,9 @@ class Generator(object):
         self.processor = Processor(settings)
         self.quitting = False
     
+    def pre_process(self, node):
+        self.processor.pre_process(node)
+        
     def process(self, item, change="Added"):
         if change in ("Added", "Modified"):
             settings.CONTEXT['node'] = item.node
@@ -266,11 +270,12 @@ class Generator(object):
         self.siteinfo  = SiteInfo(settings, self.site_path)
         self.siteinfo.refresh()
         settings.CONTEXT['site'] = self.siteinfo.content_node
-    
+                            
     def post_process(self, node):
-        self.processor.post_process(self.siteinfo)
+        self.processor.post_process(node)
     
     def process_all(self):
+        self.pre_process(self.siteinfo)
         for resource in self.siteinfo.walk_resources():
             self.process(resource)
         self.post_process(self.siteinfo)

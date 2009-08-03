@@ -11,6 +11,7 @@ import string
 import os
 from datetime import datetime
 from datetime import timedelta
+from hydeengine.file_system import Folder
 
 marker_start = "<!-- Hyde::%s::Begin -->\n"
 marker_end = "<!-- Hyde::%s::End -->\n"
@@ -83,22 +84,24 @@ class LatestExcerptNode(template.Node):
             return ""
             
 class PostsLoader(template.Node):
-    '''
-    Loads the list posts (pages in the CONTENT_DIR node) until reaching the nbPosts limit. 
+    """
+    Loads the list posts (pages in the CONTENT_BLOG_DIR node) until reaching the nbPosts limit. 
     By default, no limit.
-    '''
+    """
     def __init__(self, nbPosts=None):
         self.nbPosts=nbPosts
         
     def render(self, context):
-        from hydeengine.file_system import Folder
-        settings.CONTEXT['posts'] = []
+        site = context['site']
+        if context.has_key('blog') == False:
+            context['blog'] = {}
+        context['blog']['posts'] = []
         nbPosts = self.nbPosts
-        for i, post in enumerate(context["site"].find_node(Folder(settings.BLOG_DIR)).walk_pages()):
+        for i, post in enumerate(site.find_node(Folder(settings.BLOG_DIR)).walk_pages()):
             if post.listing == False:
                 if nbPosts != None and i >= nbPosts:
                     break;
-                settings.CONTEXT['posts'].append(post)
+                context['blog']['posts'].append(post)
         return ""
             
 @register.tag(name="load_posts")
