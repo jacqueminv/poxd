@@ -650,11 +650,11 @@ class TestProcessing(MonitorTests):
         context = settings.CONTEXT 
         site = context['site']
         self.generator.pre_process(site)
+        print  context['blog']['categories']['wishes']                   
         assert context['blog']
         assert context['blog']['categories']
         assert len(context['blog']['categories']) == 4
         assert len(context['blog']['categories']['wishes']) == 3
-        assert len(context['blog']['categories']['newyear']) == 1
 
 
 class TestPostProcessors:
