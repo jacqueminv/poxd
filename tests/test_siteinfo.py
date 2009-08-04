@@ -33,7 +33,7 @@ TEST_ROOT = Folder(TEST_ROOT)
 TEST_SITE = TEST_ROOT.child_folder("test_site")
 
 def setup_module(module):
-    Initializer(TEST_SITE.path).initialize(ROOT, force=True)
+    Initializer(TEST_SITE.path).initialize(ROOT, template='test', force=True)
     setup_env(TEST_SITE.path)
     
 def teardown_module(module):
@@ -643,7 +643,19 @@ class TestProcessing(MonitorTests):
         t.join()             
         target.delete()
         assert self.exception_queue.empty()
-         
+
+    def test_categories(self):                    
+        self.generator = Generator(TEST_SITE.path)
+        self.generator.build_siteinfo()
+        context = settings.CONTEXT 
+        site = context['site']
+        self.generator.pre_process(site)
+        assert context['blog']
+        assert context['blog']['categories']
+        assert len(context['blog']['categories']) == 4
+        assert len(context['blog']['categories']['wishes']) == 3
+        assert len(context['blog']['categories']['newyear']) == 1
+
 
 class TestPostProcessors:
             
@@ -674,14 +686,14 @@ class TestPostProcessors:
                 self.files.append(a_file.name)
                 
         tester = TestFlattener()
-        blog.list(tester)        
+        blog.list(tester)
         blog_src = Folder(settings.CONTENT_DIR).child_folder("blog")
         
-        class VerifyFlattener:            
+        class VerifyFlattener:
             @staticmethod
             def visit_file(a_file):
                 try:
                     tester.files.index(a_file.name)
                 except:
-                    assert False    
-        blog_src.walk(VerifyFlattener)    
+                    assert False
+        blog_src.walk(VerifyFlattener)
