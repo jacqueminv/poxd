@@ -34,3 +34,10 @@ class CategoryProcessor:
                 c.append(r)
                 category_map[cat] = c
         settings.CONTEXT['categories'] = CategoryProcessor.category_map
+
+class PassthroughProcessor:
+
+   @staticmethod
+   def process(resource):       
+	   resource.prerendered = True
+

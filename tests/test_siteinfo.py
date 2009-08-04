@@ -126,14 +126,20 @@ class TestSiteInfo:
     def assert_node_complete(self, node, folder):
         assert node.folder.path == folder.path
         test_case = self
-        class Visitor(object):
+        class Visitor(object):        
+            
             def visit_folder(self, folder):
+                if not folder.allow(**test_case.site.settings.FILTER): 
+                    return
                 child = node.find_child(folder)
                 assert child
                 test_case.assert_node_complete(child, folder)
-                
+
             def visit_file(self, a_file):
+                if not a_file.allow(**test_case.site.settings.FILTER):
+                    return
                 assert node.find_resource(a_file)
+                
         folder.list(Visitor())
 
     def test_population(self):
@@ -526,7 +532,7 @@ class TestProcessing(MonitorTests):
         source_text = actual_html_resource.file.read_all()
         assert original_source == source_text        
         actual_text = actual_html_resource.temp_file.read_all()        
-        self.assert_html_equals(expected_text, actual_text)
+        self.assert_html_equals(expected_text, actual_text)   
         
     def test_process_page_rendering(self):
         self.generator = Generator(TEST_SITE.path)
@@ -577,9 +583,11 @@ class TestProcessing(MonitorTests):
             self.site.monitor(self.queue)
             t = Thread(target=self.checker, 
                             kwargs={"asserter":self.assert_valid_markdown})
-            t.start()
-            source.copy_to(self.site.content_folder.child("test.html"))
-            t.join()
+            t.start()   
+            target = File(self.site.content_folder.child("test.html"))
+            source.copy_to(target)
+            t.join()             
+            target.delete()
             assert self.exception_queue.empty()            
         
     def test_textile(self):
@@ -598,15 +606,49 @@ class TestProcessing(MonitorTests):
             t = Thread(target=self.checker, 
                             kwargs={"asserter":self.assert_valid_textile})
             t.start()
-            source.copy_to(self.site.content_folder.child("test.html"))
-            t.join()
-            assert self.exception_queue.empty()
+            target = File(self.site.content_folder.child("test.html"))
+            source.copy_to(target)
+            t.join()             
+            target.delete()
+            assert self.exception_queue.empty()   
+            
+    def assert_prerendered(self, actual_html_resource):
+        expected_text = File(
+                TEST_ROOT.child("test_src.html")).read_all()
+                
+        self.generator.process(actual_html_resource)
+
+        # Ensure source file is not changed
+        # The source should be copied to tmp and then
+        # the processor should do its thing.
+        source_text = actual_html_resource.file.read_all()
+        assert expected_text == source_text        
+        actual_text = actual_html_resource.temp_file.read_all()        
+        
+        # Since the file is prerendered, there should be no change
+        assert expected_text == actual_text
+            
+            
+    def test_prerendered(self):
+        self.generator = Generator(TEST_SITE.path)
+        self.generator.build_siteinfo()
+        source = File(TEST_ROOT.child("test_src.html"))
+        self.site.refresh()
+        self.site.monitor(self.queue)
+        t = Thread(target=self.checker, 
+                        kwargs={"asserter":self.assert_prerendered})
+        t.start()
+        target = File(self.site.content_folder.child("prerendered/test.html"))
+        source.copy_to(target)
+        t.join()             
+        target.delete()
+        assert self.exception_queue.empty()
+         
 
 class TestPostProcessors:
             
     def test_folder_flattener(self):
         settings.MEDIA_PROCESSORS = {}
-        settings.CONTENT_PROCESSORS = {}
         settings.SITE_POST_PROCESSORS = {
             "blog" : {
                 "hydeengine.site_post_processors.FolderFlattener" : {
