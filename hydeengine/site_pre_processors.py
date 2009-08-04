@@ -1,6 +1,8 @@
+import sys
 from hydeengine.siteinfo import ContentNode
 from django.conf import settings
 from hydeengine.file_system import Folder
+from siteinfo import SiteNode
 
 """
     PRE PROCESSORS
@@ -12,20 +14,20 @@ from hydeengine.file_system import Folder
 class CategoriesManager:   
     
     """
-    Fetch the category(ies) from every post under BLOG_DIR node
-    and creates a reference on them in CONTEXT.
+    Fetch the category(ies) from every post under the given node
+    and creates a reference on them in CONTEXT and the node.
     """
     @staticmethod
     def process(folder, params):
         context = settings.CONTEXT
-        site = context['site']
-        blog_node = site.find_node(Folder(settings.BLOG_DIR))
+        site = context['site']    
+        node = params['node'] 
         categories = {}                                      
-        context['blog'] = {}
-        for post in blog_node.walk_pages():           
+        for post in node.walk_pages():           
             if hasattr(post, 'categories') and post.categories != None:
                 for category in post.categories:
                     if categories.has_key(category) == False:
                         categories[category] = set()
                     categories[category].add(post)     
-        context['blog']['categories'] = categories        
+        context['categories'] = categories 
+        node.categories = categories

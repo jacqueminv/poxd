@@ -88,7 +88,7 @@ SITE_POST_PROCESSORS = {
 }                       
 
 SITE_PRE_PROCESSORS = {
-    '/': {
+    'blog': {
         'hydeengine.site_pre_processors.CategoriesManager' : {}
     }
 }
