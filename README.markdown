@@ -250,3 +250,4 @@ The [Ringce][ringce] website source is available as a reference implementation.
 - [Kailoa Kadano](http://github.com/kailoa)
 - [Tom von Schwerdtner](http://github.com/tvon)
 - [montecristo](http://github.com/montecristo)
+- [Valentin Jacquemin](http://github.com/poxd)
