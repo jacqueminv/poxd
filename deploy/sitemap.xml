@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.google.com/schemas/sitemap/0.84"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84
+                      http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">
+ <url>
+  <loc>http://localhost:8080/blog/Unix-a-40-ans/</loc>
+  <lastmod>2000-01-01T00:00:00Z</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.5</priority>
+ </url>
+ <url>
+  <loc>http://localhost:8080/blog/critique-de-livre-citiboy/</loc>
+  <lastmod>2000-01-01T00:00:00Z</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.5</priority>
+ </url>
+ <url>
+  <loc>http://localhost:8080/blog/critique-de-livre-histoire-de-la-guerre-du-peloponnese-tome-1/</loc>
+  <lastmod>2000-01-01T00:00:00Z</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.5</priority>
+ </url>
+ <url>
+  <loc>http://localhost:8080/blog/pourquoi-jenvie-les-developpeurs-erlang/</loc>
+  <lastmod>2000-01-01T00:00:00Z</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.5</priority>
+ </url>
+ <url>
+  <loc>http://localhost:8080/contact/</loc>
+  <lastmod>2000-01-01T00:00:00Z</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.5</priority>
+ </url>
+</urlset>
