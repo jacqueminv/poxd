@@ -1,3 +1,4 @@
+from __future__ import with_statement
 import os
 import string
 from django.conf import settings
@@ -6,6 +7,7 @@ from file_system import File
 from datetime import datetime
 from hydeengine.templatetags.hydetags import xmldatetime
 import commands
+import codecs
 
 class FolderFlattener:
     
@@ -82,3 +84,137 @@ priority=%(priority).1f\n"
         File(config_file).delete()
         File(url_list_file).delete()
 
+class RssGenerator:
+    """
+    Can create a rss feed for a blog and its categories whenever 
+    specified in params
+    """
+    @staticmethod
+    def process(folder, params):
+        #defaults initialisation
+        node = params['node']
+        by_categories = False
+        categories = None
+        output_folder = 'feed'
+        generator = Rss2FeedGenerator()
+        if params.has_key('output_folder'):
+            output_folder = params['output_folder']
+        if params.has_key('generate_by_categories'):
+            by_categories = params['generate_by_categories']
+        if hasattr(node, 'categories'):
+            categories = node.categories
+        if categories != None:
+            #feed generation for each category
+            for category in categories.keys():
+                #create a ContentNode adapter for categories to walk through the collection (walk_pages function)
+                #the same way than through the site's ContentNode
+                category_adapter = ContentNodeAdapter(categories[category])
+                feed = generator.generate(category_adapter)
+                RssGenerator._write_feed(feed, output_folder, "%s.xml" % (category.lower().replace(' ','_')))
+        feed = generator.generate(node)
+        RssGenerator._write_feed(feed, output_folder, "feed.xml")
+
+    @staticmethod
+    def _write_feed(feed, folder, file_name):
+        output = os.path.join(settings.CONTENT_DIR, folder)
+        if not os.path.isdir(output):
+            os.makedirs(output)
+        filename = os.path.join(output, file_name)
+        with codecs.open(filename, 'w', 'utf-8') as f:
+            f.write(feed)
+
+class ContentNodeAdapter:
+    """
+    Adapter for a collection of posts to fulfill the ContentNode 
+    walk_pages contract
+    """
+    def __init__(self, categories):
+        self.categories = categories
+
+    def walk_pages(self):
+        for category in self.categories:
+            yield category
+
+class FeedGenerator:
+    """
+    Base abstract class for the generation of syndication feeds
+    """
+    def __init__(self):
+        pass
+
+    def generate(self, node):
+        """
+        Template method calling child implementations
+        """
+        #generate items
+        items = self.generate_items(node)
+        #generate feed with items inside
+        feed = self.generate_feed(items)
+        return feed
+
+    def generate_items(self, node):
+        raise TypeError('abstract function')
+
+    def generate_feed(self, items):
+        raise TypeError('abstract function')
+
+RSS2_FEED = \
+"""
+<?xml version="1.0"?>
+<rss version="2.0">
+   <channel>
+      <title>%(title)s</title>
+      <link>%(url)s/</link>
+      <description>%(description)s</description>
+      <language>%(language)s</language>
+      <pubDate>%(publication_date)s</pubDate>
+      <lastBuildDate>%(last_build_date)s</lastBuildDate>
+      <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+      <generator>Hyde</generator>
+      <webMaster>%(webmaster)s</webMaster>
+      %(items)s
+   </channel>
+</rss>
+"""
+
+RSS2_ITEMS = \
+"""    
+      <item>
+         <title>%(item_title)s</title>
+         <link>%(item_link)s</link>
+         <description>%(description)s</description>
+         <pubDate>%(publication_date)s</pubDate>
+         <author>%(author)s</author>
+      </item>"""
+
+class Rss2FeedGenerator(FeedGenerator):
+    """
+    Implementation of a rss version 2 generator
+    """
+    def __init__(self):
+        FeedGenerator.__init__(self)
+
+    def generate_items(self, node):
+        items = ""
+        author = settings.SITE_AUTHOR_EMAIL or [''][0]
+        for post in node.walk_pages():
+            if hasattr(post, 'listing') and post.listing:
+                continue
+            item_title = post.title
+            item_link = post.full_url
+            description = ''
+            publication_date = post.created
+            #TODO let customisation of RSS2_ITEMS
+            cur_item = RSS2_ITEMS % locals()
+            items = "%s%s" % (items, cur_item)
+        return items
+
+    def generate_feed(self, items):
+        title = settings.SITE_NAME
+        url = settings.SITE_WWW_URL
+        description = ''
+        language = settings.LANGUAGE_CODE or 'en-us'
+        publication_date = ""
+        last_build_date = ""
+        webmaster = settings.SITE_AUTHOR_EMAIL
+        return RSS2_FEED % locals()
