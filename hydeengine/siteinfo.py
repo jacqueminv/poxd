@@ -278,6 +278,7 @@ class ContentNode(SiteNode):
     def __init__(self, folder, parent=None):
         super(ContentNode, self).__init__(folder, parent)
         self.listing_page = None
+        self.feed_url = None
 
     walk_pages = SiteNode.walk_resources
 
