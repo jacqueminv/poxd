@@ -92,6 +92,7 @@ class RssGenerator:
     @staticmethod
     def process(folder, params):
         #defaults initialisation
+        site = settings.CONTEXT['site']
         node = params['node']
         by_categories = False
         categories = None
@@ -110,8 +111,12 @@ class RssGenerator:
                 #the same way than through the site's ContentNode
                 category_adapter = ContentNodeAdapter(categories[category])
                 feed = generator.generate(category_adapter)
-                RssGenerator._write_feed(feed, output_folder, "%s.xml" % (category.lower().replace(' ','_')))
+                feed_filename = "%s.xml" % (category.lower().replace(' ','_'))
+                feed_url = "%s/%s/%s/%s" % (settings.SITE_WWW_URL, site.url, output_folder, feed_filename)
+                node.categories[category].feed_url = feed_url
+                RssGenerator._write_feed(feed, output_folder, feed_filename)
         feed = generator.generate(node)
+        node.feed_url = "%s/%s/%s/%s" % (settings.SITE_WWW_URL, site.url, output_folder, "feed.xml")
         RssGenerator._write_feed(feed, output_folder, "feed.xml")
 
     @staticmethod
@@ -128,12 +133,12 @@ class ContentNodeAdapter:
     Adapter for a collection of posts to fulfill the ContentNode 
     walk_pages contract
     """
-    def __init__(self, categories):
-        self.categories = categories
+    def __init__(self, category):
+        self.category = category
 
     def walk_pages(self):
-        for category in self.categories:
-            yield category
+        for post in self.category.posts:
+            yield post
 
 class FeedGenerator:
     """
@@ -218,3 +223,26 @@ class Rss2FeedGenerator(FeedGenerator):
         last_build_date = ""
         webmaster = settings.SITE_AUTHOR_EMAIL
         return RSS2_FEED % locals()
+
+
+class CategoriesArchiveGenerator:
+    @staticmethod
+    def process(folder, params):
+        node = params['node']
+        if hasattr(node, 'categories'):
+            categories = node.categories
+        else:
+            raise ValueError("No categories member on node %s" % (node))
+
+        output_folder = 'archives'
+        if hasattr(params, 'output_folder') and params.output_folder is not None \
+                and len(params.output_folder) > 0:
+            output_folder = params.output_folder
+        output_folder = os.path.join(output.CONTENT_DIR, output_folder)
+        if not os.path.isdir(output_folder):
+            os.makedirs(output_folder)
+
+        for category, posts in categories.iteritems():
+            #let customization provide a template in config accessing
+            #possible variables (post info, category info)
+            pass
