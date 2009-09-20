@@ -13,6 +13,9 @@
             var disqus_no_style = false;
         </script>
     <style>
+       .no-border{
+           border: 0;
+       }
         body {
            font-family: Helvetica, Arial, sans-serif; /**check in yui theater font css**/
            color: rgb(41, 41, 49);
@@ -32,7 +35,8 @@
         }
         h1{
             font-size: 1.6em;
-            border-bottom: 2px solid #CCC;    
+            border-bottom: 2px solid #CCC;   
+	    margin-top: 0.2em;
         }
         p {
             margin: 1em 0;
@@ -47,7 +51,11 @@
             padding-left: 1.1em;
             padding-right: 1.1em;    
         }
-        
+        #doc > div{
+	    padding: 0.3em;
+	    padding-left: 0.6em;
+	    padding-right: 1em;
+	}
         /*************
             HEADER
         **************/
@@ -55,7 +63,6 @@
             background-color: rgb(132, 17, 39);
             color: #FFF;
             font-size: 1.1em;
-            padding: 0.3em;
             margin-bottom: 1.8em;
             margin-top: 0;
             position: relative;
@@ -74,7 +81,6 @@
         #hd #logo{
             font-size: 2.5em;
             font-weight: bold;
-            padding-left: 0.3em;
             float: left;
         }
         #hd #menu{
@@ -121,7 +127,7 @@
             margin-top: 1em;
             padding-top: 0.5em;
             color: #666;
-            border-top: 2px solid #eee; 
+            border-top: 1px solid #CCC; 
             font-size: 0.9em;
         }
         #ft div.last{
@@ -130,6 +136,11 @@
         /*************
          HOME CONTENT
         **************/
+	/**V2**/
+	
+	/**END V2**/
+
+
         #bd #home{
             margin-top: 2em;
         }
@@ -170,12 +181,47 @@
             POSTS
         **************/
         #post{
-            padding-left: 1.1em;
-            padding-right: 1.1em;
             text-align: justify;
             font-size: 1.1em;
             line-height: 1.4em;
         }
+        .sidebar{
+            text-align: right;
+        }
+        .sidebar h2{
+            width: 85%;
+            padding: 0.7em;
+            padding-top: 0;
+        }
+        #post .sidebar div{
+            width: 85%;
+        }
+        #post .sidebar a{
+            color: #292931;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        #post .sidebar a:hover{
+            color: gray;
+        }
+	#post #meta{
+	    font-size: 0.8em;
+	    line-height: 1.4em;
+	    background-color: #EEE;
+	    padding: 0.7em;
+	}
+	#post #meta h1{
+	    margin: 0;
+	    margin-bottom: 0.2em;
+	    border: 0;
+	}
+	#post #meta ul{
+	    margin: 0;
+	}
+	#post #meta ul li{
+	    list-style-type: none;
+	    list-style-position: outside;
+	}
         #post blockquote{
             font-family: Georgia, serif;
             font-style: italic;
@@ -185,6 +231,9 @@
             padding-left: 1em;
             color: gray;
         }
+	#post ul {
+	    margin-left: 0;
+	}
         #post ul li{
             list-style-type: square;
             list-style-position: inside;
@@ -198,11 +247,18 @@
         /*************
             DISQUS
         **************/
+        #comments{
+            background-color: #EEE;
+            border-top: 1px solid #CCC;
+            margin-bottom: -1em;
+            margin-top: 2em;
+       }
         #post .comment-separation{
             font-weight: bold;
             font-size: 1.5em;
             text-align: center;
             margin: 1em;
+            margin-bottom: 0;
             color: lightgray;
             letter-spacing: 0.2em;
         }
@@ -213,9 +269,25 @@
             -webkit-border-radius: 5px;
             border-radius: 5px;**/
             font-size: 0.9em;
-            /**padding: 0 1.2em 1.2em;**/
+            position: relative;
         }
-        
+        #dsq-options{
+            display: none;
+        }
+        .dsq-by{
+            display: none;
+        }
+        #dsq-login-message{
+            display: none;
+        }
+        #dsq-add-new-comment{
+            display: none;
+        }
+        #dsq-content #dsq-login{
+            float:left !important;
+            margin-left: -174px;
+            margin-top: 25px;
+        }
         #disqus_thread input.form-text{
             
         }
@@ -285,11 +357,19 @@
             <div id="hd"><span id="logo"><a href="/">POXD</a></span><ul id="menu"><li><a href="/">accueil</a></li><li>&nbsp;·&nbsp;<a href="/blog">blog</a></li><li>&nbsp;·&nbsp;<a href="/">projets</a></li><li>&nbsp;·&nbsp;<a href="/">à propos</a></li><li>&nbsp;·&nbsp;<a href="/contact">contact</a></li></ul></div>
             
 <div id="post" class="yui-gf">
-<div class="yui-u first">
+<div class="sidebar yui-u first">
+<h1 class="no-border">&nbsp;</h1>
+<div id="meta">
+<!--<h1>Meta</h1>-->
 <ul>
   <li>Publié le 13 juin 2009</li>
   <li>Catégorie(s): lectures</li>
+  
+  <li>Suivant: <a href="http://localhost:8080/blog/Unix-a-40-ans/">Unix a 40 ans</a></li>
+  
+  
 </ul>
+</div>
 </div>
 <div class="yui-u">
 
@@ -327,14 +407,16 @@
 <p>Cityboy a généré un certain buz, si vous êtes intéressé vous pouvez retrouver la page d'accueil du bouquin avec tout ses dérivés sur <a href="http://www.cityboy.biz" title="Fear and loathing in the city">www.cityboy.biz</a></p>
 <!-- Hyde::Article::End -->
 
-<div class="comment-separation">·····</div>
-<div id="disqus_thread"></div>
+</div>
+</div>
+<div class="yui-gf" id="comments">
+<div class="yui-u first sidebar"><h2>Commentaires</h2></div>
+<div id="disqus_thread" class="yui-u"></div>
     <script type="text/javascript" src="http://disqus.com/forums/poxd/embed.js"></script>
     <noscript>
         <a href="http://poxd.disqus.com/?url=ref">View the discussion thread.</a>
     </noscript>
     <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
-</div>
 </div>
 
             <div id="ft" class="yui-gc">

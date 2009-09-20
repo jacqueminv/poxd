@@ -24,6 +24,7 @@ SITE_ROOT = "/"
 SITE_WWW_URL = "http://localhost:8080"
 SITE_NAME = "PoXd"
 SITE_AUTHOR = "Valentin Jacquemin"
+SITE_AUTHOR_EMAIL = "jacqueminv@gmail.com"
 LANGUAGE_CODE = 'fr'
 
 #Url Configuration
@@ -93,9 +94,13 @@ SITE_POST_PROCESSORS = {
         'hydeengine.site_post_processors.GoogleSitemapGenerator' : {
             'sitemap_file':SITEMAP_FILE,
             'generator': SITEMAP_GENERATOR,
-            
-        }
-    }
+            }
+        },
+    'blog': {
+            'hydeengine.site_post_processors.RssGenerator': {
+                'generate_by_categories': True
+                }
+            }
 }
 
 GIT_HUB = "http://github.com/poxd"
