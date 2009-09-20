@@ -1,0 +1,23 @@
+
+<?xml version="1.0"?>
+<rss version="2.0">
+   <channel>
+      <title>PoXd</title>
+      <link>http://localhost:8080/</link>
+      <description></description>
+      <language>fr</language>
+      <pubDate></pubDate>
+      <lastBuildDate></lastBuildDate>
+      <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+      <generator>Hyde</generator>
+      <webMaster>jacqueminv@gmail.com</webMaster>
+          
+      <item>
+         <title>Vous faisiez quoi à 12 ans vous?</title>
+         <link>http://localhost:8080/blog/vous-faisiez-quoi-a-12-ans-vous/</link>
+         <description></description>
+         <pubDate>2009-08-27 00:00:00</pubDate>
+         <author>jacqueminv@gmail.com</author>
+      </item>
+   </channel>
+</rss>
