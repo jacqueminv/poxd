@@ -12,9 +12,8 @@
 </div>
 <div class="yui-u">
 <ul>
-{% for node in page.node.walk %}
-{% load_posts %}
-{% for post in posts %}
+{% for post in page.node.walk_pages %}
+    {% if not post.listing %}
     {% ifchanged post.created.month %}
     <li class="month"><h1>{{post.created|date:"F Y"|title}}</h1></li>
     {% endifchanged %}
@@ -24,7 +23,7 @@
             {{post.title|default_if_none:default_title }}
         {%endwith%}</a>
     </li>
-{% endfor %}
+    {% endif %}
 {% endfor %}
 </ul>
 </div>

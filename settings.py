@@ -11,7 +11,6 @@ CONTENT_DIR = os.path.join(ROOT_PATH, 'content')
 MEDIA_DIR = os.path.join(ROOT_PATH, 'media')
 DEPLOY_DIR = os.path.join(ROOT_PATH, 'deploy')
 TMP_DIR = os.path.join(ROOT_PATH, 'deploy_tmp')
-BLOG_DIR = os.path.join(CONTENT_DIR, 'blog')
 
 SITEMAP_FILE = os.path.join(TMP_DIR, 'sitemap.xml')
 SITEMAP_GENERATOR = os.path.join(ROOT_PATH,  "../lib/sitemap_gen-1.4/sitemap_gen.py")
@@ -79,8 +78,14 @@ CONTENT_PROCESSORS = {
 
 SITE_PRE_PROCESSORS = {
     'blog': {
-        'hydeengine.site_pre_processors.CategoriesManager': {'node':'blog'}
+        'hydeengine.site_pre_processors.CategoriesManager': {'node':'blog'},
+        },
+    '/': {
+        'hydeengine.site_pre_processors.NodeInjector' : {
+               'variable' : 'blog_node',
+               'path' : 'content/blog'
         }
+    }
 }
 
 SITE_POST_PROCESSORS = {

@@ -1,9 +1,21 @@
 {% extends "skeleton/_home2.html" %}
-{% block list_posts_last %}
-{% load_posts 5 %}
+{% block home_content %}
+{% recent_posts post 1 page.blog_node %}
+{% filter typogrify %}
+<div id="post" class="yui-gf">
+<div class="sidebar yui-u first">
+<h1 class="no-border">&nbsp;</h1>
+<div id="meta">
 <ul>
-{% for p in posts %}
-<li><a href="{{p.full_url}}">{{p.title}}</a></li>
-{% endfor %}
+  <li>Publié le {{post.0.created|date:"j F Y"}}</li>
+  <li>Catégorie(s): {{post.0.categories|join:", "}}</li>
 </ul>
+</div>
+</div>
+<div class="yui-u">
+<h1><a href="{{post.0.full_url}}">{{post.0.title}}</a></h1>
+{% render_article post.0 %}
+</div>
+</div>
+{% endfilter %}
 {% endblock %}

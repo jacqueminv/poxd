@@ -23,7 +23,19 @@
   <priority>0.5</priority>
  </url>
  <url>
+  <loc>http://localhost:8080/blog/critique-de-livre-l-enfant-perse/</loc>
+  <lastmod>2000-01-01T00:00:00Z</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.5</priority>
+ </url>
+ <url>
   <loc>http://localhost:8080/blog/pourquoi-jenvie-les-developpeurs-erlang/</loc>
+  <lastmod>2000-01-01T00:00:00Z</lastmod>
+  <changefreq>weekly</changefreq>
+  <priority>0.5</priority>
+ </url>
+ <url>
+  <loc>http://localhost:8080/blog/vous-faisiez-quoi-a-12-ans-vous/</loc>
   <lastmod>2000-01-01T00:00:00Z</lastmod>
   <changefreq>weekly</changefreq>
   <priority>0.5</priority>

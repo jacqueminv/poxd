@@ -1,5 +1,6 @@
 {% extends "skeleton/_index.html" %}
 {% block main_content %}
+{% filter typogrify %}
 <div id="post" class="yui-gf">
 <div class="sidebar yui-u first">
 <h1 class="no-border">&nbsp;</h1>
@@ -18,15 +19,11 @@
 </div>
 </div>
 <div class="yui-u">
-{% filter typogrify %}
 <h1>{{page.title}}</h1>
 {% markdown %}
-
-{% block article %}
-{% endblock %}
-
+{% block article %}{% endblock %}
 {% endmarkdown %}
-{% endfilter %}
+
 </div>
 </div>
 <div class="yui-gf" id="comments">
@@ -38,4 +35,5 @@
     </noscript>
     <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
 </div>
+{% endfilter %}
 {% endblock %}
