@@ -1,9 +1,0 @@
-{% extends "skeleton/_home2.html" %}
-{% block list_posts_last %}
-{% load_posts 5 %}
-<ul>
-{% for p in posts %}
-<li><a href="{{p.full_url}}">{{p.title}}</a></li>
-{% endfor %}
-</ul>
-{% endblock %}
