@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<head>
+   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+   <title>{% block title %}{{site.name}}{% endblock %}</title>
+   <meta name="author" content="Valentin Jacquemin" />
+   <link href="http://feeds2.feedburner.com/thepolluxworld" rel="alternate" title="Valentin Jacquemin" type="application/rss+xml" />
+    <!-- syntax highlighting CSS -->
+   <link rel="stylesheet" href="{{site.url}}/media/css/syntax.css" type="text/css" />
+    <!-- Homepage CSS -->
+   <link rel="stylesheet" href="{{site.url}}/media/css/base.css" type="text/css" media="screen" charset="utf-8">
+</head>
+<body>
+ <div class="site">
+  <div class="title">
+    <a href="/">Valentin Jacquemin</a>
+    <a class="extra" href="/">accueil</a>
+  </div>
+  {% block content %}Default text when no content{% endblock %}
+  <div class="footer">
+    <div class="contact">
+      <p>
+        Valentin Jacquemin<br />
+        jacqueminv@gmail.com
+      </p>
+    </div>
+    <div class="contact">
+      <p>
+        <a href="librarything.fr/profile/poxd">librarything.fr/profile/poxd</a><br />
+        <a href="http://twitter.com/poxd/">twitter.com/poxd</a><br />
+        <a href="http://flickr.com/photos/mojombo/">flickr.com/photos/poxd</a>
+      </p>
+    </div>
+    <div class="rss">
+      <a href="http://feeds2.feedburner.com/thepolluxworld">
+        <img src="/images/rss.png" alt="Souscrivez au fil RSS" />
+      </a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

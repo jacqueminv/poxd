@@ -1,0 +1,390 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="fr">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>PoXd</title>
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/reset-fonts-grids/reset-fonts-grids.css&2.7.0/build/base/base-min.css"> 
+        <link rel="stylesheet" type="text/css" href="/media/poxd.css">
+        <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.7.0/build/yahoo-dom-event/yahoo-dom-event.js&2.7.0/build/connection/connection-min.js&2.7.0/build/json/json-min.js"></script>
+        <script type="text/javascript" src="/media/js/lt.js"></script>
+        <script type="text/javascript">
+            var disqus_developer = 1;
+            var disqus_iframe_css = 'http://localhost:8080/media/css/poxd.css';
+            var disqus_no_style = false;
+        </script>
+    <style>
+       .no-border{
+           border: 0;
+       }
+        body {
+           font-family: Helvetica, Arial, sans-serif; /**check in yui theater font css**/
+           color: rgb(41, 41, 49);
+           margin: 0;
+        }
+        a {
+          color: rgb(132, 17, 39);
+        }
+        a:hover {
+          color: black;
+        }
+        .clear{
+            clear: both;
+            visibility: hidden;
+            border:0;
+            margin: 0;   
+        }
+        h1{
+            font-size: 1.6em;
+            border-bottom: 2px solid #CCC;   
+	    margin-top: 0.2em;
+        }
+        p {
+            margin: 1em 0;
+        }
+        strong{
+            font-weight: bold;    
+        }
+        em {
+            font-style: italic;    
+        }
+        #bd {
+            padding-left: 1.1em;
+            padding-right: 1.1em;    
+        }
+        #doc > div{
+	    padding: 0.3em;
+	    padding-left: 0.6em;
+	    padding-right: 1em;
+	}
+        /*************
+            HEADER
+        **************/
+        #hd{
+            background-color: rgb(132, 17, 39);
+            color: #FFF;
+            font-size: 1.1em;
+            margin-bottom: 1.8em;
+            margin-top: 0;
+            position: relative;
+            letter-spacing: 0.1em;
+            -moz-border-radius-bottomright: 3px;
+            -moz-border-radius-bottomleft: 3px;
+            -webkit-border-bottom-right-radius: 3px;
+            -webkit-border-bottom-left-radius: 3px;
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+        #hd a{
+            color: #FFF;
+            text-decoration: none;
+        }
+        #hd #logo{
+            font-size: 2.5em;
+            font-weight: bold;
+            float: left;
+        }
+        #hd #menu{
+            bottom:0.79em;
+            position:absolute;
+            right:1em;
+        }
+        #hd ul{
+            margin: 0;    
+        }
+        #hd #menu li{
+            display: inline;
+        }
+        /*************
+          HOME QUOTE
+        **************/
+        #welcome{
+           background-color: rgb(41, 41, 49); /**#292931**/
+           color: rgb(238, 238, 238); /**#EEEEEE**/
+           padding: 0.6em;
+           font-size: 3.2em;
+           font-family: Garamond, Georgia, serif;
+           font-style: italic;
+           
+           -moz-border-radius: 5px;
+           -webkit-border-radius: 5px;
+           border-radius: 5px;
+        }
+        
+        #welcome #author{
+            margin-top: 0.5em;
+            font-size: 0.7em;
+            float:right; 
+            font-style: normal;   
+        }
+        
+        #welcome blockquote{
+            margin: 0;    
+        }
+        /*************
+            FOOTER
+        **************/
+        #ft{
+            margin-top: 1em;
+            padding-top: 0.5em;
+            color: #666;
+            border-top: 1px solid #CCC; 
+            font-size: 0.9em;
+        }
+        #ft div.last{
+            text-align: right;   
+         }
+        /*************
+         HOME CONTENT
+        **************/
+	/**V2**/
+	
+	/**END V2**/
+
+
+        #bd #home{
+            margin-top: 2em;
+        }
+        #home h1{
+            margin: 0;    
+        }
+        #home ul{
+            margin: 0;
+            margin-bottom: 0.4em;
+        }
+        #home ul li{
+            border-bottom: 1px dotted #CCCCCC;
+            padding: 6px 0;
+            line-height: 1.4em;
+            list-style-position: outside;
+            list-style-type: none;
+        }
+        #home ul li:hover{
+            background: #F9F9F9 none repeat scroll 0 0;   
+            color: #ECEBEB;
+        }
+        #home ul li a{
+            color: rgb(41, 41, 49);
+            text-decoration: none;
+            display: block;
+        }
+        /*************
+            READINGS
+        **************/
+        #readings {
+            padding: 4px;    
+        }
+        #readings img{
+            border: 2px solid #826F72;
+            margin: 3px;
+        }
+        /*************
+            POSTS
+        **************/
+        #post{
+            text-align: justify;
+            font-size: 1.1em;
+            line-height: 1.4em;
+        }
+        .sidebar{
+            text-align: right;
+        }
+        .sidebar h2{
+            width: 85%;
+            padding: 0.7em;
+            padding-top: 0;
+        }
+        #post .sidebar div{
+            width: 85%;
+        }
+        #post .sidebar a{
+            color: #292931;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        #post .sidebar a:hover{
+            color: gray;
+        }
+	#post #meta{
+	    font-size: 0.8em;
+	    line-height: 1.4em;
+	    background-color: #EEE;
+	    padding: 0.7em;
+	}
+	#post #meta h1{
+	    margin: 0;
+	    margin-bottom: 0.2em;
+	    border: 0;
+	}
+	#post #meta ul{
+	    margin: 0;
+	}
+	#post #meta ul li{
+	    list-style-type: none;
+	    list-style-position: outside;
+	}
+        #post blockquote{
+            font-family: Georgia, serif;
+            font-style: italic;
+            border-left: 0.7em solid lightgray;
+            margin-left: 1em;
+            margin-right: 2em;
+            padding-left: 1em;
+            color: gray;
+        }
+	#post ul {
+	    margin-left: 0;
+	}
+        #post ul li{
+            list-style-type: square;
+            list-style-position: inside;
+        }
+        /*************
+            CONTACT
+        **************/
+        #contact iframe .info{
+            display: none;    
+        }
+        /*************
+            DISQUS
+        **************/
+        #comments{
+            background-color: #EEE;
+            border-top: 1px solid #CCC;
+            margin-bottom: -1em;
+            margin-top: 2em;
+       }
+        #post .comment-separation{
+            font-weight: bold;
+            font-size: 1.5em;
+            text-align: center;
+            margin: 1em;
+            margin-bottom: 0;
+            color: lightgray;
+            letter-spacing: 0.2em;
+        }
+        #disqus_thread{
+            /**background-color: #F9F9F9;
+            border: 1px solid gray;   
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;**/
+            font-size: 0.9em;
+            position: relative;
+        }
+        #dsq-options{
+            display: none;
+        }
+        .dsq-by{
+            display: none;
+        }
+        #dsq-login-message{
+            display: none;
+        }
+        #dsq-add-new-comment{
+            display: none;
+        }
+        #dsq-content #dsq-login{
+            float:left !important;
+            margin-left: -174px;
+            margin-top: 25px;
+        }
+        #disqus_thread input.form-text{
+            
+        }
+         #disqus_thread input.submit{
+            
+        }
+        
+        #disqus_thread .dsq-comment-header{
+            background-color: rgb(132, 17, 39);    
+        }
+        
+        #disqus_thread .dsq-by {
+            float: right;   
+        }    
+        .dsq-brlink {
+            display: none;    
+        }
+        #disqus_thread .dsq-item-trackback {
+            margin-top: -10px;    
+        }
+        .dsq-authenticated-pic{
+            float: left;    
+        }
+        .dsq-authenticated-info{
+            float: left;    
+            margin-left: 1em;
+        }
+        .dsq-authenticated-info ul li{
+            list-style-type: none !important;
+        } 
+        #dsq-content #dsq-auth .dsq-authenticated-pic img{
+            height: 48px;
+            width: 48px;    
+        }
+        #disqus_thread iframe{
+            width: 100%;
+            height: 100%;
+            scrolling: no;    
+        }
+        /****************
+            ARCHIVES
+        *****************/
+        #archives li{
+            list-style-type: none;
+            list-style-position: outside;    
+        }
+        #archives li.month {
+            margin-bottom: 1em;    
+        }
+        #archives li.month h1{
+            font-size: 1.8em;
+            border:0;
+        }
+        #archives li.entry{
+            margin: 0.4em 0 0.4em 1em;    
+        }
+        #archives li.entry .day{
+            float: left;
+            width: 80px;
+            margin-right: 10px;
+            text-align: right;
+        }
+    </style>
+    </head>
+    <body>
+        <div id="doc">
+            <div id="hd"><span id="logo"><a href="/">POXD</a></span><ul id="menu"><li><a href="/">accueil</a></li><li>&nbsp;·&nbsp;<a href="/blog">blog</a></li><li>&nbsp;·&nbsp;<a href="/">projets</a></li><li>&nbsp;·&nbsp;<a href="/">à propos</a></li><li>&nbsp;·&nbsp;<a href="/contact">contact</a></li></ul></div>
+            
+<div id="bd">
+    <div id="home" class="yui-b">
+        <div class="yui-b" id="blog">
+            
+
+<ul>
+
+<li><a href="http://localhost:8080/blog/critique-de-livre-histoire-de-la-guerre-du-peloponnese-tome-1/">Critique de livre: Histoire de la guerre du Péloponnèse, tome 1</a></li>
+
+<li><a href="http://localhost:8080/blog/pourquoi-jenvie-les-developpeurs-erlang/">Pourquoi j’envie les développeurs Erlang</a></li>
+
+<li><a href="http://localhost:8080/blog/Unix-a-40-ans/">Unix a 40 ans</a></li>
+
+<li><a href="http://localhost:8080/blog/critique-de-livre-citiboy/">Critique de livre: Cityboy</a></li>
+
+</ul>
+
+        </div>
+	<div class="yui-b" id="projects">
+        </div>
+	<div class="yui-b" id="readings">
+	</div>
+    </div>
+</div>
+
+            <div id="ft" class="yui-gc">
+    <div class="yui-u first">Propulsé par <a href="http://github.com/poxd/hyde">hyde</a> | design par Valentin Jacquemin</div>
+    <div class="yui-u last"><a href="#doc">Retour en haut</a></div>
+</div>
+        </div>
+    </body>
+</html>

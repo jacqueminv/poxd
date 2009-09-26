@@ -1,0 +1,416 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="fr">
+    <head>
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>PoXd</title>
+        <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/reset-fonts-grids/reset-fonts-grids.css&2.7.0/build/base/base-min.css"> 
+        <link rel="stylesheet" type="text/css" href="/media/poxd.css">
+        <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.7.0/build/yahoo-dom-event/yahoo-dom-event.js&2.7.0/build/connection/connection-min.js&2.7.0/build/json/json-min.js"></script>
+        <script type="text/javascript" src="/media/js/lt.js"></script>
+        <script type="text/javascript">
+            var disqus_developer = 1;
+            var disqus_iframe_css = 'http://localhost:8080/media/css/poxd.css';
+            var disqus_no_style = false;
+        </script>
+    <style>
+       .no-border{
+           border: 0;
+       }
+        body {
+           font-family: Helvetica, Arial, sans-serif; /**check in yui theater font css**/
+           color: rgb(41, 41, 49);
+           margin: 0;
+        }
+        a {
+          color: rgb(132, 17, 39);
+        }
+        a:hover {
+          color: black;
+        }
+        .clear{
+            clear: both;
+            visibility: hidden;
+            border:0;
+            margin: 0;   
+        }
+        h1{
+            font-size: 1.6em;
+            border-bottom: 2px solid #CCC;   
+	    margin-top: 0.2em;
+        }
+        p {
+            margin: 1em 0;
+        }
+        strong{
+            font-weight: bold;    
+        }
+        em {
+            font-style: italic;    
+        }
+        #bd {
+            padding-left: 1.1em;
+            padding-right: 1.1em;    
+        }
+        #doc > div{
+	    padding: 0.3em;
+	    padding-left: 0.6em;
+	    padding-right: 1em;
+	}
+        /*************
+            HEADER
+        **************/
+        #hd{
+            background-color: rgb(132, 17, 39);
+            color: #FFF;
+            font-size: 1.1em;
+            margin-bottom: 1.8em;
+            margin-top: 0;
+            position: relative;
+            letter-spacing: 0.1em;
+            -moz-border-radius-bottomright: 3px;
+            -moz-border-radius-bottomleft: 3px;
+            -webkit-border-bottom-right-radius: 3px;
+            -webkit-border-bottom-left-radius: 3px;
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+        #hd a{
+            color: #FFF;
+            text-decoration: none;
+        }
+        #hd #logo{
+            font-size: 2.5em;
+            font-weight: bold;
+            float: left;
+        }
+        #hd #menu{
+            bottom:0.79em;
+            position:absolute;
+            right:1em;
+        }
+        #hd ul{
+            margin: 0;    
+        }
+        #hd #menu li{
+            display: inline;
+        }
+        /*************
+          HOME QUOTE
+        **************/
+        #welcome{
+           background-color: rgb(41, 41, 49); /**#292931**/
+           color: rgb(238, 238, 238); /**#EEEEEE**/
+           padding: 0.6em;
+           font-size: 3.2em;
+           font-family: Garamond, Georgia, serif;
+           font-style: italic;
+           
+           -moz-border-radius: 5px;
+           -webkit-border-radius: 5px;
+           border-radius: 5px;
+        }
+        
+        #welcome #author{
+            margin-top: 0.5em;
+            font-size: 0.7em;
+            float:right; 
+            font-style: normal;   
+        }
+        
+        #welcome blockquote{
+            margin: 0;    
+        }
+        /*************
+            FOOTER
+        **************/
+        #ft{
+            margin-top: 1em;
+            padding-top: 0.5em;
+            color: #666;
+            border-top: 1px solid #CCC; 
+            font-size: 0.9em;
+        }
+        #ft div.last{
+            text-align: right;   
+         }
+        /*************
+         HOME CONTENT
+        **************/
+	/**V2**/
+	
+	/**END V2**/
+
+
+        #bd #home{
+            margin-top: 2em;
+        }
+        #home h1{
+            margin: 0;    
+        }
+        #home ul{
+            margin: 0;
+            margin-bottom: 0.4em;
+        }
+        #home ul li{
+            border-bottom: 1px dotted #CCCCCC;
+            padding: 6px 0;
+            line-height: 1.4em;
+            list-style-position: outside;
+            list-style-type: none;
+        }
+        #home ul li:hover{
+            background: #F9F9F9 none repeat scroll 0 0;   
+            color: #ECEBEB;
+        }
+        #home ul li a{
+            color: rgb(41, 41, 49);
+            text-decoration: none;
+            display: block;
+        }
+        /*************
+            READINGS
+        **************/
+        #readings {
+            padding: 4px;    
+        }
+        #readings img{
+            border: 2px solid #826F72;
+            margin: 3px;
+        }
+        /*************
+            POSTS
+        **************/
+        #post{
+            text-align: justify;
+            font-size: 1.1em;
+            line-height: 1.4em;
+        }
+        .sidebar{
+            text-align: right;
+        }
+        .sidebar h2{
+            width: 85%;
+            padding: 0.7em;
+            padding-top: 0;
+        }
+        #post .sidebar div{
+            width: 85%;
+        }
+        #post .sidebar a{
+            color: #292931;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        #post .sidebar a:hover{
+            color: gray;
+        }
+	#post #meta{
+	    font-size: 0.8em;
+	    line-height: 1.4em;
+	    background-color: #EEE;
+	    padding: 0.7em;
+	}
+	#post #meta h1{
+	    margin: 0;
+	    margin-bottom: 0.2em;
+	    border: 0;
+	}
+	#post #meta ul{
+	    margin: 0;
+	}
+	#post #meta ul li{
+	    list-style-type: none;
+	    list-style-position: outside;
+	}
+        #post blockquote{
+            font-family: Georgia, serif;
+            font-style: italic;
+            border-left: 0.7em solid lightgray;
+            margin-left: 1em;
+            margin-right: 2em;
+            padding-left: 1em;
+            color: gray;
+        }
+	#post ul {
+	    margin-left: 0;
+	}
+        #post ul li{
+            list-style-type: square;
+            list-style-position: inside;
+        }
+        /*************
+            CONTACT
+        **************/
+        #contact iframe .info{
+            display: none;    
+        }
+        /*************
+            DISQUS
+        **************/
+        #comments{
+            background-color: #EEE;
+            border-top: 1px solid #CCC;
+            margin-bottom: -1em;
+            margin-top: 2em;
+       }
+        #post .comment-separation{
+            font-weight: bold;
+            font-size: 1.5em;
+            text-align: center;
+            margin: 1em;
+            margin-bottom: 0;
+            color: lightgray;
+            letter-spacing: 0.2em;
+        }
+        #disqus_thread{
+            /**background-color: #F9F9F9;
+            border: 1px solid gray;   
+            -moz-border-radius: 5px;
+            -webkit-border-radius: 5px;
+            border-radius: 5px;**/
+            font-size: 0.9em;
+            position: relative;
+        }
+        #dsq-options{
+            display: none;
+        }
+        .dsq-by{
+            display: none;
+        }
+        #dsq-login-message{
+            display: none;
+        }
+        #dsq-add-new-comment{
+            display: none;
+        }
+        #dsq-content #dsq-login{
+            float:left !important;
+            margin-left: -174px;
+            margin-top: 25px;
+        }
+        #disqus_thread input.form-text{
+            
+        }
+         #disqus_thread input.submit{
+            
+        }
+        
+        #disqus_thread .dsq-comment-header{
+            background-color: rgb(132, 17, 39);    
+        }
+        
+        #disqus_thread .dsq-by {
+            float: right;   
+        }    
+        .dsq-brlink {
+            display: none;    
+        }
+        #disqus_thread .dsq-item-trackback {
+            margin-top: -10px;    
+        }
+        .dsq-authenticated-pic{
+            float: left;    
+        }
+        .dsq-authenticated-info{
+            float: left;    
+            margin-left: 1em;
+        }
+        .dsq-authenticated-info ul li{
+            list-style-type: none !important;
+        } 
+        #dsq-content #dsq-auth .dsq-authenticated-pic img{
+            height: 48px;
+            width: 48px;    
+        }
+        #disqus_thread iframe{
+            width: 100%;
+            height: 100%;
+            scrolling: no;    
+        }
+        /****************
+            ARCHIVES
+        *****************/
+        #archives li{
+            list-style-type: none;
+            list-style-position: outside;    
+        }
+        #archives li.month {
+            margin-bottom: 1em;    
+        }
+        #archives li.month h1{
+            font-size: 1.8em;
+            border:0;
+        }
+        #archives li.entry{
+            margin: 0.4em 0 0.4em 1em;    
+        }
+        #archives li.entry .day{
+            float: left;
+            width: 80px;
+            margin-right: 10px;
+            text-align: right;
+        }
+    </style>
+    </head>
+    <body>
+        <div id="doc">
+            <div id="hd"><span id="logo"><a href="/">POXD</a></span><ul id="menu"><li><a href="/">accueil</a></li><li>&nbsp;·&nbsp;<a href="/blog">blog</a></li><li>&nbsp;·&nbsp;<a href="/">projets</a></li><li>&nbsp;·&nbsp;<a href="/">à propos</a></li><li>&nbsp;·&nbsp;<a href="/contact">contact</a></li></ul></div>
+            
+<div id="post" class="yui-gf">
+<div class="sidebar yui-u first">
+<h1 class="no-border">&nbsp;</h1>
+<div id="meta">
+<!--<h1>Meta</h1>-->
+<ul>
+  <li>Publié le 25 juillet 2009</li>
+  <li>Catégorie(s): lectures, 110 meilleurs livres</li>
+  
+  
+  <li>Précédent: <a href="http://localhost:8080/blog/pourquoi-jenvie-les-developpeurs-erlang/">Pourquoi j’envie les développeurs Erlang</a></li>
+  
+</ul>
+</div>
+</div>
+<div class="yui-u">
+
+<h1>Critique de livre: Histoire de la guerre du Péloponnèse, tome&nbsp;1</h1>
+<!-- Hyde::Article::Begin -->
+
+<p>Traducteur de l'oeuvre qui est passée entre mes mains, Jean Voilquin fait de l'oeuvre de Thucydide une introduction des plus&nbsp;vantarde:</p>
+<blockquote>
+<p>La valeur de l'oeuvre de Thucidyde ne saurait être exagérée (...). Faut-il, en outre, signaler l'intérêt actuel qui s'attache à la guerre du Péloponnèse? Tous les problèmes politiques, moraux ou philosophiques qui tourmentent à l'heure actuelle une humanité désorientée s'y trouvent posés: rapports de l'individu et de l'Etat, rapports des peuples entre eux, immoralité de la force brutale, rôle des individus dans la conduite des sociétés. (...) Quand des esprits paradoxaux croient pouvoir nier l'utilité de l'histoire, nous découvrons à chaque instant dans la vie moderne des analogies avec le monde dont Thucidyde a écrit&nbsp;l'histoire.</p>
+</blockquote>
+<p>Certainement! On le sait bien, connaître l'histoire devrait nous permettre de ne plus commettre les mêmes erreurs, d'analyser avec intelligence les situations pouvant être similaires à l'heure actuelle... Mais pouvons-nous seulement dire qu'aujourd'hui nous avons réellement progressé depuis l'ère de domination grecque? Débat dans lequel je ne m'engagerai pas, parlons plutôt de l'oeuvre en&nbsp;elle-même.</p>
+<p>L'une des premières choses à ressortir à mon avis, c'est l'effort donné par Thucydide pour se montrer neutre. Surtout lorsque l'on sait qu'il était partie prenante à cette guerre! Il y défend d'ailleurs à un moment donné ses actes avec une certaine ferveur. Je ne suis pas spécialiste des oeuvres historiennes et n'aurait certainement pas pu l'être. Rien qu'à voir le temps que j'ai mis pour livre l'entier de ce livre, j'aurais trop rapidement baissé les bras! Je ne peux donc pas comparer le travail de Thucydide avec celui d'autres auteurs. Je n'ai cependant jamais eu le sentiment en tant que lecteur que les grecques aient été mis sur un pied d'estal. Le narrateur tente d'ailleurs de mettre rapidement les choses au clair lorsqu'il&nbsp;déclare:</p>
+<blockquote>
+<p>On n'accordera pas la confiance aux poètes, qui amplifient les événements, ni aux logographques qui, plus pour charmer les oreilles que pour servir la vérité, rassemblent des faits impossibles à vérifier rigoureusement et aboutissent finalement pour la plupart à un récit incroyable et merveilleux. On doit penser que mes informations proviennent des sources les plus sûres et présentent, étant donné leur antiquité, une certitute suffisante. (...) Quant aux événements de la guerre, je n'ai pas jugé bon de les rapporter sur la foi du premier venu, ni d'après mon&nbsp;opinion.</p>
+</blockquote>
+<p>Ce louable effort rend malheureusement le récit terne pour la majeur partie. Je ne sais si récit est le bon mot. C'est assurément un témoignage de l'époque, on y découvre les problèmes politiques, les idéologies partagées par les athéniens d'un côté et les lacédémoniens de l'autre. Mais c'est bien un témoignage! Pas de sentiment, pas de parti pris, ce n'est pas un roman, c'est un livre d'histoire! Et visiblement, c'est l'une des premières oeuvres à être qualifiée en tant que&nbsp;tel.</p>
+<p>Thucydide parle donc de la guerre du Péloponnèse se déroulant de -431 à -404 et mettant aux prises les Athéniens, grands navigateurs prônant la démocratie aux Lacédémoniens (dont fait partie Sparte) prônant l'aristocratie. Malgré l'ennui que peut provoquer certains passages du livre, on apprend beaucoup et ça j'adore. Ce qui m'a le plus captivé ce sont les passages où l'on devient auditeur de grands stratèges, de grands orateurs tel que Démosthène, Brasidas ou encore Périclès. J'ai aimé imaginer l'impact de ces discours bien souvent dynamisants, truffés de tournures faisant l'éloge de dirigeants bons tout en ne laissant finalement pas de réels choix quant aux "propositions" données. On découvre aussi les stratégies mises en place de part et d'autre pour écraser l'adversaire, les résultats du génie militaire (les débuts des lance-flammes!), les effets terrible d'une peste... bref j'ai appris des choses ce qui est l'essentiel pour moi lorsque je lis un&nbsp;livre.</p>
+<p>Pour lire ce livre vous devez soit être un passionné d'histoire, soit être assez curieux pour pouvoir vous engager dans le genre de défis que je me suis lancé à savoir lire ces 110 meilleurs livres à lire!&nbsp;Enjoy!</p>
+<h2>Si ça vous&nbsp;intéresse...</h2>
+<ul>
+<li><a href="http://fr.wikipedia.org/wiki/Guerre_du_Péloponnèse">L'histoire de la guerre du Péloponnèse sur&nbsp;Wikipédia</a></li>
+<li><a href="http://fr.wikipedia.org/wiki/Thucydide#Recherche_de_la_v.C3.A9rit.C3.A9">Thucydide sur&nbsp;Wikipédia</a></li>
+</ul>
+<!-- Hyde::Article::End -->
+
+</div>
+</div>
+<div class="yui-gf" id="comments">
+<div class="yui-u first sidebar"><h2>Commentaires</h2></div>
+<div id="disqus_thread" class="yui-u"></div>
+    <script type="text/javascript" src="http://disqus.com/forums/poxd/embed.js"></script>
+    <noscript>
+        <a href="http://poxd.disqus.com/?url=ref">View the discussion thread.</a>
+    </noscript>
+    <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+</div>
+
+            <div id="ft" class="yui-gc">
+    <div class="yui-u first">Propulsé par <a href="http://github.com/poxd/hyde">hyde</a> | design par Valentin Jacquemin</div>
+    <div class="yui-u last"><a href="#doc">Retour en haut</a></div>
+</div>
+        </div>
+    </body>
+</html>
