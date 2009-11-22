@@ -4,7 +4,7 @@
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <title>{% block title %}{{site.name}}{% endblock %}</title>
         <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/reset-fonts-grids/reset-fonts-grids.css&2.7.0/build/base/base-min.css"> 
-        <link rel="stylesheet" type="text/css" href="/media/poxd.css">
+        <link rel="stylesheet" type="text/css" href="/media/css/poxd.css">
         <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.7.0/build/yahoo-dom-event/yahoo-dom-event.js&2.7.0/build/connection/connection-min.js&2.7.0/build/json/json-min.js"></script>
         <script type="text/javascript" src="/media/js/lt.js"></script>
         <script type="text/javascript">
@@ -17,7 +17,7 @@
            border: 0;
        }
         body {
-           font-family: Helvetica, Arial, sans-serif; /**check in yui theater font css**/
+           font-family: Verdana, Helvetica, Arial, sans-serif; /**check in yui theater font css**/
            color: rgb(41, 41, 49);
            margin: 0;
         }
@@ -59,7 +59,46 @@
         /*************
             HEADER
         **************/
-        #hd{
+       #hd{
+           border-top: 4px solid black;
+           margin-bottom: 1.8em;
+           margin-top:0;
+           font-size: 1.1em;
+           position: relative;
+           color: black;
+       }
+       #hd a{
+            text-decoration: none;
+            color: black;
+        }
+       #hd #menu a{
+            margin-left: 0.7em;
+       }
+       #hd #menu a:hover{
+            font-weight: bold;
+            margin-left: 0.4em;
+        }
+       #hd #logo{
+            font-size: 2em;
+            float: left;
+        }
+       #hd #logo #x{
+            color: rgb(132, 17, 39);
+            font-weight: 600;
+       }
+       #hd #menu{
+            bottom:0.49em;
+            position:absolute;
+            right:1em;
+        }
+        #hd ul{
+            margin: 0;    
+        }
+        #hd #menu li{
+            display: inline;
+            font-variant: small-caps;
+        }
+      /**  #hd{
             background-color: rgb(132, 17, 39);
             color: #FFF;
             font-size: 1.1em;
@@ -93,7 +132,7 @@
         }
         #hd #menu li{
             display: inline;
-        }
+        }**/
         /*************
           HOME QUOTE
         **************/
@@ -167,11 +206,11 @@
             text-decoration: none;
             display: block;
         } **/
-       #home h1 a{
+       #bd h1 a{
             color: #292931;
             text-decoration: none;
        }
-       #home h1 a:hover{
+       #bd h1 a:hover{
             color: #4B4B53;
        }
         /*************
@@ -188,8 +227,8 @@
             POSTS
         **************/
         #post{
-            text-align: justify;
-            font-size: 1.1em;
+/**            text-align: justify;
+            font-size: 1.1em;**/
             line-height: 1.4em;
         }
         .sidebar{
@@ -230,13 +269,13 @@
 	    list-style-position: outside;
 	}
         #post blockquote{
-            font-family: Georgia, serif;
+            /**font-family: Georgia, serif;**/
             font-style: italic;
-            border-left: 0.7em solid lightgray;
-            margin-left: 1em;
-            margin-right: 2em;
+            border-left: 0.1em solid #841127;
+/**            margin-left: 1em;
+            margin-right: 2em;**/
             padding-left: 1em;
-            color: gray;
+/**            color: gray;**/
         }
 	#post ul {
 	    margin-left: 0;
@@ -298,8 +337,7 @@
         #disqus_thread input.form-text{
             
         }
-         #disqus_thread input.submit{
-            
+         #disqus_thread input.submit{            
         }
         
         #disqus_thread .dsq-comment-header{
