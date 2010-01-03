@@ -1,0 +1,86 @@
+{% extends '_post.html' %}
+{%hyde
+title: "DOM et ses bonnes pratiques"
+created: 2008-12-14%}
+{% block article %}
+{% article %}
+J'ai terminé le visionnage d'une série [de][1] [3][2] [vidéos][1] concernant
+les bonnes pratiques sur du traitement DOM. Je voulais en garder une trace
+parce que ces vidéos contiennent vraiment des choses intéressantes...
+
+_Ceci n'est pas une introduction à DOM. Si cet acronyme vous est inconnu vous
+n'êtes pas sur le bon article, un bon point de départ: [Wikipedia ][3]_
+
+Présentateur: [Douglas Crockford][4]
+
+# Gestionnaires d'événements
+
+Il existe pas moins de 3 méthodes pour affecter une fonction à un type
+d'événement sur un noeud:
+
+  * _node_["on" + type] = _fonction_
+  * _node._attachEvent("on" + type,  _fonction_) - valide uniquement sur IE
+  * _node._addEventListener(type, _fonction_, false) - Recommendation W3c mais
+non supporté sur IE
+
+Pour bien faire, il faut utiliser les 3! Vive le monde du web... En plus IE
+possède une variable globale event contenant les données de l'événement
+(source, target, etc.) alors que le W3C recommande le passage d'un paramètre
+au gestionnaire contenant ces données...
+
+## Fuites mémoire
+
+Toujours prendre bien garde que IE 6 utilise une stratégie minimaliste
+concernant la gestion de la mémoire. Cette stratégie se base sur un entier
+incrémenté lorsqu'une nouvelle référence à un objet se crée et décrémenté
+lorsque cette référence est supprimée... Le problème surgit lorsqu'une
+application met en oeuvre des références circulaire (explications et exemples
+sur [cet article de Crockford][5]). Cette gestion peut facilement occasionner
+des fuites mémoires et ce particulièrement lorsque les gestionnaires
+d'événements interviennent. IE crée une référence cyclique entre le noeud DOM
+sur lequel on attache un gestionnaire et le code de ce gestionnaire lui-même
+(dans le cas où ce code utilise le noeud - donc très souvent), c'est là qu'est
+le problème... Ce qui fait qu'il faudra explicitement mettre à null tous les
+membres d'un noeud étant une fonction avant de le retirer (ou de le remplacer,
+attention aussi par l'intermédiaire de innerHTML) du DOM sous peine de voir
+proliférer des zones mémoires occupées et qui le resteront tant que IE reste
+ouvert!
+
+# Tips
+
+Pour simple rappel perso je publie ici encore quelques conseils à ne pas
+oublier:
+
+  * placer les balises javascript le plus bas possible dans le document HTML
+  * placer les imports des fichiers CSS le plus haut possible
+  * rassembler les fichiers externes autant que possible (une bonne piste:[
+YUI Compressor][6] pour les js et les css)
+  * ne pas utiliser document.write
+  * ne pas utiliser les collections de l'objet document (anchors, forms, etc.)
+  * ne pas utilier document.all
+  * les éléments dans le DOM sont en MAJUSCULES (tendance à l'oublier)
+  * utiliser la méthode setAttribute des noeuds plutôt que d'affecter la
+valeur à la propriété directement
+  * cloner un noeud retourne un noeud qui n'est pas dans le DOM
+
+Quelques indices bon à savoir pour créer une application web toujours plus
+performante! **Note:** utiliser un framework comme [YUI][7] simplifiera
+souvent **beaucoup** les choses.
+
+   [1]: http://fr.video.yahoo.com/watch/111584/996008
+
+   [2]: http://fr.video.yahoo.com/watch/111583/996002
+
+   [3]: http://fr.wikipedia.org/wiki/Document_Object_Model
+
+   [4]: http://www.crockford.com/
+
+   [5]: http://www.crockford.com/javascript/memory/leak.html
+
+   [6]: http://developer.yahoo.com/yui/compressor/
+
+   [7]: http://developer.yahoo.com/yui/
+
+
+{% endarticle %}
+{% endblock %}

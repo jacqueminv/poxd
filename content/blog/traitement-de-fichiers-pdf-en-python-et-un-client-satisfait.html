@@ -1,0 +1,64 @@
+{% extends '_post.html' %}
+{%hyde
+title: "Traitement de fichiers PDF en python et un client satisfait"
+created: 2008-10-11%}
+{% block article %}
+{% article %}
+Si vous lisez ce blog, vous savez que j'aime bien Java et Flex. Mais lorsqu'on
+a besoin de faire des traitements typiquement automatisés et accédant au
+système ou ne demandant aucune interaction graphique avec l'utilisateur ces
+langages ne sont certainement pas les mieux adaptés. Je ne vais pas m'étendre
+sur cette assertion maintenant... Ca pourrait faire le sujet d'un autre billet
+tiens... Mon choix personnel du moment pour ce type d'action porte sur Python.
+((Python is a dynamic object-oriented programming language that can be used
+for many kinds of software development. - [www.python.org][1])) Le but ici
+n'est pas de défendre les atouts de Python. Ceux-ci sont déjà largement
+reconnus par les développeurs. Le nombre de projets open-source l'atteste tout
+comme le classement [TIOBE][2] évoqué il y a [quelques temps][3]. Récemment
+j'ai eu la joie de faire un petit développement en freelancing ayant pour but
+un simple traitement de fichiers PDF. Python a une nouvelle fois pleinement
+répondu à mes attentes. Ce que j'aime principalement lorsque je développe en
+Python c'est sa simplicité et de ce fait la rapidité de développement
+associée, le nombre de librairies disponibles ou encore un code naturellement
+facile à lire. Pour ce projet, le workflow était le suivant:
+
+  1. Lister tous les fichiers PDF du dossier courant
+
+  2. Parser chaque fichier et récupérer le texte le plus haut dans la première
+page
+
+  3. Enregistrer le fichier avec cette valeur
+
+Très simple en apparence. Mais c'est sans compter sur le fait que les fichiers
+PDF ont une structure disons pas très naturelle. J'ai donc du passer un
+certain temps à comprendre cette structure. Pour ce faire j'ai utilisé la
+libraire [PDFMiner][4] codée par [Yusuke Shinyama][5] qui a fait un excellent
+boulot en l'occurence. Après avoir atteint ces 3 objectifs j'ai simplement du
+me pencher sur les possibilités de python à compiler le tout en exécutable
+Mac... Et là c'est [stackoverflow qui m'a aidé][6]... [py2app][7] m'a permis
+de compiler le tout et hop le tour est joué! Sur ce, l'expérience python m'a
+une fois de plus convaincu mais qu'est-ce qu'en a pensé mon client? Aussi
+clair qu'un code Python:
+
+> Test réussi! C'est parfait. Je vous remercie beaucoup de l'excellente
+collaboration.
+
+Ca fait toujours plaisir :D
+
+   [1]: www.python.org
+
+   [2]: http://www.tiobe.com/index.php/content/paperinfo/tpci/index.html
+
+   [3]: http://www.poxd.org/2008/07/10/netbeans-et-python/
+
+   [4]: http://www.unixuser.org/~euske/python/pdfminer/index.html
+
+   [5]: http://cs.nyu.edu/yusuke/
+
+   [6]: http://stackoverflow.com/questions/2933/an-executable-python-app
+
+   [7]: http://svn.pythonmac.org/py2app/py2app/trunk/doc/index.html
+
+
+{% endarticle %}
+{% endblock %}

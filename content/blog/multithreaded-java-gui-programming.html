@@ -1,0 +1,55 @@
+{% extends '_post.html' %}
+{%hyde
+title: "Multithreaded Java GUI Programming"
+created: 2007-10-02%}
+{% block article %}
+{% article %}
+J'ai lu récemment [cet article][1] sur InformIT. J'ai cependant une petite
+précision à faire. Il est en effet important de connaître la structure de
+swing au niveau threading avant de faire passer une application monothread à
+une application multithread. Ce n'est pas aussi simple que l'article semble le
+montrer.
+
+Au départ de toute application, swing ou pas, la machine virtuelle démarre un
+thread de lancement. Ce thread a pour nom le _main-thread_, c'est donc au sein
+de celui-ci qu'est lancé la méthode _main_ de votre application. Ensuite votre
+code peut initialiser, lancer, tuer des threads à souhait. Mais lorsque vous
+développez une application graphique avec le framework swing, un thread
+additionnel est lancé. Il se nomme l'_Event Dispatch Thread (_abbrévié _EDT)_.
+Ce thread a pour but de gérer les interactions de l'utilisateur et l'affichage
+des composants graphiques de votre application. Ce qui est important c'est que
+ce thread n'ait à faire que des tâches très courtes afin que votre application
+ne gèle pas mais également que tout changement d'apparence de votre
+application passe par lui.
+
+Si maintenant nous revenons à l'article de Monsieur [Morris][2] nous pouvons
+voir en page 3 que pour lui passer une application swing en multithreading est
+aussi simple que de créer un thread lors d'un clic de bouton et le lancer. Ce
+pourrait en effet paraître très facile! Mais il faut faire très attention en
+suivant cette méthode... En effet si vous mettez à jour votre application
+depuis le thread lancé il peut vous arriver malheur et ce qu'il fait dans
+l'article.
+
+En revenant à notre description (très rapide) de l'architecture swing nous
+nous rappelons de l'EDT. Tout ce qui concerne un changement graphique doit
+passer par ce thread puisque c'est lui gère **tout** (redimensionnement,
+rafraîchissement, disposition...) ! Il existe plusieurs méthodes dans l'API de
+java qui permettent d'ajouter une tâche à effectuer dans l'EDT:
+[SwingUtilities.invokeLater(Runnable r)][3] et
+[SwingUtilities.invokeAndWait(Runnable r)][4]
+
+Je vous laisse consulter la documentation pour connaître leur spécificités.
+Tout cela pour dire qu'il ne faut pas oublier de passer par l'EDT pour changer
+l'aspect de votre application pour ne pas avoir de surprise.
+
+   [1]: http://www.informit.com/articles/article.aspx?p=787119&seqNum=1
+
+   [2]: http://www.informit.com/authors/bio.aspx?a=ff0e7b03-51ce-4983-9e3f-68485b1e8ceb
+
+   [3]: http://java.sun.com/javase/6/docs/api/javax/swing/SwingUtilities.html#invokeLater(java.lang.Runnable)
+
+   [4]: http://java.sun.com/javase/6/docs/api/javax/swing/SwingUtilities.html#invokeAndWait(java.lang.Runnable)
+
+
+{% endarticle %}
+{% endblock %}

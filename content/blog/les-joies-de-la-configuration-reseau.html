@@ -1,0 +1,50 @@
+{% extends '_post.html' %}
+{%hyde
+title: "Les joies de la configuration réseau"
+created: 2007-10-05%}
+{% block article %}
+{% article %}
+/etc/modprobe.c/blacklist : un fichier important! .... La configuration de
+serveur, stations et autres périphériques est la chose la plus ennuyeuse à mes
+yeux en informatique. Mais bon il faut bien y passer de temps en temps. J'ai
+enfin terminé la configuration de mon serveur sous ubuntu feisty. Si vous
+possédez comme moi un chip sis 191 comme carte ethernet voici quelques notes
+importantes:
+
+Le driver intégré à la distrib fait arrêter le démarrage de votre os. Il faut
+donc désactiver le composant depuis le bios. Ensuite pour installer le driver
+on est obligé, à ma connaissance mais ca peut très bien évoluer, de passer par
+un driver windows. Il vous faut donc le dowloader depuis le site de sis.
+Ensuite il va falloir installer ndiswrapper qui permet d'installer le driver:
+
+  * sudo ndiswrapper -i _nom_driver.inf_
+
+  * sudo depmod -a
+
+  * sudo modprobe ndiswrapper
+
+  * sudo ndiswrapper -m
+
+Voilà ndiswrapper est maintenant configuré. Ce qu'il m'a fallu encore faire
+que [je n'ai pas trouvé sur cette procédure][1] c'est d'ajouter le module
+sis190 au fichier /etc/modprobe.c/blacklist. Il faut juste ajouter blacklist
+sis190 et le tour est joué. Sans ajouter cette ligne, ubuntu va tenter de
+charger ce module pour la carte réseau et va faire planter le démarrage. Après
+blacklistage, ndiswrapper prend les choses en main et tout fonctionne.
+
+C'était le plus compliqué à trouver mais maintenant c'est tout bon j'ai mon
+serveur ssh qui tourne dessus et grâce à [ce driver][2] il est enfin possible
+de lire et écrire sur partition ntfs donc je n'ai pas à me casser bonbon à
+convertir/réorganiser toutes mes partitions... Ouf! Voilà qui est bien, enfin
+fini... Ah et pis chose rien à voir... Si vous voulez utiliser tomcat sur
+système Unix (en tout cas sur mac), ajouter bien l'autorisation d'exécution à
+tous les fichiers .sh sinon vous vous prendrez une erreur concernant une
+variable BASEDIR... Enfin bon pas toujours logique.
+
+   [1]: http://ubuntuforums.org/archive/index.php/t-522139.html
+
+   [2]: http://www.ntfs-3g.org/
+
+
+{% endarticle %}
+{% endblock %}

@@ -3,7 +3,7 @@
 <rss version="2.0">
    <channel>
       <title>PoXd</title>
-      <link>http://localhost:8080/</link>
+      <link>http://www.poxd.org//</link>
       <description></description>
       <language>fr</language>
       <pubDate></pubDate>
@@ -14,14 +14,14 @@
           
       <item>
          <title>Pourquoi j’envie les développeurs Erlang</title>
-         <link>http://localhost:8080/blog/pourquoi-jenvie-les-developpeurs-erlang/</link>
+         <link>http://www.poxd.org/blog/pourquoi-jenvie-les-developpeurs-erlang.html</link>
          <description></description>
          <pubDate>2009-06-16 00:00:00</pubDate>
          <author>jacqueminv@gmail.com</author>
       </item>    
       <item>
          <title>Unix a 40 ans</title>
-         <link>http://localhost:8080/blog/Unix-a-40-ans/</link>
+         <link>http://www.poxd.org/blog/Unix-a-40-ans.html</link>
          <description></description>
          <pubDate>2009-06-14 00:00:00</pubDate>
          <author>jacqueminv@gmail.com</author>

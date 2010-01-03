@@ -3,7 +3,7 @@
 <rss version="2.0">
    <channel>
       <title>PoXd</title>
-      <link>http://localhost:8080/</link>
+      <link>http://www.poxd.org//</link>
       <description></description>
       <language>fr</language>
       <pubDate></pubDate>
@@ -13,15 +13,22 @@
       <webMaster>jacqueminv@gmail.com</webMaster>
           
       <item>
+         <title>Critique de livre: Les jeux funéraires -- Alexandre le Grand tome 3</title>
+         <link>http://www.poxd.org/blog/critique-de-livre-les-jeux-funeraires.html</link>
+         <description></description>
+         <pubDate>2009-11-28 00:00:00</pubDate>
+         <author>jacqueminv@gmail.com</author>
+      </item>    
+      <item>
          <title>Critique de livre: L'enfant perse</title>
-         <link>http://localhost:8080/blog/critique-de-livre-l-enfant-perse/</link>
+         <link>http://www.poxd.org/blog/critique-de-livre-l-enfant-perse.html</link>
          <description></description>
          <pubDate>2009-09-16 00:00:00</pubDate>
          <author>jacqueminv@gmail.com</author>
       </item>    
       <item>
          <title>Critique de livre: Histoire de la guerre du Péloponnèse, tome 1</title>
-         <link>http://localhost:8080/blog/critique-de-livre-histoire-de-la-guerre-du-peloponnese-tome-1/</link>
+         <link>http://www.poxd.org/blog/critique-de-livre-histoire-de-la-guerre-du-peloponnese-tome-1.html</link>
          <description></description>
          <pubDate>2009-07-25 00:00:00</pubDate>
          <author>jacqueminv@gmail.com</author>

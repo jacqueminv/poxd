@@ -3,29 +3,46 @@
     listing: true
 %}
 {% block main_content %}
-<div class="yui-gf" id="archives">
+<div class="yui-ge" id="archives">
 <div class="yui-u first">
-<h2>Parcourir par catégories</h2>
-{% for category in categories.keys %}
-<li>{{category}}</li>
-{% endfor %}
-</div>
-<div class="yui-u">
 <ul>
 {% for post in page.node.walk_pages %}
     {% if not post.listing %}
     {% ifchanged post.created.month %}
-    <li class="month"><h1>{{post.created|date:"F Y"|title}}</h1></li>
+    {% if forloop.first %}
+    <li class="month"><h1 class="section first">{{post.created|date:"F Y"}}</h1><!--<h1>{{post.created|date:"F Y"|title}}</h1>--></li>
+    {% else %}
+    <li class="month"><h1 class="section">{{post.created|date:"F Y"}}</h1><!--<h1>{{post.created|date:"F Y"|title}}</h1>--></li>
+    {% endif %}
     {% endifchanged %}
-    <li class="entry"><div class="day">{{post.created|date:"l j"|title}}</div>
-        <a href="{{post.url}}">
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">{{post.created|date:"j/m"|title}}</span></div>
+        <div class="yui-u" style="width:88%"><a href="{{post.url}}">
         {% with post.name_without_extension|remove_date_prefix|unslugify as default_title %}
+            {% filter typogrify %}
             {{post.title|default_if_none:default_title }}
-        {%endwith%}</a>
+            {% endfilter %}
+        {%endwith%}</a></div>
+        <hr class="clear"/>
     </li>
     {% endif %}
 {% endfor %}
 </ul>
+</div>
+
+<div class="yui-u sidebar">
+<h1 class="first">Recherche</h1>
+<form action="http://www.google.com/cse" id="cse-search-box">
+  <div>
+    <input type="hidden" name="cx" value="003809943872332300594:qkaoz1sxboo" />
+    <input type="hidden" name="ie" value="UTF-8" />
+    <input type="text" name="q" size="31" style="width:97%;" onkeypress="poxd.checkEnter();" />
+    <!--<input type="submit" name="sa" value="Rechercher" />-->
+  </div>
+</form>
+{% for category in categories.keys %}
+<!--<li>{{category}}</li>-->
+{% endfor %}
 </div>
 </div>
 {% endblock %}

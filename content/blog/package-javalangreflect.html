@@ -1,0 +1,148 @@
+{% extends '_post.html' %}
+{%hyde
+title: "Package java.lang.reflect"
+created: 2008-05-09%}
+{% block article %}
+{% article %}
+Après avoir substantiellement passé en revu le package [java.lang][1], je vais
+me porter sur java.lang.reflect durant ce post. Comme son nom l'indique, nous
+retrouvons dans ce package tout l'attirail nécessaire pour jouer avec la
+_reflection_. Autrement dit, en ciblant un objet donné, nous pourrons
+découvrir chacun de ses membres.
+
+### A quoi ça sert ?
+
+Concrètement, la _reflection_ trouve son utilité par exemple
+dans les éditeurs de développement (IDE). Comme l'image ci-dessous le montre,
+ces outils nous permettent de découvrir la structure d'une classe mais aussi
+où est-ce qu'elle se trouve dans la hierarchie objet. Ceci souvent au moyen
+d'un arbre et ce que ce soit en cours de développement mais encore, de manière
+avantageuse, en cours de débugage. 
+
+![eclipse_refl][2]
+
+Il existe d'autres utilisations à la reflection comme par exemple dans les processus de sérialisation, dans
+l'utilisation d'objets métiers distribués (EJB), les containers web et
+d'inversion de contrôle etc. Mais dans la pratique comment font donc ces IDE
+pour nous décrire la structure de nos objets? C'est ce que nous allons
+découvrir maintenant avec la suite de cet article.
+
+### Les classes de bases
+
+En plus des classes se trouvant dans ce package, il nous faudra également
+faire appel à une classe étant dans le package java.lang: [Class][3]. Je n'en
+avais pas encore parlé, voici donc le moment venu... Class représente une
+classe (ou une interface) tournant dans la machine virtuelle. Les objets Class
+sont créés automatiquement par la JVM au moyen du [ClassLoader ][4](faisant
+aussi parti du package java.lang) au chargement. Il nous faut en premier lieu
+utiliser cette classe avant de pouvoir profiter du contenu de
+java.lang.reflect: `Class lClazz = Class.forName(className);` Suite à
+l'exécution de cette ligne de code nous pouvons être certains qu'un objet
+Class correspondant est créé. En effet, le ClassLoader ne va pas charger
+toutes les classes de la librairie (ouf!) mais uniquement celles qui sont
+utilisées dans l'application.
+
+![reflect][5]
+
+Comme exemple j'ai créé une petite application[^1] listant tous les membres d'une classe entrée par l'utilisateur.
+
+[^1]: Vous pouvez retrouver le code source en cliquant [ici][6] -- code de démo, entrez dans le
+champ texte par exemple org.poxd.Reflect ou n'importe quelle classe du JDK
+
+Comme vous pouvez le constater dans les sources après avoir l'objet Class tout
+est accessible grâce aux classes [Constructor][7], [Field][8], [Method ][9]et
+[Modifiers ][10]de l'API java.lang.reflect. A noter que grâce à la reflection,
+il est possible de contourner les modificateurs d'accès! Pour davantage
+d'informations, je vous invite à lire _[Accès privé... pas tant que ça][11]_.
+
+Voilà pour les bases de la reflection. Maintenant un peu plus intéressant,
+découvrons l'utilisation des Proxy et leur importance au sein d'un certain
+framework.
+
+### Proxy
+
+La classe [Proxy][12] offre la possibilité de créer des [proxy
+dynamiques][13]. Autrement dit, elle permet d'ajouter une couche entre un
+objet _target_ et son créateur. Pourquoi rajouter une couche direz-vous... Eh
+bien pour le découvrir entrons dans les entrailles du framework [Spring][14][^2]. L'un des modules de Spring permet de faire de
+la programmation par aspect (AOP pour Aspect Oriented Programming) ce qui
+offre la possibilité de créer des classes avec une meilleure granularité.
+Voici par exemple la configuration XML permettant d'afficher un message sur la
+console avant l'appel de certaines méthodes: 
+
+{% syntax xml %}
+<bean id="kwikEMart" 
+    class="org.springframework.aop.framework.ProxyFactoryBean">
+    <!-- interface interface implémentée par l'objet _target_ -->
+    <property name="proxyInterfaces">
+        <value>org.poxd.store.KwikEMArt</value>
+    </property> 
+    <property name="interceptorNames"> 
+        <list> 
+            <value>welcomeAdvice</value> 
+        </list> 
+    </property> 
+    <property name="target">
+        <ref="kwikEMartTarget"/>
+    </property>
+</bean> `
+{% endsyntax %}
+
+[^2]: Pour une description de ce framework, consultez la section _About_ du site [www.springframework.org][15]
+
+Nous n'avons ici qu'une partie du travail à effectuer mais il y a ce qu'il
+nous faut. Ce bout de code XML permet à Spring de créer un _ProxyFactoryBean_.
+Cette classe offre la possibilité d'ajouter des _interceptors_ dans le
+_workflow_ de votre application. Dans notre cas, le bean correspondant à
+welcomeAdvice sera appelé (suivant une règle définie ailleurs) par exemple
+avant l'invocation de la méthode start de notre application pour afficher un
+message de bienvenue_._
+
+![proxy][16] 
+
+A la base nous avons toujours notre classe ne contenant aucun
+appel à welcomAdvice. C'est Spring qui va rajouter cet appel avant de
+poursuivre avec la classe que nous avons développé au départ. Pour ce faire,
+Spring utilise un Proxy. L'image ci-contre démontre bien le fonctionnement.
+Avant que le proxy _invoke_ l'objet _target_ il peut faire n'importe quelle
+opération (dans notre cas appeler welcomeAdvice)! Et de notre côté,
+l'architecture n'est pas touchée, nos classes ont un _focus_ bien défini.
+
+Voilà en pour ce qui concerne le package java.lang.ref. En attendant que je me
+penche sur une partie du JDK, les commentaires sont les bienvenus!
+
+   [1]: http://www.poxd.org/2008/04/01/package-javalang/
+
+   [2]: http://www.poxd.org/wp-content/uploads/2008/05/eclipse-refl.png
+
+   [3]: http://java.sun.com/javase/6/docs/api/java/lang/Class.html
+
+   [4]: http://java.sun.com/javase/6/docs/api/java/lang/ClassLoader.html
+
+   [5]: http://www.poxd.org/wp-content/uploads/2008/05/reflect1.png
+
+   [6]: http://www.digitalbucket.net/Public/Download.ashx?q=a7379e6a0dec4b03da8a248a9e155659
+
+   [7]: http://java.sun.com/javase/6/docs/api/java/lang/reflect/Constructor.html
+
+   [8]: http://java.sun.com/javase/6/docs/api/java/lang/reflect/Field.html
+
+   [9]: http://java.sun.com/javase/6/docs/api/java/lang/reflect/Method.html
+
+   [10]: http://java.sun.com/javase/6/docs/api/java/lang/reflect/Modifier.html
+
+   [11]: http://progx.org/index.php?section=replies&newsid=572
+
+   [12]: http://java.sun.com/javase/6/docs/api/java/lang/reflect/Proxy.html
+
+   [13]: http://fr.wikipedia.org/wiki/Proxy_%28patron_de_conception%29
+
+   [14]: http://www.springframework.org/
+
+   [15]: http://www.springframework.org
+
+   [16]: http://www.poxd.org/wp-content/uploads/2008/05/proxy1.gif
+
+
+{% endarticle %}
+{% endblock %}

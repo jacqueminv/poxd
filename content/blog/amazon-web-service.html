@@ -1,0 +1,101 @@
+{% extends '_post.html' %}
+{%hyde
+title: "Amazon Web Service"
+created: 2007-12-12%}
+{% block article %}
+{% article %}
+Les applications aujourd'hui connectées à Internet peuvent interroger des
+services web afin d'obtenir des données externes aux objets de l'application.
+Il est ainsi possible d'interroger des miliers de bases de données en ligne.
+
+Nous avions par exemple vu l'application Delicious Library. L'appel d'un
+service web se fait au moment où on lance une recherche à propos d'un média.
+En entrant un simple mot vous obtenez une liste de livre, cd, dvd ou encore de
+jeux vidéos correspondant à votre recherche. L'application utilise le service
+web de la plateforme amazon et par cet article je vais démontrer la facilité
+avec laquelle il est possible d'interroger se service web en Java. C'est
+parti!
+
+Il faut tout d'abord créer un compte sur la plateforme depuis cet url :
+[http://www.amazon.com/gp/browse.html?node=3435361][1]
+
+Après inscription il est possible d'obtenir un identifiant (acces key id)
+nécessaire à l'interrogation du service web. Il nous manque plus que le lien
+reliant notre application et le service web. L'utilitaire en ligne de commande
+wsimport va nous créer ce lien. Cet outil est intégré au JDK. Donc si
+l'environnement est bien configuré il sera possible de directement lancer cet
+utilitaire depuis le prompt. Sinon il faudra vérifier que le répertoire JDK
+est bien référencé dans le _PATH _de l'environnement.
+
+Utilisons donc cet utilitaire pour nous créer les classes nécessaires à
+l'interrogation du service web. Pour cela rien de plus simple : `wsimport
+http://www.amazon.com/gp/browse.html?node=3435361 -d src -p org.poxd.gen`
+Après exécution de cette ligne dans le shell (prompt DOS ou shell unix) un
+ensemble de classes sont créées. Celles-ci feront tout le travail
+d'interrogation sur le service web.
+
+Suite à la création de ces classes, nous allons les utiliser afin d'interroger
+amazon pour nous retourner les résultats de livres pour un auteur renseigné
+par l'utilisateur dans une application graphique. L'aspect graphique peut en
+rebuter plus d'un lorsqu'il faut s'attaquer à la librairie swing qui a
+mauvaise réputation. Cependant en utilisant Netbeans il devient très facile
+d'arranger des composants ensembles grâce à Matisse son _GUI Builder. _En 2
+minutes on peut se créer une fenêtre contenant une liste, un champ de texte,
+un bouton, une barre de menu et une gestion complète du positionnement et de
+la taille de la fenêtre qui vont être mémorisées à la fermeture de
+l'application pour les restaurer au prochain démarrage. Voici le rendu de mon
+application :
+
+![aws-gui][2]
+
+Netbeans s'appuie sur l'Application framework développé par Sun ce qui tend à
+rendre les choses plus facile pour ce genre de développement. Tout ce qui est
+de la gestion de l'internationalisation, des actions, du modèle de Swing est
+plus accessible à tout développeur.
+
+Maintenant si nous retournons à notre application nous allons y intégrer
+l'appel au service web d'amazon en passant par nos classes générées par
+wsimport. Pour récupérer donc une liste de livres correspondant à un auteur le
+tout est aussi simple que ça:
+
+{% syntax java %}
+AWSECommerceService service = new AWSECommerceService();
+AWSECommerceServicePortType portType = 
+            service.getAWSECommerceServicePort();
+ItemSearchRequest request = new ItemSearchRequest(); 
+Holder<OperationRequest> operationrequest = 
+            new Holder<OperationRequest>();
+Holder<java.util.List<Items>> items = 
+            new Holder<java.util.List<Items>>();
+request.setSearchIndex("Books"); 
+request.setAuthor("tevis"); 
+ItemSearch search = new ItemSearch(); 
+search.setAWSAccessKeyId(AWSID);
+search.getRequest().add(request); 
+List result = new ArrayList();
+portType.itemSearch("", AWSID, AWSID, "", "", "", request,
+search.getRequest(), operationrequest, items);
+{% endsyntax %} 
+
+La variable AWSID étant la clé fournie par amazon après création d'un compte. A ce moment-là, la liste
+_result _contient toutes les informations dont on peut avoir besoin! Tout est
+accessible depuis son membre _value_. Pour de plus amples informations sur ce
+qui est possible et comment je vous laisse consulter le centre de ressources
+d'amazon. Voici en quelques minutes ce que l'on peut obtenir conjointement
+avec les services web d'Amazon et Netbeans 6.
+
+![result-aws][3]
+
+Vous pouvez trouver les sources [ici][4].
+
+   [1]: http://www.amazon.com/gp/browse.html?node=3435361
+
+   [2]: http://www.poxd.org/wp-content/uploads/poxd.files.wordpress.com/2007/12/sans-titre.jpg
+
+   [3]: http://www.poxd.org/wp-content/uploads/poxd.files.wordpress.com/2007/12/result.jpg
+
+   [4]: http://digitalbucket.net/Public/Download.ashx?q=9f5316edbe182634c7f80eb879642cda
+
+
+{% endarticle %}
+{% endblock %}

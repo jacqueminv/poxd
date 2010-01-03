@@ -1,0 +1,49 @@
+{% extends '_post.html' %}
+{%hyde
+title: "Parfois la solution est juste plus simple que ce que l'on pensait..."
+created: 2009-02-18%}
+{% block article %}
+{% article %}
+La lecture de The Pragmatic Programmer from journeyman to master vaut la
+peine. Le chapitre que je viens de terminer m'a une fois de plus permis de
+garder à l'esprit certains points dont on est certainement tous conscients,
+mais les mettre par écrit fait parfois toute la différence.
+
+## Il doit y avoir un moyen plus facile!
+
+Qui ne s'est pas retrouvé un jour face un problème technique n'offrant
+visiblement aucune solution? Tourner le problème dans tous les sens ne suffit
+parfois pas à le résoudre: on est bloqué! La deadline approche, c'est la
+panique! Il est bon à ce moment-là - voir bien avant si possible - de ce poser
+ce genre de questions:
+
+  * Est-ce qu'il y a une autre solution plus facile à implémenter? Est-ce
+qu'il est obligé de le résoudre de cette manière? Parfois faire les choses
+juste autremement peut être non seulement plus facile à implémenter mais
+encore mieux: offrir une solution que le client n'avait pas forcément imaginée
+et qui l'enchante!
+
+  * Est-ce que je suis en train de passer mon temps sur le vrai problème?
+Attention! Les défis techniques peuvent se transformer en vraies de trappes
+mangeuses de temps.
+
+  * Pourquoi ce problème est-il un? Pourquoi est-ce si difficile de le
+résoudre? Le formuler, à soi ou à un collègue peut ouvrir la porte à une
+solution.
+
+  * Est-ce que la fonctionnalité sous-jacente nous posant problème à
+implémenter est réellement indispensable? "Instead of outdoing, try
+underdoing." - [Build Less][1] du livre [Getting Real][2]
+
+Je ne sais pas pourquoi mais il m'arrive régulièrement de rester bloqué sur un
+problème et de me rendre compte tout d'un coup que la solution pourrait être
+beaucoup plus simple! Mais est-ce que je suis le seul dans ce cas? Une chose
+est sûre, ce genre de questions ne peut qu'aider à s'en sortir!
+
+   [1]: http://gettingreal.37signals.com/ch02_Build_Less.php
+
+   [2]: http://gettingreal.37signals.com/index.php
+
+
+{% endarticle %}
+{% endblock %}

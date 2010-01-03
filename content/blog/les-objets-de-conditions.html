@@ -1,0 +1,77 @@
+{% extends '_post.html' %}
+{%hyde
+title: "Les objets de conditions"
+created: 2007-09-26%}
+{% block article %}
+{% article %}
+La JDK 5 a apporté de nombreuses fonctionnalités au niveau du développement
+multi-threading. Aujourd'hui j'aimerais discuter un peu des objets de
+conditions.
+
+Un objet de condition permet de définir une condition (non pas vrai?) à
+remplir avant de continuer le processus définit par votre programme. Imaginons
+que vous développiez une application de gestion de stock pour le garage
+Marielo du centre du patelin. Angelo, le gérant, veut pouvoir gérer son stock
+depuis la maison mais également que ses employés puissent le mettre à jour
+directement avec les clients lors d'un devis ou d'une commande spécifique.
+Maintenant passons par-dessus toute l'analyse, que vous avez d'ailleurs
+parfaitement effectuée avec Angelo lui-même, pour arriver au coeur de votre
+application: la méthode _removePieceFromStock(Piece p, int quantity)_. Dans
+cette méthode l'utilisation d'objets de conditions devient évidente. En effet
+dans le cas ou plusieurs clients (de votre application donc) appellent cette
+méthode il vous faudra vérifier que votre stock contient bien le nombre de
+pièces à commander. S'il s'avère que le nombre de pièces est suffisant vous
+pouvez alors les retirer. Avant de vérifier le nombre de pièces en stock vous
+aurez obtenu un verrou sur l'objet courant du fait que cette méthode modifie
+l'état de votre stock. Maintenant si vous obtenez le verrou pour l'objet et
+que votre condition échoue... Vous devez libérer le verrou de l'objet afin que
+le stock puisse à nouveau être fourni en pièce(s) qu'il vous faut.
+
+Avant la JDK 5 la seule possibilité d'utiliser un objet de condition était
+d'en créer soi-même et de gérer les accès depuis plusieurs threads. Autant
+dire que sans être un expert du genre les erreurs de conception ou du moins
+les performances pouvaient s'en ressentir très facilement.
+
+Le package java.util.concurrent.lock fournit 2 classes particulièrement utiles
+dans notre situation. Je veux parler de Lock et de Condition. L'interface Lock
+définit un objet de verrou (plusieurs implémentations existent au sein du
+JDK). La classe Condition quant à elle représente un objet de condition. Un
+objet Lock comporte de nombreux avantages par rapport à une conception mettant
+en oeuvre uniquement des méthodes ou des blocs _synchronized_ mais la
+définition de ces avantages n'est pas le but de ce post. Je vous laisse vous
+référer à la javadoc pour obtenir une description complète sur ces éléments de
+la librairie. Sommairement, il faut savoir qu'un objet Lock peut avoir
+plusieurs Conditions et que ces Conditions permettent de stopper le
+déroulement de votre programme lorsqu'une condition n'est pas remplie et de
+reprendre à cet endroit lorsqu'un autre thread signale que la condition peut
+avoir changé. Le principe est le même que celui des méthodes wait/notify de la
+classe Thread. Le premier avantage est pour ma part une meilleure lisibilité
+du code de l'application puisque l'on connaît directement l'objet de la
+condition à remplir.
+
+Pour finir, voici une solution possible au développement pour Angelo:
+
+{% syntax java %}
+public void removePieceFromStock(Piece p, int quantity) { 
+    try { 
+            lock.lock(); //acquiert le verrou 
+            while(getQuantity(p) < quantity)
+                insuffisantCondition.await(); //libère le verrou 
+                                              //retire le nombre de 
+                                              //pièces du stock 
+        } finally { lock.unlock(); //libère le verrou } }
+    /**
+    une autre méthode permettra de rajouter des pièces au stock; 
+    dans cette méthode il faudra signaler que la condition change 
+    en appelant la méthode insuffisantCondition.signalAll() ou 
+    insuffisantCondition.signal() ce qui permettra de relancer un
+    thread en attente sur cette condition - à noter qu'il est 
+    impératif d'obtenir le verrou qui possède la condition afin 
+    de signaler un changement d'état 
+    **/
+}
+{% endsyntax %}
+
+
+{% endarticle %}
+{% endblock %}
