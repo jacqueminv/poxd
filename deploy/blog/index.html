@@ -1,451 +1,1232 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<!DOCTYPE html>
 <html lang="fr">
     <head>
         <meta http-equiv="content-type" content="text/html; charset=utf-8">
         <title>PoXd</title>
+        <meta name="robots" content="follow, all" />
+        <link rel="openid.server" href="http://www.poxd.org/MyID.config.php" />
+        <link rel="openid.delegate" href="http://www.poxd.org/MyID.config.php" />
+        <meta name="generator" content="hyde" />
+        <link rel="alternate" type="application/rss+xml" title="PoXd RSS" href="http://feeds.feedburner.com/Poxd" />
         <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/combo?2.7.0/build/reset-fonts-grids/reset-fonts-grids.css&2.7.0/build/base/base-min.css"> 
-        <link rel="stylesheet" type="text/css" href="/media/poxd.css">
+        <link rel="stylesheet" type="text/css" href="/media/css/poxd.css">
+        <link rel="stylesheet" type="text/css" href="/media/css/syntax.css">
+        <script src="http://jqueryjs.googlecode.com/files/jquery-1.3.2.js" type="text/javascript"></script>
+        <script src="/media/js/poxd.js" type="text/javascript"></script>
+        <script type="text/javascript" src="http://www.google.com/cse/brand?form=cse-search-box&lang=fr"></script>
         <script type="text/javascript" src="http://yui.yahooapis.com/combo?2.7.0/build/yahoo-dom-event/yahoo-dom-event.js&2.7.0/build/connection/connection-min.js&2.7.0/build/json/json-min.js"></script>
-        <script type="text/javascript" src="/media/js/lt.js"></script>
         <script type="text/javascript">
-            var disqus_developer = 1;
-            var disqus_iframe_css = 'http://localhost:8080/media/css/poxd.css';
-            var disqus_no_style = false;
+            //var disqus_developer = 1;
+            //var disqus_iframe_css = 'http://localhost:8080/media/css/poxd.css';
+            //var disqus_no_style = false;
         </script>
-    <style>
-       .no-border{
-           border: 0;
-       }
-        body {
-           font-family: Helvetica, Arial, sans-serif; /**check in yui theater font css**/
-           color: rgb(41, 41, 49);
-           margin: 0;
-        }
-        a {
-          color: rgb(132, 17, 39);
-        }
-        a:hover {
-          color: black;
-        }
-        .clear{
-            clear: both;
-            visibility: hidden;
-            border:0;
-            margin: 0;   
-        }
-        h1{
-            font-size: 1.6em;
-            border-bottom: 2px solid #CCC;   
-	    margin-top: 0.2em;
-        }
-        p {
-            margin: 1em 0;
-        }
-        strong{
-            font-weight: bold;    
-        }
-        em {
-            font-style: italic;    
-        }
-        #bd {
-            padding-left: 1.1em;
-            padding-right: 1.1em;    
-        }
-        #doc > div{
-	    padding: 0.3em;
-	    padding-left: 0.6em;
-	    padding-right: 1em;
-	}
-        /*************
-            HEADER
-        **************/
-        #hd{
-            background-color: rgb(132, 17, 39);
-            color: #FFF;
-            font-size: 1.1em;
-            margin-bottom: 1.8em;
-            margin-top: 0;
-            position: relative;
-            letter-spacing: 0.1em;
-            -moz-border-radius-bottomright: 3px;
-            -moz-border-radius-bottomleft: 3px;
-            -webkit-border-bottom-right-radius: 3px;
-            -webkit-border-bottom-left-radius: 3px;
-            border-bottom-left-radius: 3px;
-            border-bottom-right-radius: 3px;
-        }
-        #hd a{
-            color: #FFF;
-            text-decoration: none;
-        }
-        #hd #logo{
-            font-size: 2.5em;
-            font-weight: bold;
-            float: left;
-        }
-        #hd #menu{
-            bottom:0.79em;
-            position:absolute;
-            right:1em;
-        }
-        #hd ul{
-            margin: 0;    
-        }
-        #hd #menu li{
-            display: inline;
-        }
-        /*************
-          HOME QUOTE
-        **************/
-        #welcome{
-           background-color: rgb(41, 41, 49); /**#292931**/
-           color: rgb(238, 238, 238); /**#EEEEEE**/
-           padding: 0.6em;
-           font-size: 3.2em;
-           font-family: Garamond, Georgia, serif;
-           font-style: italic;
-           
-           -moz-border-radius: 5px;
-           -webkit-border-radius: 5px;
-           border-radius: 5px;
-        }
-        
-        #welcome #author{
-            margin-top: 0.5em;
-            font-size: 0.7em;
-            float:right; 
-            font-style: normal;   
-        }
-        
-        #welcome blockquote{
-            margin: 0;    
-        }
-        /*************
-            FOOTER
-        **************/
-        #ft{
-            margin-top: 1em;
-            padding-top: 0.5em;
-            color: #666;
-            border-top: 1px solid #CCC; 
-            font-size: 0.9em;
-        }
-        #ft div.last{
-            text-align: right;   
-         }
-        /*************
-         HOME CONTENT
-        **************/
-	/**V2
-	
-	
-
-
-        #bd #home{
-            margin-top: 2em;
-        }**/
-        #home h1{
-            margin: 0;    
-        }
-/** V2        #home ul{
-            margin: 0;
-            margin-bottom: 0.4em;
-        }
-        #home ul li{
-            border-bottom: 1px dotted #CCCCCC;
-            padding: 6px 0;
-            line-height: 1.4em;
-            list-style-position: outside;
-            list-style-type: none;
-        }
-        #home ul li:hover{
-            background: #F9F9F9 none repeat scroll 0 0;   
-            color: #ECEBEB;
-        }
-        #home ul li a{
-            color: rgb(41, 41, 49);
-            text-decoration: none;
-            display: block;
-        } **/
-       #home h1 a{
-            color: #292931;
-            text-decoration: none;
-       }
-       #home h1 a:hover{
-            color: #4B4B53;
-       }
-        /*************
-            READINGS
-        **************/
-        #readings {
-            padding: 4px;    
-        }
-        #readings img{
-            border: 2px solid #826F72;
-            margin: 3px;
-        }
-        /*************
-            POSTS
-        **************/
-        #post{
-            text-align: justify;
-            font-size: 1.1em;
-            line-height: 1.4em;
-        }
-        .sidebar{
-            text-align: right;
-        }
-        .sidebar h2{
-            width: 85%;
-            padding: 0.7em;
-            padding-top: 0;
-        }
-        #post .sidebar div{
-            width: 85%;
-        }
-        #post .sidebar a{
-            color: #292931;
-            font-weight: bold;
-            text-decoration: none;
-        }
-        #post .sidebar a:hover{
-            color: gray;
-        }
-	#post #meta{
-	    font-size: 0.8em;
-	    line-height: 1.4em;
-	    background-color: #EEE;
-	    padding: 0.7em;
-	}
-	#post #meta h1{
-	    margin: 0;
-	    margin-bottom: 0.2em;
-	    border: 0;
-	}
-	#post #meta ul{
-	    margin: 0;
-	}
-	#post #meta ul li{
-	    list-style-type: none;
-	    list-style-position: outside;
-	}
-        #post blockquote{
-            font-family: Georgia, serif;
-            font-style: italic;
-            border-left: 0.7em solid lightgray;
-            margin-left: 1em;
-            margin-right: 2em;
-            padding-left: 1em;
-            color: gray;
-        }
-	#post ul {
-	    margin-left: 0;
-	}
-        #post ul li{
-            list-style-type: square;
-            list-style-position: inside;
-        }
-        /*************
-            CONTACT
-        **************/
-        #contact iframe .info{
-            display: none;    
-        }
-        /*************
-            DISQUS
-        **************/
-        #comments{
-            background-color: #EEE;
-            border-top: 1px solid #CCC;
-            margin-bottom: -1em;
-            margin-top: 2em;
-       }
-        #post .comment-separation{
-            font-weight: bold;
-            font-size: 1.5em;
-            text-align: center;
-            margin: 1em;
-            margin-bottom: 0;
-            color: lightgray;
-            letter-spacing: 0.2em;
-        }
-        #disqus_thread{
-            /**background-color: #F9F9F9;
-            border: 1px solid gray;   
-            -moz-border-radius: 5px;
-            -webkit-border-radius: 5px;
-            border-radius: 5px;**/
-            font-size: 0.9em;
-            position: relative;
-        }
-        #dsq-options{
-            display: none;
-        }
-        .dsq-by{
-            display: none;
-        }
-        #dsq-login-message{
-            display: none;
-        }
-        #dsq-add-new-comment{
-            display: none;
-        }
-        #dsq-content #dsq-login{
-            float:left !important;
-            margin-left: -174px;
-            margin-top: 25px;
-        }
-        #disqus_thread input.form-text{
-            
-        }
-         #disqus_thread input.submit{
-            
-        }
-        
-        #disqus_thread .dsq-comment-header{
-            background-color: rgb(132, 17, 39);    
-        }
-        
-        #disqus_thread .dsq-by {
-            float: right;   
-        }    
-        .dsq-brlink {
-            display: none;    
-        }
-        #disqus_thread .dsq-item-trackback {
-            margin-top: -10px;    
-        }
-        .dsq-authenticated-pic{
-            float: left;    
-        }
-        .dsq-authenticated-info{
-            float: left;    
-            margin-left: 1em;
-        }
-        .dsq-authenticated-info ul li{
-            list-style-type: none !important;
-        } 
-        #dsq-content #dsq-auth .dsq-authenticated-pic img{
-            height: 48px;
-            width: 48px;    
-        }
-        #disqus_thread iframe{
-            width: 100%;
-            height: 100%;
-            scrolling: no;    
-        }
-        /****************
-            ARCHIVES
-        *****************/
-        #archives li{
-            list-style-type: none;
-            list-style-position: outside;    
-        }
-        #archives li.month {
-            margin-bottom: 1em;    
-        }
-        #archives li.month h1{
-            font-size: 1.8em;
-            border:0;
-        }
-        #archives li.entry{
-            margin: 0.4em 0 0.4em 1em;    
-        }
-        #archives li.entry .day{
-            float: left;
-            width: 80px;
-            margin-right: 10px;
-            text-align: right;
-        }
-    </style>
     </head>
     <body>
         <div id="doc">
-            <div id="hd"><span id="logo"><a href="/">POXD</a></span><ul id="menu"><li><a href="/">accueil</a></li><li>&nbsp;·&nbsp;<a href="/blog">blog</a></li><li>&nbsp;·&nbsp;<a href="/">projets</a></li><li>&nbsp;·&nbsp;<a href="/">à propos</a></li><li>&nbsp;·&nbsp;<a href="/contact">contact</a></li></ul></div>
-            
-<div class="yui-gf" id="archives">
-<div class="yui-u first">
-<h2>Parcourir par catégories</h2>
-
-<li>lectures</li>
-
-<li>lien</li>
-
-<li>liens</li>
-
-<li>dev</li>
-
-<li>110 meilleurs livres</li>
-
+            <div id="hd"><span id="logo"><a href="/">Po<span id="x">X</span>d</a></span><ul id="menu"><li><a href="/blog">archives</a></li><li><a href="/">projets</a></li></ul>
 </div>
-<div class="yui-u">
+            
+<div class="yui-ge" id="archives">
+<div class="yui-u first">
 <ul>
 
     
     
-    <li class="month"><h1>Septembre 2009</h1></li>
     
-    <li class="entry"><div class="day">Mercredi 16</div>
-        <a href="/blog/critique-de-livre-l-enfant-perse/">
+    <li class="month"><h1 class="section first">novembre 2009</h1><!--<h1>Novembre 2009</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">28/11</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/critique-de-livre-les-jeux-funeraires.html">
         
-            Critique de livre: L&#39;enfant perse
-        </a>
+            
+            Critique de livre: Les jeux funéraires &#8212; Alexandre le Grand tome&nbsp;3
+            
+        </a></div>
+        <hr class="clear"/>
     </li>
     
 
     
     
-    <li class="month"><h1>Août 2009</h1></li>
-    
-    <li class="entry"><div class="day">Jeudi 27</div>
-        <a href="/blog/vous-faisiez-quoi-a-12-ans-vous/">
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">23/11</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/critique-de-livre-histoire-de-la-guerre-du-peloponnese.html">
         
-            Vous faisiez quoi à 12 ans vous?
-        </a>
+            
+            Critique de livre: Histoire de la guerre du Péloponnèse &#8212; Tome&nbsp;2
+            
+        </a></div>
+        <hr class="clear"/>
     </li>
     
 
     
     
-    <li class="month"><h1>Juillet 2009</h1></li>
-    
-    <li class="entry"><div class="day">Samedi 25</div>
-        <a href="/blog/critique-de-livre-histoire-de-la-guerre-du-peloponnese-tome-1/">
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">9/11</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/vaincre-le-burnout-et-bien-plus.html">
         
-            Critique de livre: Histoire de la guerre du Péloponnèse, tome 1
-        </a>
+            
+            Vaincre le burnout et bien&nbsp;plus
+            
+        </a></div>
+        <hr class="clear"/>
     </li>
     
 
     
     
-    <li class="month"><h1>Juin 2009</h1></li>
     
-    <li class="entry"><div class="day">Mardi 16</div>
-        <a href="/blog/pourquoi-jenvie-les-developpeurs-erlang/">
+    <li class="month"><h1 class="section">septembre 2009</h1><!--<h1>Septembre 2009</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">16/09</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/critique-de-livre-l-enfant-perse.html">
         
-            Pourquoi j’envie les développeurs Erlang
-        </a>
+            
+            Critique de livre: L&#39;enfant&nbsp;perse
+            
+        </a></div>
+        <hr class="clear"/>
     </li>
     
 
     
     
-    <li class="entry"><div class="day">Dimanche 14</div>
-        <a href="/blog/Unix-a-40-ans/">
+    
+    <li class="month"><h1 class="section">août 2009</h1><!--<h1>Août 2009</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">27/08</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/vous-faisiez-quoi-a-12-ans-vous.html">
         
-            Unix a 40 ans
-        </a>
+            
+            Vous faisiez quoi à 12 ans&nbsp;vous?
+            
+        </a></div>
+        <hr class="clear"/>
     </li>
     
 
     
     
-    <li class="entry"><div class="day">Samedi 13</div>
-        <a href="/blog/critique-de-livre-citiboy/">
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">20/08</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/ecrire-sans-ennuyer.html">
         
-            Critique de livre: Cityboy
-        </a>
+            
+            Ecrire sans&nbsp;ennuyer
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">juillet 2009</h1><!--<h1>Juillet 2009</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">25/07</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/critique-de-livre-histoire-de-la-guerre-du-peloponnese-tome-1.html">
+        
+            
+            Critique de livre: Histoire de la guerre du Péloponnèse, tome&nbsp;1
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">juin 2009</h1><!--<h1>Juin 2009</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">16/06</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/pourquoi-jenvie-les-developpeurs-erlang.html">
+        
+            
+            Pourquoi j’envie les développeurs&nbsp;Erlang
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">14/06</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/Unix-a-40-ans.html">
+        
+            
+            Unix a 40&nbsp;ans
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">13/06</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/critique-de-livre-citiboy.html">
+        
+            
+            Critique de livre:&nbsp;Cityboy
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">mai 2009</h1><!--<h1>Mai 2009</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">22/05</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/critique-de-livre-the-non-designers-design-book.html">
+        
+            
+            Critique de livre: The Non-Designer&#39;s Design&nbsp;Book
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">9/05</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/scbcd-je-taurai.html">
+        
+            
+            <span class="caps">SCBCD</span> je&nbsp;t&#39;aurai!
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">avril 2009</h1><!--<h1>Avril 2009</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">15/04</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/nouveau-venu-dans-la-famille-des-podcasts-sur-java.html">
+        
+            
+            Nouveau venu dans la famille des podcasts sur&nbsp;Java
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">4/04</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/critique-de-livre-alexandre-le-feu-du-ciel.html">
+        
+            
+            Critique de livre: Alexandre - Le feu du&nbsp;ciel
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">2/04</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/il-est-temps-de-se-mettre-a-scala.html">
+        
+            
+            Il est temps de se mettre à&nbsp;Scala
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">mars 2009</h1><!--<h1>Mars 2009</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">24/03</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/kathy-sierra-mon-choix-pour-lada-lovelace-day.html">
+        
+            
+            Kathy Sierra : mon choix pour l&#39;Ada Lovelace&nbsp;<span class="caps">DAY</span>
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">19/03</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/javascript-the-good-parts-en-video.html">
+        
+            
+            Javascript &#8220;The Good Parts&#8221; en&nbsp;vidéo
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">8/03</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/critique-de-livre-le-prince-de-machiavel.html">
+        
+            
+            Critique de livre: Le Prince de&nbsp;Machiavel
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">7/03</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/comment-ne-plus-procrastiner.html">
+        
+            
+            Comment ne plus&nbsp;procrastiner
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">février 2009</h1><!--<h1>Février 2009</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">26/02</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/elle-date-de-combien-de-temps-ta-derniere-sauvegarde.html">
+        
+            
+            Elle date de combien de temps ta dernière&nbsp;sauvegarde?
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">18/02</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/parfois-la-solution-est-juste-plus-simple-que-ce-que-lon-pensait.html">
+        
+            
+            Parfois la solution est juste plus simple que ce que l&#39;on&nbsp;pensait&#8230;
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">16/02</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/apres-destroyflickr-destroytwitter.html">
+        
+            
+            Après DestroyFlickr,&nbsp;DestroyTwitter!
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">7/02</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/les-110-meilleurs-livres-a-lire.html">
+        
+            
+            Les 110 meilleurs livres à&nbsp;lire
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">janvier 2009</h1><!--<h1>Janvier 2009</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">22/01</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/que-conseilleriez-vous-a-quelquun-qui-voudrait-devenir-programmeur-mais-sans-aller-a-luni.html">
+        
+            
+            Que conseilleriez-vous à quelqu&#39;un qui voudrait devenir programmeur mais sans aller à&nbsp;l&#39;uni?
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">16/01</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/critique-de-livre-la-religieuse-de-denis-diderot.html">
+        
+            
+            Critique de livre: La Religieuse de Denis&nbsp;Diderot
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">8/01</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/resume-2008.html">
+        
+            
+            Résumé&nbsp;2008
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">décembre 2008</h1><!--<h1>Décembre 2008</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">18/12</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/tests-unitaires-javascript-avec-yui.html">
+        
+            
+            Tests unitaires JavaScript avec&nbsp;<span class="caps">YUI</span>
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">16/12</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/critique-de-livre-un-risque-calcule-de-katherine-neville.html">
+        
+            
+            Critique de livre: Un risque calculé de Katherine&nbsp;Neville
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">14/12</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/dom-et-ses-bonnes-pratiques.html">
+        
+            
+            <span class="caps">DOM</span> et ses bonnes&nbsp;pratiques
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">12/12</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/conception-et-developpement-spring-3eme-jour.html">
+        
+            
+            Conception et développement Spring - 3ème&nbsp;jour
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">8/12</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/javafx-10-est-sorti.html">
+        
+            
+            JavaFX 1.0 est&nbsp;sorti!
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">3/12</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/test-driven-development-et-javascript.html">
+        
+            
+            Test Driven Development et&nbsp;JavaScript
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">novembre 2008</h1><!--<h1>Novembre 2008</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">30/11</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/conception-et-developpement-spring-2eme-jour.html">
+        
+            
+            Conception et développement Spring - 2ème&nbsp;jour
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">17/11</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/conception-et-dveloppement-spring-1er-jour.html">
+        
+            
+            Conception et développement Spring - 1er&nbsp;jour
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">13/11</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/world-usability-day.html">
+        
+            
+            World Usability&nbsp;Day
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">11/11</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/paris-me-voila.html">
+        
+            
+            Paris me&nbsp;voilà!
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">6/11</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/michael-crichton-sen-est-alle.html">
+        
+            
+            Michael Crichton s&#39;en est&nbsp;allé
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">octobre 2008</h1><!--<h1>Octobre 2008</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">30/10</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/critique-de-livre-les-cerfs-volants-de-kaboul-par-khaled-hosseini.html">
+        
+            
+            Critique de livre: Les cerfs-volants de Kaboul par Khaled&nbsp;Hosseini
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">27/10</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/exercice-sicp-110.html">
+        
+            
+            Exercice <span class="caps">SICP</span>&nbsp;1.10
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">23/10</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/critique-de-livre-getting-things-done-de-david-allen.html">
+        
+            
+            Critique de livre: Getting Things Done de David&nbsp;Allen
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">11/10</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/traitement-de-fichiers-pdf-en-python-et-un-client-satisfait.html">
+        
+            
+            Traitement de fichiers <span class="caps">PDF</span> en python et un client&nbsp;satisfait
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">7/10</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/critique-de-livre-toute-lhistoire-du-monde.html">
+        
+            
+            Critique de livre: Toute l&#39;histoire du&nbsp;monde
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">septembre 2008</h1><!--<h1>Septembre 2008</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">24/09</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/apprentissage-de-flex.html">
+        
+            
+            Apprentissage de&nbsp;Flex
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">16/09</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/stackoverflow-en-version-publique.html">
+        
+            
+            Stackoverflow en version&nbsp;publique
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">2/09</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/netbeans-et-php.html">
+        
+            
+            Netbeans et&nbsp;<span class="caps">PHP</span>
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">août 2008</h1><!--<h1>Août 2008</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">21/08</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/merck-serono-1er-retour-dexperience.html">
+        
+            
+            Merck Serono, 1er retour&nbsp;d&#39;expérience
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">juillet 2008</h1><!--<h1>Juillet 2008</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">21/07</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/les-atouts-de-flex-selon-ward.html">
+        
+            
+            Les atouts de Flex selon&nbsp;Ward
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">11/07</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/wiihab.html">
+        
+            
+            Wiihab
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">10/07</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/netbeans-et-python.html">
+        
+            
+            Netbeans et&nbsp;Python
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">8/07</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/wiiiiiii.html">
+        
+            
+            Wiiiiiii
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">1/07</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/lectures-5.html">
+        
+            
+            Lectures&nbsp;#5
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">juin 2008</h1><!--<h1>Juin 2008</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">16/06</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/structure-and-interpretation-of-computer-programs.html">
+        
+            
+            Structure and Interpretation of Computer&nbsp;Programs
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">13/06</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/le-matre-de-garamond.html">
+        
+            
+            Le maître de&nbsp;Garamond
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">mai 2008</h1><!--<h1>Mai 2008</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">21/05</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/building-gwt-comet-based-web-app-using-grizzly-comet.html">
+        
+            
+            Building <span class="caps">GWT</span> Comet based web app using Grizzly&nbsp;Comet
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">9/05</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/package-javalangreflect.html">
+        
+            
+            Package&nbsp;java.lang.reflect
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">8/05</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/apprendre-langlais.html">
+        
+            
+            Apprendre&nbsp;l&#39;anglais
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">avril 2008</h1><!--<h1>Avril 2008</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">30/04</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/je-suis-un-intello.html">
+        
+            
+            Je suis un&nbsp;intello!
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">20/04</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/teach-yourself-programming-in-ten-years.html">
+        
+            
+            Teach Yourself Programming in ten&nbsp;years
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">16/04</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/une-aide-bienvenue-pour-se-certifier-scwcd-2.html">
+        
+            
+            Une aide bienvenue pour se certifier&nbsp;<span class="caps">SCWCD</span>
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">1/04</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/package-javalang.html">
+        
+            
+            Package&nbsp;java.lang
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">mars 2008</h1><!--<h1>Mars 2008</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">9/03</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/la-charte-des-droits-du-programmeur.html">
+        
+            
+            La charte des droits du&nbsp;programmeur
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">février 2008</h1><!--<h1>Février 2008</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">28/02</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/lectures-4.html">
+        
+            
+            Lectures&nbsp;#4
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">janvier 2008</h1><!--<h1>Janvier 2008</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">28/01</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/lunion-fait-la-force.html">
+        
+            
+            L&#39;union fait la&nbsp;force
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">décembre 2007</h1><!--<h1>Décembre 2007</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">17/12</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/lectures-3.html">
+        
+            
+            Lectures&nbsp;#3
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">12/12</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/amazon-web-service.html">
+        
+            
+            Amazon Web&nbsp;Service
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">novembre 2007</h1><!--<h1>Novembre 2007</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">26/11</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/envie-de-rire-un-coup.html">
+        
+            
+            Envie de rire un coup&nbsp;?
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">19/11</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/java-et-le-web-20.html">
+        
+            
+            Java et le web&nbsp;2.0
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">15/11</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/lectures-2.html">
+        
+            
+            Lectures&nbsp;#2
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">octobre 2007</h1><!--<h1>Octobre 2007</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">19/10</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/la-perle.html">
+        
+            
+            La&nbsp;perle
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">10/10</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/bee.html">
+        
+            
+            Bee
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">8/10</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/adobe-air.html">
+        
+            
+            Adobe&nbsp;<span class="caps">AIR</span>
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">7/10</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/librarything.html">
+        
+            
+            LibraryThing
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">5/10</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/les-joies-de-la-configuration-reseau.html">
+        
+            
+            Les joies de la configuration&nbsp;réseau
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">2/10</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/multithreaded-java-gui-programming.html">
+        
+            
+            Multithreaded Java <span class="caps">GUI</span>&nbsp;Programming
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">1/10</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/3-applics-utiles.html">
+        
+            
+            3 applics&nbsp;utiles
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">septembre 2007</h1><!--<h1>Septembre 2007</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">26/09</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/les-objets-de-conditions.html">
+        
+            
+            Les objets de&nbsp;conditions
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">22/09</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/macbook-arrive.html">
+        
+            
+            Macbook&nbsp;arrivé!
+            
+        </a></div>
+        <hr class="clear"/>
+    </li>
+    
+
+    
+    
+    
+    <li class="month"><h1 class="section">août 2007</h1><!--<h1>Août 2007</h1>--></li>
+    
+    
+    <li class="entry">
+        <div class="yui-u first align-right" style="width:12%"><span class="postdate">23/08</span></div>
+        <div class="yui-u" style="width:88%"><a href="/blog/embauche-logica.html">
+        
+            
+            Embauche -&nbsp;Logica
+            
+        </a></div>
+        <hr class="clear"/>
     </li>
     
 
@@ -453,12 +1234,61 @@
 
 </ul>
 </div>
+
+<div class="yui-u sidebar">
+<h1 class="first">Recherche</h1>
+<form action="http://www.google.com/cse" id="cse-search-box">
+  <div>
+    <input type="hidden" name="cx" value="003809943872332300594:qkaoz1sxboo" />
+    <input type="hidden" name="ie" value="UTF-8" />
+    <input type="text" name="q" size="31" style="width:97%;" onkeypress="poxd.checkEnter();" />
+    <!--<input type="submit" name="sa" value="Rechercher" />-->
+  </div>
+</form>
+
+<!--<li>lectures</li>-->
+
+<!--<li>110 meilleurs livres</li>-->
+
+<!--<li>110 meilleures lectures</li>-->
+
+<!--<li>lien</li>-->
+
+<!--<li>dev</li>-->
+
+<!--<li>liens</li>-->
+
+<!--<li>divers</li>-->
+
+</div>
 </div>
 
             <div id="ft" class="yui-gc">
-    <div class="yui-u first">Propulsé par <a href="http://github.com/poxd/hyde">hyde</a> | design par Valentin Jacquemin</div>
+    <div class="yui-u first">Propulsé par <a href="http://ringce.com/hyde">hyde</a> | design par Valentin Jacquemin | <a href="http://twitter.com/poxd">@poxd</a></div>
     <div class="yui-u last"><a href="#doc">Retour en haut</a></div>
 </div>
         </div>
+    <script type="text/javascript">
+        $(document).ready(function () {  
+            // transition effect
+            style = 'linear';          
+            $('.book').hover(  
+                function() {    
+                    $(this).children('.caption').animate({bottom:0},{duration:200, easing: style});  
+                },
+                function() {  
+                    $(this).children('.caption').animate({bottom:-60},{duration:200, easing: style});  
+                }  
+            );
+        }); 
+    </script>
+    <script type='text/javascript' src='http://track.mybloglog.com/js/jsserv.php?mblID=2008042105271357'></script>
+    <script type="text/javascript">var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">var pageTracker = _gat._getTracker("UA-4870082-1");
+        pageTracker._initData();
+        pageTracker._trackPageview();
+    </script>
     </body>
 </html>
