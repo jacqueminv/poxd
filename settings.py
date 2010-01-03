@@ -1,9 +1,14 @@
 import os
 import logging
 
+DEBUG=True
 LOG_LEVEL = logging.INFO
 DATE_FORMAT = "j F Y"
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
+
+MD_EXTENSIONS = ['footnotes']
+PYGMENTS_OPTIONS = {'cssclass':'syntax'}
+DEFAULT_CATEGORY = 'divers'
 
 #Directories
 LAYOUT_DIR = os.path.join(ROOT_PATH, 'layout')
@@ -20,14 +25,14 @@ BACKUPS_DIR = os.path.join(ROOT_PATH, 'backups')
 BACKUP = False
 
 SITE_ROOT = "/"
-SITE_WWW_URL = "http://localhost:8080"
+SITE_WWW_URL = "http://www.poxd.org/"
 SITE_NAME = "PoXd"
 SITE_AUTHOR = "Valentin Jacquemin"
 SITE_AUTHOR_EMAIL = "jacqueminv@gmail.com"
 LANGUAGE_CODE = 'fr'
 
 #Url Configuration
-GENERATE_ABSOLUTE_FS_URLS = False
+GENERATE_ABSOLUTE_FS_URLS = True
 
 # Clean urls causes Hyde to generate urls without extensions. Examples:
 # http://example.com/section/page.html becomes
@@ -38,7 +43,7 @@ GENERATE_ABSOLUTE_FS_URLS = False
 # to map the clean urls to the actual html files.  The HtaccessGenerator site
 # post processor is capable of automatically generating the necessary
 # RewriteRules for use with Apache.
-GENERATE_CLEAN_URLS = True
+GENERATE_CLEAN_URLS = False
 
 # A list of filenames (without extensions) that will be considered listing
 # pages for their enclosing folders.
@@ -47,7 +52,7 @@ LISTING_PAGE_NAMES = ['listing', 'index', 'default']
 
 # Determines whether or not to append a trailing slash to generated urls when
 # clean urls are enabled.
-APPEND_SLASH = True
+APPEND_SLASH = False
 
 # {folder : extension : (processors)}
 # The processors are run in the given order and are chained.
@@ -70,12 +75,7 @@ MEDIA_PROCESSORS = {
     } 
 }
 
-CONTENT_PROCESSORS = {
-#    'blog/' : {
-#        '.markdown' : ('hydeengine.content_processors.CreationDateAutomator')
-#        }
-}
-
+CONTENT_PROCESSORS = {}
 SITE_PRE_PROCESSORS = {
     'blog': {
         'hydeengine.site_pre_processors.CategoriesManager': {'node':'blog'},
@@ -87,7 +87,6 @@ SITE_PRE_PROCESSORS = {
         }
     }
 }
-
 SITE_POST_PROCESSORS = {
      'media/js': {
             'hydeengine.site_post_processors.FolderFlattener' : {
@@ -113,10 +112,7 @@ CONTEXT = {
     'GENERATE_CLEAN_URLS': GENERATE_CLEAN_URLS,
     'links': {
         "jekyll": "http://github.com/mojombo/jekyll/tree/master",
-        "hyde": {
-            "download": GIT_HUB + "/hyde/zipball/master",
-            "source": GIT_HUB + "/hyde",
-            "forum": "http://groups.google.com/group/hyde-dev"}
+        "hyde": "http://ringce.com/hyde"
         }
 }
 
@@ -144,6 +140,7 @@ HSS_PATH = None # if you don't want to use HSS
 TEMPLATE_DIRS = (LAYOUT_DIR, CONTENT_DIR, TMP_DIR, MEDIA_DIR)
 
 INSTALLED_APPS = (
+    'typogrify',
     'hydeengine',
     'django.contrib.webdesign',
 )

@@ -1,39 +1,77 @@
 {% extends "skeleton/_index.html" %}
 {% block main_content %}
+<div id="post" class="yui-ge">
+<div class="yui-u first">
 {% filter typogrify %}
-<div id="post" class="yui-gf">
-<div class="sidebar yui-u first">
-<h1 class="no-border">&nbsp;</h1>
-<div id="meta">
-<!--<h1>Meta</h1>-->
+<h1 class="first" style="margin-bottom:0.2em;">{{page.title}}</h1>
+<span class="postdate">Publié le {{page.created|date:"d F Y"}}</span>
+<hr class="clear"/>
+{% markdown %}
+{% article %}
+{% block article %}{% endblock %}
+{% endarticle %}
+{% endmarkdown %}
+</div>
+<div class="yui-u sidebar">
+<div id="nav">
+<h1>Navigation</h1>
 <ul>
-  <li>Publié le {{page.created|date:"j F Y"}}</li>
-  <li>Catégorie(s): {{page.categories|join:", "}}</li>
-  {% if page.prev %}
-  <li>Suivant: <a href="{{page.prev.full_url}}">{{page.prev.title}}</a></li>
-  {% endif %}
-  {% if page.next %}
-  <li>Précédent: <a href="{{page.next.full_url}}">{{page.next.title}}</a></li>
-  {% endif %}
+    {% if page.prev %}
+    <li>&#8594; <a href="{{page.prev.url}}">{{page.prev.title}}</a></li>
+    {% endif %}
+    {% if page.next %}
+    <li>&#8592; <a href="{{page.next.url}}">{{page.next.title}}</a></li>
+    {% endif %}
 </ul>
 </div>
+<div>
+<h1>Catégories</h1>
+<ul>
+{% for c in page.categories %}
+<li>{{c}}</li>
+{% endfor %}
+</ul>
 </div>
-<div class="yui-u">
-<h1>{{page.title}}</h1>
-{% markdown %}
-{% block article %}{% endblock %}
-{% endmarkdown %}
-
+<div>
+<h1>Recherche</h1>
+<form action="http://www.google.com/cse" id="cse-search-box">
+  <div>
+    <input type="hidden" name="cx" value="003809943872332300594:qkaoz1sxboo" />
+    <input type="hidden" name="ie" value="UTF-8" />
+    <input type="text" name="q" size="31" style="width:97%;" onkeypress="poxd.checkEnter();" />
+  </div>
+</form>
+</div>
+<hr class="clear"/>
+<div>{% block meta %}{% endblock %}</div>
 </div>
 </div>
-<div class="yui-gf" id="comments">
-<div class="yui-u first sidebar"><h2>Commentaires</h2></div>
-<div id="disqus_thread" class="yui-u"></div>
-    <script type="text/javascript" src="http://disqus.com/forums/poxd/embed.js"></script>
-    <noscript>
-        <a href="http://poxd.disqus.com/?url=ref">View the discussion thread.</a>
-    </noscript>
-    <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+<div id="comments" class="yui-ge">
+    <div class="yui-u first">
+        <h2>Commenter cet article &#8594;</h2>
+        <div id="disqus_thread"></div>
+        <script type="text/javascript" src="http://disqus.com/forums/poxd/embed.js"></script>
+        <noscript><a href="http://disqus.com/forums/poxd/?url=ref">Voir le fil de discussion.</a></noscript>
+        <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+    </div>
+    <div class="yui-u sidebar">
+        <p>commentaires gérés par <span class="logo-disqus">Disqus</span></p>
+    </div>
 </div>
+<script type="text/javascript">
+        $(document).ready(function () {
+            $('#comments > .first > h2').click(function(){
+                $('#disqus_thread').toggle();
+            });
+            var links = document.getElementsByTagName('a');
+         	var query = '?';
+         	for(var i = 0; i < links.length; i++) {
+         	if(links[i].href.indexOf('#disqus_thread') >= 0) {
+         		query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
+         	}
+         	}
+         	document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/poxd/get_num_replies.js' + query + '"></' + 'script>');
+        }); 
+</script>
 {% endfilter %}
 {% endblock %}
