@@ -25,7 +25,7 @@ BACKUPS_DIR = os.path.join(ROOT_PATH, 'backups')
 BACKUP = False
 
 SITE_ROOT = "/"
-SITE_WWW_URL = "http://www.poxd.org/"
+SITE_WWW_URL = "http://www.poxd.org/" #"http://localhost:8080/"
 SITE_NAME = "PoXd"
 SITE_AUTHOR = "Valentin Jacquemin"
 SITE_AUTHOR_EMAIL = "jacqueminv@gmail.com"

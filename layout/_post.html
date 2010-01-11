@@ -1,15 +1,14 @@
 {% extends "skeleton/_index.html" %}
+{% block title %}{{site.name}} - {{page.title}}{% endblock %}
 {% block main_content %}
 <div id="post" class="yui-ge">
-<div class="yui-u first">
+<div class="yui-u first" style="width: 72%;">
 {% filter typogrify %}
 <h1 class="first" style="margin-bottom:0.2em;">{{page.title}}</h1>
 <span class="postdate">Publié le {{page.created|date:"d F Y"}}</span>
 <hr class="clear"/>
 {% markdown %}
-{% article %}
 {% block article %}{% endblock %}
-{% endarticle %}
 {% endmarkdown %}
 </div>
 <div class="yui-u sidebar">
@@ -63,14 +62,6 @@
             $('#comments > .first > h2').click(function(){
                 $('#disqus_thread').toggle();
             });
-            var links = document.getElementsByTagName('a');
-         	var query = '?';
-         	for(var i = 0; i < links.length; i++) {
-         	if(links[i].href.indexOf('#disqus_thread') >= 0) {
-         		query += 'url' + i + '=' + encodeURIComponent(links[i].href) + '&';
-         	}
-         	}
-         	document.write('<script charset="utf-8" type="text/javascript" src="http://disqus.com/forums/poxd/get_num_replies.js' + query + '"></' + 'script>');
         }); 
 </script>
 {% endfilter %}

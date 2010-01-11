@@ -12,17 +12,10 @@
       <webMaster>jacqueminv@gmail.com</webMaster>
           
       <item>
-         <title>Pourquoi j’envie les développeurs Erlang</title>
-         <link>http://www.poxd.org/blog/pourquoi-jenvie-les-developpeurs-erlang.html</link>
+         <title>Hyde: bloguer comme un hacker c'est fun!</title>
+         <link>http://www.poxd.org/blog/hyde-bloguer-comme-un-hacker-c-est-fun.html</link>
          <description></description>
-         <pubDate>2009-06-16 00:00:00</pubDate>
-         <author>jacqueminv@gmail.com</author>
-      </item>    
-      <item>
-         <title>Unix a 40 ans</title>
-         <link>http://www.poxd.org/blog/Unix-a-40-ans.html</link>
-         <description></description>
-         <pubDate>2009-06-14 00:00:00</pubDate>
+         <pubDate>2010-01-09 00:00:00</pubDate>
          <author>jacqueminv@gmail.com</author>
       </item>
    </channel>

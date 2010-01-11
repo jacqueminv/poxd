@@ -1,5 +1,4 @@
-
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?> 
 <rss version="2.0">
    <channel>
       <title>PoXd</title>
@@ -42,7 +41,7 @@
       </item>    
       <item>
          <title>Critique de livre: Cityboy</title>
-         <link>http://www.poxd.org/blog/critique-de-livre-citiboy.html</link>
+         <link>http://www.poxd.org/blog/critique-de-livre-cityboy.html</link>
          <description></description>
          <pubDate>2009-06-13 00:00:00</pubDate>
          <author>jacqueminv@gmail.com</author>
