@@ -1,10 +1,5 @@
-{% extends "skeleton/_index.html" %}
-{%hyde
-    listing: true
-%}
-{% block main_content %}
-<div class="yui-ge" id="archives">
-<div class="yui-u first">
+{% extends "_archives.html" %}
+{% block listing %}
 <ul>
 {% for post in page.node.walk_pages %}
     {% if not post.listing %}
@@ -28,21 +23,4 @@
     {% endif %}
 {% endfor %}
 </ul>
-</div>
-
-<div class="yui-u sidebar">
-<h1 class="first">Recherche</h1>
-<form action="http://www.google.com/cse" id="cse-search-box">
-  <div>
-    <input type="hidden" name="cx" value="003809943872332300594:qkaoz1sxboo" />
-    <input type="hidden" name="ie" value="UTF-8" />
-    <input type="text" name="q" size="31" style="width:97%;" onkeypress="poxd.checkEnter();" />
-    <!--<input type="submit" name="sa" value="Rechercher" />-->
-  </div>
-</form>
-{% for category in categories.keys %}
-<!--<li>{{category}}</li>-->
-{% endfor %}
-</div>
-</div>
 {% endblock %}

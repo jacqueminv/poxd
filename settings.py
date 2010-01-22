@@ -79,6 +79,7 @@ CONTENT_PROCESSORS = {}
 SITE_PRE_PROCESSORS = {
     'blog': {
         'hydeengine.site_pre_processors.CategoriesManager': {'node':'blog'},
+        'hydeengine.site_pre_processors.CategoriesArchiveGenerator': {'template':"_archives.html"},
         },
     '/': {
         'hydeengine.site_pre_processors.NodeInjector' : {
