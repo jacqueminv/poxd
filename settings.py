@@ -75,7 +75,12 @@ MEDIA_PROCESSORS = {
     } 
 }
 
-CONTENT_PROCESSORS = {}
+CONTENT_PROCESSORS = {
+    'blog/archives/': {
+        '*' : 
+            ('hydeengine.content_processors.PassthroughProcessor',)
+            }
+}
 SITE_PRE_PROCESSORS = {
     'blog': {
         'hydeengine.site_pre_processors.CategoriesManager': {'node':'blog'},

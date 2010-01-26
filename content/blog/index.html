@@ -3,6 +3,7 @@
 <ul>
 {% for post in page.node.walk_pages %}
     {% if not post.listing %}
+    {% ifequal post.node page.node %}
     {% ifchanged post.created.month %}
     {% if forloop.first %}
     <li class="month"><h1 class="section first">{{post.created|date:"F Y"}}</h1><!--<h1>{{post.created|date:"F Y"|title}}</h1>--></li>
@@ -20,6 +21,7 @@
         {%endwith%}</a></div>
         <hr class="clear"/>
     </li>
+    {% endifequal %}
     {% endif %}
 {% endfor %}
 </ul>
