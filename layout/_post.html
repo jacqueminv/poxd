@@ -27,7 +27,13 @@
 <h1>Catégories</h1>
 <ul>
 {% for c in page.categories %}
-<li>{{c}}</li>
+<li>
+{% for name, category in page.node.categories.items %}
+{% ifequal name c %}
+<a href="{{category.archive_url}}">{{name}}</a>
+{% endifequal %}
+{% endfor %}
+</li>
 {% endfor %}
 </ul>
 </div>
