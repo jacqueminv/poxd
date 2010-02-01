@@ -4,11 +4,11 @@
 {% for post in page.node.walk_pages %}
     {% if not post.listing %}
     {% ifequal post.node page.node %}
-    {% ifchanged post.created.month %}
+    {% ifchanged post.created.year %}
     {% if forloop.first %}
-    <li class="month"><h1 class="section first">{{post.created|date:"F Y"}}</h1><!--<h1>{{post.created|date:"F Y"|title}}</h1>--></li>
+    <li class="month"><h1 class="section first">{{post.created|date:"Y"}}</h1><!--<h1>{{post.created|date:"F Y"|title}}</h1>--></li>
     {% else %}
-    <li class="month"><h1 class="section">{{post.created|date:"F Y"}}</h1><!--<h1>{{post.created|date:"F Y"|title}}</h1>--></li>
+    <li class="month"><h1 class="section">{{post.created|date:"Y"}}</h1><!--<h1>{{post.created|date:"F Y"|title}}</h1>--></li>
     {% endif %}
     {% endifchanged %}
     <li class="entry">
