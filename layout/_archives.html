@@ -8,7 +8,6 @@
 {% block listing %}
 <ul>
 {% for post in posts %}
-    {% if not post.listing %}
     {% ifchanged post.created.year %}
     {% if forloop.first %}
     <li class="month"><h1 class="section first">{{post.created|date:"Y"}}</h1></li>
@@ -26,7 +25,6 @@
         {%endwith%}</a></div>
         <hr class="clear"/>
     </li>
-    {% endif %}
 {% endfor %}
 </ul>
 {% endblock %}
