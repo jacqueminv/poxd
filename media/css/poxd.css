@@ -230,18 +230,18 @@ span.date{
 /****************
       DISQUS
 ****************/
-#dsq-comments-title{display:none;}
-.dsq-options{display:none;}
+#dsq-comments-title{display:none !important;}
+.dsq-options{display:none !important;}
 #dsq-pagination{
     background:none !important;
     position: absolute;
     left: 75%;
     top: 33px;
 }
-#dsq-new-post > h3{display:none;}
-.dsq-dc-logo{display:none;}
-.dsq-item-trackback{display:none;}
-.dsq-brlink{display:none;}
+#dsq-new-post > h3{display:none !important;}
+.dsq-dc-logo{display:none !important;}
+.dsq-item-trackback{display:none !important;}
+.dsq-brlink{display:none !important;}
 #comments{
     background-color: #EEE;
     border: 1px solid #CCC;
@@ -252,4 +252,4 @@ span.date{
 #comments h2:hover{cursor:pointer;}
 #comments a{color: black;}
 #comments .sidebar{padding-top: 2em;}
-#disqus_thread{display:none;}
+#disqus_thread{display:none !important;}

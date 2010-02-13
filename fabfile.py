@@ -27,7 +27,7 @@ def smush():
 
 @hosts(PROD)
 def publish():
-#    regen()
+    regen()
     project.rsync_project(
         remote_dir=DEST_PATH,
         local_dir=DEPLOY_PATH.rstrip('/') + '/',
