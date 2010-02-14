@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<rss version="2.0">
+   <channel>
+      <title>PoXd</title>
+      <link>http://www.poxd.org//</link>
+      <description></description>
+      <language>fr</language>
+      <pubDate></pubDate>
+      <lastBuildDate></lastBuildDate>
+      <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+      <generator>Hyde</generator>
+      <webMaster>jacqueminv@gmail.com</webMaster>
+          
+      <item>
+         <title>Ton ordi ne t'appartient pas</title>
+         <link>http://www.poxd.org/blog/ton-ordi-ne-t-appartient-pas.html</link>
+         <description></description>
+         <pubDate>2010-02-09 00:00:00</pubDate>
+         <author>jacqueminv@gmail.com</author>
+      </item>
+   </channel>
+</rss>

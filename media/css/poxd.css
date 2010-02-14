@@ -252,4 +252,4 @@ span.date{
 #comments h2:hover{cursor:pointer;}
 #comments a{color: black;}
 #comments .sidebar{padding-top: 2em;}
-#disqus_thread{display:none !important;}
+#disqus_thread{display:none;}
