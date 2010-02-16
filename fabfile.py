@@ -30,6 +30,5 @@ def publish():
     regen()
     project.rsync_project(
         remote_dir=DEST_PATH,
-        local_dir=DEPLOY_PATH.rstrip('/') + '/',
-        delete=True
+        local_dir=DEPLOY_PATH.rstrip('/') + '/'
     )
