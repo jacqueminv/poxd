@@ -211,6 +211,7 @@ h1.section{
     font-size: 0.9em;    
 }
 .footnote ol p{margin-bottom:0;}
+code{background-color: #EEE; border: 1px solid #DDD;}
 /***************
     ARCHIVES
 ***************/
