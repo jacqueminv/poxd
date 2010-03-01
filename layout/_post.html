@@ -28,9 +28,9 @@
 <ul>
 {% for c in page.categories %}
 <li>
-{% for name, category in page.node.categories.items %}
-{% ifequal name c %}
-<a href="{{category.archive_url}}">{{name}}</a>
+{% for category in page.node.categories %}
+{% ifequal category.name c %}
+<a href="{{category.archive_url}}">{{category.name}}</a>
 {% endifequal %}
 {% endfor %}
 </li>
