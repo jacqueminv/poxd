@@ -1,0 +1,102 @@
+{% extends "_post.html" %}
+{%hyde
+   title: Liberté, égalité, fraternité, signum du logiciel libre
+   categories:
+    - libre
+   created: 2010-03-27
+%}
+{% block article %}
+{% article %}
+
+S'il ne fallait en mentionner qu'un ce serait lui: RMS. Maître respecté au sein
+de la nation hacker, c'est LE nom qu'on retrouve partout lorsqu'on parle du
+monde du libre.
+
+RMS pour Richard Matthew Stallman, le pionnier en chef du libre. Car même si le
+mode du libre subsistait avant sa formalisation -- je pense en premier lieu au
+milieu universitaire -- RMS a bien été le fer de lance du mouvement. Il en est
+d'ailleurs toujours l'icône et le plus vif défenseur. Voyons comment tout est
+né...
+
+# "New Unix implementation"
+
+Le 27 septembre 1983, RMS envoie sur 2 *newsgroups* son intention de développer
+un tout nouveau système d'exploitation entièrement libre. Ses intentions -- et
+par là même toute l'idéologie du libre -- ressortent bien lorsqu'il
+dit:[^1]<sup>,</sup>[^2]
+
+> Je considère comme règle d'or le fait que si j'apprécie un programme je dois
+le partager avec d'autres personnes. Je ne peux pas signer un accord de non
+divulgation et être en accord avec ma conscience.
+
+<p>&nbsp;</p>
+
+<div class="aside left"><h2><i>Free as in speech</i></h2><p>La confusion entre
+  logiciels libres et gratuité est très courante mais peut-être encore davantage
+  dans les contrées anglophones où "gratuit" et "libre" portent le même nom
+  : <i>free</i>.</p><p>Deux tournures permettent de contourner le problème et de
+  savoir de quoi l'on parle: <i>free as in speech</i> pour signifier la liberté
+  d'expression et <i>free as in beer</i> pour la gratuité.</p></div>
+
+Tout part de cette envie de partage.  Retenez donc ça: le libre veut promouvoir
+un esprit égalitaire au sein de l'industrie du logiciel. Ce qui au passage n'a
+rien à voir avec le coût mercantile du-dit logiciel. Non, ici égalitaire veut
+plutôt dire qu'un utilisateur ne doit se voir privé d'aucun de ses droits par le
+logiciel. Ceci implique principalement 4 commandements, appelés les **4
+libertés**:
+
+1. La liberté d'exécuter le programme et ce pour tout usage.
+2. La liberté d'étudier le fonctionnement du programme au moyen des sources
+fournies avec le logiciel.
+3. La liberté de redistribuer des copies payantes ou non.
+4. La liberté d'améliorer le programme et de publier ces améliorations.
+
+# "GNU's not Unix"
+
+La création de ce nouveau système d'exploitation complètement libre passe par le
+projet *GNU*[^4], un ensemble de briques applicatives. Pour y arriver le projet
+a dû regrouper de nombreux développeurs brillants même si Stallman lui-même
+n'est pas dénué de talent de ce côté-là. Jugez vous-même: c'est lui qui a --
+entre autres -- développé le fameux Emacs ou encore le compilateur C du projet
+*GNU*.
+
+A côté de ça il se penche également sur les implications légales du mouvement
+qu'il défend en mettant au jour[^3] la première licence dite libre: la fameuse
+*GNU General Public License*. Le 4 octobre 1985 cet effort mène à la création de
+la *Free Software Foundation* ayant pour objectif de promouvoir la liberté des
+utilisateurs de logiciels et de défendre leurs droits.
+
+Pour se faire cette fondation mène des campagnes[^5] de promotion, supporte le
+développement de logiciels libres -- en sponsorisant le projet *GNU* par exemple
+-- ou encore enregistre chaque année des milliers de *copyrights* auprès de
+l'administration américaine afin de pouvoir toujours mieux défendre les droits
+des logiciels libres et de leur créateurs.
+
+# Open source <span>&ne;</span> Logiciel libre
+
+Le développement du libre a ainsi pu prendre forme sur maintenant près de trois
+décennies mais en chemin un cousin est né lorsqu'en 1998 le mouvement *Open
+Source* est créé.
+
+Il ne faudrait toutefois pas le confondre avec le logiciel libre. Bien que
+l'*Open Source* obéisse au 2ème commandement du libre, il n'est pas aussi
+profondément attaché au principe éthique de liberté. Il est ainsi possible
+aujourd'hui de mêler logiciels *open source* et produits propriétaires, cela
+n'étant pas vrai du logiciel libre.
+
+Bref voilà comment en un peu plus de 500 mots on peut définir l'idéologie
+derrière le logiciel libre, ce qu'il défend, d'où il vient. Mais bien que ce
+discours de liberté soit des plus louable dans le concret qu'est-ce que cela a
+donné?
+
+Rendez-vous au prochain article de cette série pour voir les succès du logiciel
+libre.
+
+[^1]: toute traduction est de moi sauf contre indication
+[^2]: Source: [http://www.gnu.org/gnu/initial-announcement.html](http://www.gnu.org/gnu/initial-announcement.html)
+[^3]: [Eben Moglen](http://fr.wikipedia.org/wiki/Eben_Moglen) en est le co-rédacteur
+[^4]: [historique du projet -- et plus encore -- ](http://www.gnu.org/gnu/thegnuproject.fr.html) raconté par RMS lui-même
+[^5]: [comme celle ayant mené](ton-ordi-ne-t-appartient-pas.html) la création de cette série d'article
+
+{% endarticle %}
+{% endblock %}
