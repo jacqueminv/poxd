@@ -1,38 +1,21 @@
 {% extends "skeleton/_home2.html" %}
 {% block home_content %}
-{% recent_posts post 5 page.blog_node %}
+{% recent_posts post 3 page.blog_node %}
 <div id="home" class="yui-ge">
 <div class="yui-u first">
 {% filter typogrify %}
-<div id="pub" class="yui-gf" style="width: 95%;">
-    <h1 class="section">Dernières publications</h1>
+<div id="doc" class="yui-gf" style="width: 95%;">
     {% for p in post %}
-    <div class="yui-u first align-right" style="width:20%">
-        <span class="postdate">{{p.created|date:"j/m"}}</span>
-    </div>
-    <div class="yui-u first" style="width:74.2%"> 
+    <div id="post" class="yui-ge" style="width:72%"> 
         <h1 style="width: 100%;"><a href="{{p.full_url}}">{{p.title}}</a></h1>
+	<div id="content">
+	  {% render_article p %}
+	</div>
     </div>
     <hr class="clear"/>
     {% endfor %}
 </div>
 {% endfilter %}
-</div>
-<div class="sidebar yui-u">
-<h1>A propos</h1>
-<div>
-<p>Passionné de bouquins et de développement logiciel je vous accueille avec grand plaisir sur mon blog.</p>
-<p>Ne s'appuyant sur aucune base de données, ce site prend vie grâce à hyde, un générateur de sites statiques développé en python dont je suis contributeur.</p>
-<!--<p style="text-align: center; font-weight: normal; font-size: 2em;">&#955;</p>-->
-<h1>Recherche</h1>
-<form action="http://www.google.com/cse" id="cse-search-box">
-  <div>
-    <input type="hidden" name="cx" value="003809943872332300594:qkaoz1sxboo" />
-    <input type="hidden" name="ie" value="UTF-8" />
-    <input type="text" name="q" size="31" style="width:97%;" onkeypress="poxd.checkEnter();" />
-    <!--<input type="submit" name="sa" value="Rechercher" />-->
-  </div>
-</form>
 </div>
 </div>
 <br class="clear"/>
