@@ -1,0 +1,47 @@
+{% extends "_post.html" %}
+{%hyde
+   title:
+   categories:
+   created: "2010-05-14"
+%}
+{% block article %}
+{% article %}
+LiveScript -> JavaScript (NetScape <> Sun) -> ECMAScript (Microsoft)
+
+
+ES5 in IE9
+always testing if a function exist already in a prototype (prevent to erase browser implemented versions)
+parseInt always with the radix (test: parseInt('08);parseInt('08',10);+"08"
+
+Arrays
+forEach / map in Array added in ES5
+splice instead of delete:
+       myArray = ['a','b','c','d']
+       delete myArray[1]
+       //['a', undefined, 'c', 'd']
+       myArray.splie(1,1)
+       //['a','c','d'] slow!
+Array.isArray in ES5 (! typeof []; 'object')
+
+All values are objects except null and undefined
+undefined: default value
+
+Falsy values: false,null,undefined,"",0,Nan
+All others are truthy
+
+Objects are passed by reference
+=== compares references
+
+convention: uppercase for constructor (only way to *prevent* calling a constructor without the `new` keyword)
+
+safer to use only // and not /* to not disrupt regex
+
+% remainder, not modulo
+
+!! produces booleans
+
+throw {name:"",reason:""}
+
+`with` no more in ES5
+{% endarticle %}
+{% endblock %}

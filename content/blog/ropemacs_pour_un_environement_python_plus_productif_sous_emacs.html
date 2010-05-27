@@ -1,0 +1,19 @@
+{% extends "_post.html" %}
+{%hyde
+   title: "ropemacs pour un environement python plus productif sous emacs"
+   categories:
+    - dev
+    - emacs
+   created: "2010-05-08"
+%}
+{% block article %}
+{% article %}
+<table>
+<tr><td><pre>M-/</pre></td><td>rope-code-assist</td></tr>
+<tr><td><pre>C-c</pre></td><td>rope-goto-definition</td></tr>
+<tr><td><pre>C-c</pre></td><td>rope-show-doc</td></tr>
+<tr><td><pre>C-c</pre></td><td>rope-find-occurrences</td></tr>
+<tr><td><pre>M-?</pre></td><td>rope-lucky-assist</td></tr>
+</table>
+{% endarticle %}
+{% endblock %}
