@@ -93,7 +93,7 @@ La spécification de JEE 6 fait mention d'un sous-ensemble d'api[^4]
 disponible dans ce qui est appelé le web profile. Ce profile comme le
 démontre la liste des api disponibles fourni le nécessaire pour la
 plupart des applications entreprises sans inclure toutes les api
-entreprises existantes comme par exemple EJB 3.1). La notion de
+entreprises existantes comme par exemple EJB 3.1. La notion de
 profile est extensible et tout un chacun peut créer son propre profile.
 
 ### Packaging ###
@@ -102,9 +102,86 @@ Il n'est dorénavant plus impératif de créer un `ear` dès lors qu'un
 projet contient des EJB. Tout composant peut se retrouver dans une
 archive `war`. Une notion de *web fragment* apparaît également
 permettant une meilleure intégration des librairies dans les projets
-JEE.
+JEE. A noter également que le fichier `web.xml` n'est dorénavant plus
+obligatoire grâce notamment à l'ajout d'annotations telles que
+`@WebServlet` et `@WebFilter`. En parlant d'annotations une autre
+nouveauté intéressante: l'annotation `@HandlesTypes`qui permet
+d'ajouter depuis le code des mapping -- entre autre -- à chaud dans le
+container.
+
+### JAX-RS 1.1 ###
+
+L'implémentation de *RESTful web services* se fait grâce à la
+spécification JAX-RS à partir de JEE 6. Basée sur des annotations mais
+proposant également une api disponible depuis le code,
+l'implémentation de référence se nomme Jersey et elle est disponible
+conjointement avec glassfish.
+
+### EJB ###
+
+Une nouvelle version mineure fait son apparition avec en nouveauté
+quelques annotations: `@Singleton`, `@Startup` et `@Asynchronous` mais
+également comme évoqué plus haut la possibilité dorénavant de créer un
+EJB au sein même d'une application web. Plus besoin forcément d'un
+`ear`.
+
+L'`EJBContainer` voit également le jour permettant de lancer une
+instance d'un container EJB localement. Ce nouveau composant devrait
+notamment faciliter grandement les tests d'EJB mais aussi permettre
+aux applications jse d'acceuillir des EJB en leur sein.
+
+La contrainte pour la version *lite* évoquée plus haut se trouve au
+niveau du type d'EJB qu'il est permis de déployer dans cette
+version. Uniquement les EJB de type local sont permis.
+
+### Bean Validation ###
+
+Cette spécification permet la validation des propriétés au sein des
+beans au moyen soit d'annotations (ex: `@NotNull`) soit au moyen d'une
+api disponible. A noter également que cette api n'est pas dépendante
+du container, il est possible de l'utiliser depuis n'importe quel type
+d'applications.
+
+### DI -- *Dependency Injection* ###
+
+La notion d'injection de dépendances est maintenant prise en charge
+par le container. Ca va un peu plus loin que ce que fait par exemple
+Spring dans le sens que le container peut gérer la portée des
+propriétés injectées (ex: session, requête, etc.). L'annotation
+`@Resource` permet toujours d'injecter les composants configurés sur
+le serveur comme les ressources JNDI par exemple. `@Inject` fait son
+arrivée en proposant l'injection *type safe*. Autre arrivée: les
+*qualifier* qui sont des annotations définies par le développeur
+lui-même dans le but de spécifier quel type d'instance injecter. Les
+slides prennent comme exemple un objet `User` devant être injecté dans
+un `CheckoutHandler` et le *qualifier* `LoggedIn` permet de s'assurer
+que l'instance injectée sera l'utilisateur identifié à l'application
+dans ce contexte-ci.
+
+Une autre possibilité de gérer les dépendances avec JEE 6 c'est avec
+les événements qui font leur arrivée avec l'annotation `@Observe`.
+
+### Et encore... ###
+
+Des nouveautés aussi côté JSF avec support simplifié d'ajax, des
+événements systèmes mais aussi côté JPA avec l'arrivée d'une api
+*Criteria* permettant la création de requête *type-safe* et plus
+uniquement une suite de `String` source d'erreur à l'exécution.
+
+La présentation se termine avec une démo utilisant glassfish
+l'implémentation de référence de JEE 6. Petit détail intéressant
+révélé durant la démo: la possibilité de redémarer une application
+tout en gardant la session dans le même état. Pour plus de détail
+n'hésitez pas à consulter les slides ou bientôt la session directement
+puisque cette session s'est déroulée dans la salle 5 qui était filmée.
 
 [Télécharger les slides de la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a5_1100-1150_dochez.pdf)
+
+
+# CDI, Seam & RESTEasy: You haven't seen REST yet by #
+
+
+
 
 [1]: http://javafx.com/
 
