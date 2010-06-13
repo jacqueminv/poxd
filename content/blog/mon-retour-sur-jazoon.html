@@ -1,0 +1,117 @@
+{% extends "_post.html" %}
+{%hyde
+   title: "Mon retour sur Jazoon"
+   categories:
+       - dev
+   created: 2010-06-12
+%}
+{% block article %}
+{% article %}
+
+C'est dans le complex cinématographique Arena Filmcity de Zürich que
+j'ai participé à ma toute première conférence internationale sur
+Java. Sur une durée de trois jours, c'est comme un petit gamin
+émerveillé par un mur de bonbons que j'ai navigué de session en
+session dont voici un aperçu[^1].
+
+[TOC]
+
+# Le mardi #
+
+## Java SE and JavaFX: The Road Ahead ##
+
+La toute première présentation est donnée par Danny Coward, *Chief
+Architect for Client Software* chez Oracle. Membre du JCP, présent sur
+Java depuis la version 1.0, il a notamment mené la standardisation de
+l'api servlet. Il en connait donc un bout.
+
+Avec son accent british, l'orateur nous rappelle que Java a 15 ans,
+qu'il y a aujourd'hui 7 millions de développeurs Java et que Java se
+trouve partout des smartcards jusqu'aux téléviseurs. Petit clin d'oeil
+au *green project* avec un iphone des années 1990 dans les labos de Sun[^2].
+
+En revenant sur l'actualité il parle ensuite des divers évolutions
+actuellement en cours de discussion au sein du jcp pour la version 7
+du jdk. Il pointe du doigt pour commencer sur l'effort de
+refactorisation et de modularisation. Le jdk7 sera modulaire grâce à
+un système de *class loading* plus efficace en chargeant uniquement
+les classes nécessaires.
+
+L'accent est ensuite mis sur le parallèlisme. La version 7 du jdk
+améliorera les choses de ce côté-là notamment grâce à un *garbage
+collector* amélioré tournant selon les dire de Danny Coward quasiment
+en même temps que l'application. Un *framework* Fork/Join[^3] fera
+également son apparition permettant de séparer des tâches en petit
+bouts, les exécuter en parallèle et ensuite rassembler les résultats
+pour ainsi profiter de la présence de tous les processeurs de la
+machine. Ce framework est une extension du package
+`java.util.concurrent` apparu dans la version 5 du jdk.
+
+La machine virtuelle étant l'un des grands atouts de Java, il existe
+aujourd'hui plus de 200 langages pouvant s'exécuter sur celle-ci. Le
+jdk7 apportera également des améliorations à ce niveau-là notamment en
+terme de performances.
+
+Finalement concernant le code produit par les développeurs au jour le
+jour Danny Coward explique qu'ajouter de nouvelles fonctionalités à ce
+niveau-là est pris très au sérieux et bien réfléchi car une fois
+ajoutées, ces nouvelles fonctionalités restent présentes à jamais. On
+pourra néanmoins retrouver plusieurs ajouts:
+
+* *diamond type inference* : déclarations utilisant les *generics* simplifiées
+* *exception handling* : possiblité d'avoir plusieurs exceptions dans un seul `catch`
+* `try(<closeable resource){}` : utilisation simplifiée des ressources devant être 'fermées' (ex: les flux d'entrée-sortie)
+* `switch` sur des `String`
+* closures : gros sujet de discussions, aucune syntaxe n'a clairement été choisie aujourd'hui
+
+Le but étant clairement d'alléger notre code, de le rendre plus
+lisible. On retrouve plusieurs idées venant du monde des langages
+dynamiques...
+
+Pour finir Danny Coward nous parle de [JavaFX][1]. Une démo de ce qui
+a été fait pour le site des jeux olympiques de Vancouver, des
+composants compatibles du mobile à la tv, des performances améliorées,
+etc. Oracle ne lache donc pas le morceau concernant sa plateforme
+RIA. JavaFX fait d'ailleurs le sujet pas moins de six sessions.
+
+Très bonne présentation donnée par Danny Coward, la conférence
+commence alors très fort.
+
+[Télécharger les slides de la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a5_0930-1030_coward_keynote.pdf)
+
+## The Java EE 6 Platform: Powerful, Productive, Extensible ##
+
+Cette session présentée par Jérome Docher et Alexis Moussine-Pouchkine
+est là pour nous parler des nouveautés de JEE 6. Une nouvelle notion
+de profile, de nouvelles annotations, une api REST, un système de
+*packaging* simplifié et une version *lite* des EJB font notamment
+leur apparition.
+
+### Web Profile ###
+
+La spécification de JEE 6 fait mention d'un sous-ensemble d'api[^4]
+disponible dans ce qui est appelé le web profile. Ce profile comme le
+démontre la liste des api disponibles fourni le nécessaire pour la
+plupart des applications entreprises sans inclure toutes les api
+entreprises existantes comme par exemple EJB 3.1). La notion de
+profile est extensible et tout un chacun peut créer son propre profile.
+
+### Packaging ###
+
+Il n'est dorénavant plus impératif de créer un `ear` dès lors qu'un
+projet contient des EJB. Tout composant peut se retrouver dans une
+archive `war`. Une notion de *web fragment* apparaît également
+permettant une meilleure intégration des librairies dans les projets
+JEE.
+
+[Télécharger les slides de la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a5_1100-1150_dochez.pdf)
+
+[1]: http://javafx.com/
+
+[^1]: gardez un oeil sur le site de [Jazoon](http://jazoon.com) qui petit à petit met en ligne les conférences
+[^2]: retrouvez la vidéo diffusée durant la session à propos de ce projet [ici](http://blogs.sun.com/jag/entry/the_green_ui)
+[^3]: le blog insideIT.fr en fait l'objet d'un [article](http://www.insideit.fr/post/2008/09/15/Java-7-Fork/Join-:-Exploiter-toute-la-puissance)
+[^4]: JSF 2.0, JSP 2.2, EL 2.2, JSTL 1.2, JSR45 1.0, Servlet 3.0, CDI 1.0, EJB 3.1 Lite, DI 1.0, Managed Beans 1.0, Bean Validation 1.0, Interceptors 1.1, JSR250 1.1, JPA 2.0 pour être précis
+
+{% endarticle %}
+{% endblock %}
