@@ -18,6 +18,11 @@ session dont voici un aperçu[^1].
 
 # Le mardi #
 
+Ce premier jour restera mon préféré. De bonnes session d'introduction
+et de conclusion, un apéro bien sympa en fin d'après-midi et la
+découverte d'une conférence super bien organisée. Bien accueilli, bien
+nourri, tout est quasi parfait.
+
 ## Java SE and JavaFX: The Road Ahead ##
 
 La toute première présentation est donnée par Danny Coward, *Chief
@@ -178,10 +183,110 @@ puisque cette session s'est déroulée dans la salle 5 qui était filmée.
 [Télécharger les slides de la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a5_1100-1150_dochez.pdf)
 
 
-# CDI, Seam & RESTEasy: You haven't seen REST yet by #
+## CDI, Seam & RESTEasy: You haven't seen REST yet ##
+
+Dan Allen reprend ici les principes de REST tout d'abord en expliquant
+en trois points les aspects essentiels d'une architecture centrée sur
+les ressources:
+
+1. Uniforme: architecturer les URL pour adresser les besoins, les
+méthodes adressent les opérations (GET, PUT, DELETE, POST)
+2. Orienté représentation
+3. Communication sans état: plus *scalable* et plus cohérent avec le
+protocol HTTP
+
+S'ensuit quelques extraits de code avec explications utilisant JAX-RS
+comme base de référence. Il termine par une démo de RESTEasy qui se
+trouve être l'implémentation de JAX-RS par JBoss. Cette implémentation
+propose entre autre l'avantage d'avoir un serveur embarqué pour les
+tests et une forte intégration au framework Seam.
+
+Dan Allen résume finalement en citant les principaux bénéfices de REST:
+
+1. Respect du protocole HTTP
+2. Simplicité
+3. Exposition des données au travers d'une API standardisée
+
+[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a3_1200-1250_allen.pdf)
+
+## Objects of Value ##
+
+Après un bon lunch je continue avec cette session présentée par Kevlin
+Henney. Si vous avez l'occasion de le voir à une conférence ça vaut le
+coup. C'est vraiment un excellent présentateur.
+
+Il nous a parlé ici un peu philosophiquement de l'importance que nos
+objets aient une identité clairement définie. Trop souvent les
+`String` font office de fourre-tout.
+
+[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a5_1400-1450_henney.pdf)
+
+## Server-side OSGi with Apache Sling ##
+
+Le présentateur était malheureusement pas assez à l'aise pour rendre
+le sujet intéressant. Soporifique à souhait, la pause café s'est faite
+désirer...
+
+Le principe de Sling est de *mapper* une URL à une ressource et d'y
+apposer un script de traitement. Les ressources en question sont
+hierarchiquement disposées dans un *repository* JCR. Tout ça fournit
+une base solide à l'implémentation d'un CMS personalisable, d'ailleurs
+utilisé par Day Software au travers de leur solution commerciale CQ.
+
+[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a7_1500-1550_meschberger.pdf)
+
+## Servlet 3.0 -- Asynchronous, extensibility, ease of development ##
+
+La version 3 de l'api servlet -- intégrée à JEE 6 -- est vantée par
+Rajiv Mordani dans cette session suivie par une démo par Arun Gupta.
+
+Extensibilité et asynchronicité sont donc les maîtres mots de cette
+nouvelle mouture. Il est dorénavant possible -- comme vu plus haut --
+d'ajouter dynamiquement depuis le code de nouveau composants au
+container de servlet. Pour parler d'extensibilité la notion de
+fragment fait aussi son arrivée. Cela devrait faciliter la vie du
+développeur notamment lors de l'utilisation de frameworks tiers. En
+effet ces frameworks pourront se configurer d'eux-mêmes au sein de
+l'application, plus besoin de définir le nécessaire pour configurer un
+framework au sein du fichier `web.xml`.
+
+En plus de ces points forts, l'arrivée de plusieurs annotations
+devraient également faciliter notre vie... Voir la présentation The
+Java EE 6 Platform: Powerful, Productive, Extensible pour plus d'info.
+
+A noter finalement la possibilité de se passer complètement du fichier
+`web.xml` à partir de cette nouvelle version.
+
+[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a3_1630-1720_mordani.pdf)
+
+## 97 Things Every Programmer Should Know ##
+
+A nouveau une présentation par Kevlin Henney et à nouveau un vrai
+régal. Pour cette dernière session de la journée on est tous
+rassemblée dans la salle principale. Et plus d'une fois les rires ont
+émergé de l'assistance, Kevlin est vraiment un bon orateur...
+
+Cette session-ci présentait son dernier livre portant le même nom que
+la session. Ce livre est une compilation d'avis d'une ribambelle
+d'experts sollicités par Kevlin.
+
+Comme conseils on a pu retrouver par exemple:
+
+* Apprender à estimer: on négocie les objectifs, mais pas les estimations
+
+* Commenter uniquement ce que le code ne dit pas: un bon code nécessitera moins de commentaire qu'un mauvais code.
+
+* Ecrire les tests pour être lus par des humains: de bon tests font acte de documentation
+
+* Préférer des objets ayant une signification métier plutôt que d'utiliser des types primitifs. J'ai particulièrement aimé l'idée d'utiliser un *tag cloud* sur le code d'un projet. Après génération de ce *tag cloud*, si on a une idée de quoi on parle c'est mieux... L'idée est initialement présentée sur [cet article](http://fragmental.tw/2009/04/29/tag-clouds-see-how-noisy-your-code-is/).
+
+[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a5_1740-1830_henney_keynote.pdf)
+
+# Le mercredi #
 
 
 
+# Le jeudi #
 
 [1]: http://javafx.com/
 
