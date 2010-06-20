@@ -1,3 +1,4 @@
+.syntax {width: 100%; overflow: auto; margin: 1em 0;}
 .syntax .hll { background-color: #ffffcc }
 .syntax  { background: #f8f8f8; }
 .syntax .c { color: #408080; font-style: italic } /* Comment */

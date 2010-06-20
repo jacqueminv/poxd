@@ -107,8 +107,10 @@ h1{
 .sidebar #nav h1{
     margin-top: 0;
 }
+.sidebar ul li{
+    list-style-position: inside !important;
+}
 .sidebar #nav ul li{
-    list-style-position: outside;
     list-style-type: none;
     margin-bottom: 0.5em;
 }
@@ -190,6 +192,16 @@ h1.section{
 #post{
     line-height: 1.4em;
 }
+#post .yui-u.first h1.first{
+    font-size: 1.6em;
+}
+#post .yui-u.first h1, #post .yui-u.first h2, #post .yui-u.first h3{
+    font-family: Georgia, serif;
+    font-variant: normal;
+}
+#post .yui-u.first h1{
+    font-size: 1.4em;
+}
 #post blockquote{
     font-style: italic;
     border-left: 0.1em solid #841127;
@@ -198,9 +210,11 @@ h1.section{
 #post ul {
     margin-left: 0;
 }
+#post ol li, #post ul li{
+    list-style-position: outside;
+}
 #post ul li{
     list-style-type: square;
-    list-style-position: inside;
 }
 .footnote hr{
     width: 7em; 
@@ -213,6 +227,19 @@ h1.section{
 .footnote ol p{margin-bottom:0;}
 code{background-color: #EEE; border: 1px solid #DDD;}
 .links-ico{height:22px;position:relative;top:5px;}
+#post .aside{
+    width: 35%;
+    position: relative;
+    left: -4em;
+    padding: 0 10px;
+
+    font-size: 0.85em;
+    line-height: 1.2em;
+
+    border-top: 3px solid #841127;
+    background-color: #EEE;
+}
+.left{float: left;}
 /***************
     ARCHIVES
 ***************/
