@@ -316,6 +316,67 @@ disponible. Si cela vous intéresse rendez-vous sur le site officiel: [http://www
 
 ## iPhone/iPad development from the Java perspective ##
 
+Carrément impatient d'assister à cette présentation, je ne suis
+visiblement pas le seul vu l'assistance en nombre venue pour écouter
+Ognen Ivanovski prodiguer ses conseils sur le développement
+iPhone/iPad.
+
+## L'expérience utilisateur ##
+
+Premier élément évoqué: le hardware. Développer sur mobile signifie
+davantage de contraintes à ce niveau-là par rapport à du développement
+JEE sur de gros serveurs. Petit récapitulatif provenant de la
+présentation:
+
+<table>
+<tr>
+   <td>iPhone</td><td>ARM11 ~400MHZ</td>
+</tr>
+<tr>   
+   <td>iPhone 3G</td><td>128MB RAM (~50MB for an application)</td>
+</tr>
+<tr>   
+   <td>iPod Touch</td><td>Hardware Graphics Accelerator</td>
+</tr>
+<tr>   
+   <td>iPod Touch 2nd generation</td><td>slightly faster</td>
+</tr>
+<tr>   
+   <td>iPhone 3GS</td><td>ARM Cortex V8 ~600MHz / 256MB RAM</td>
+</tr>
+<tr>   
+   <td>iPad</td><td>Apple A4 SoC (ARM) ~1GHz / 256MB RAM</td>               
+</tr>
+</table>
+
+Si les contraintes au niveau matériel sont bien réelles il faudra
+également reconsidérer nos préconceptions par rapport à l'utilisation
+de l'application. Une application sur iPhone qui demande beaucoup
+d'interactions avec l'utilisateur pour atteindre un résultat n'est pas
+une bonne application. L'iPhone s'utilise dans le bus, en marchant,
+dans l'ascenseur, dans quasiment toutes situations si ce n'est à un
+bureau, tout l'inverse des applications dont on a l'habitude de
+développer. Il faudra par conséquent bien réfléchir l'interaction
+utilisateur, qu'elle se fasse le plus simplement possible et ce avec
+le minimum d'information entrée par l'utilisateur. Lorsqu'il se doit
+d'interragir, il faut aussi penser à afficher des contrôles
+suffisament grands, l'utilisateur entre les données avec ses doigts et
+non plus avec une souris... Autre préconception à s'enlever de la
+tête.
+
+Une bonne utilisation du *multi-touch* et des animations permettront
+également de rendre l'application plus *responsive* et de faire
+comprendre à l'utilisateur où il en est, ce qu'il peut faire et
+comment. Même si l'on peut y être un peu habitué au sein des
+applications web au travers par exemple des progrès réalisés au sein
+des frameworks javascript, l'iPhone pousse l'expérience encore plus
+loin.
+
+## L'écosystème ##
+
+
+
+résolutions différentes / tests réels
 
 [Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/we_a3_1030-1130_ivanovski.pdf)
 
