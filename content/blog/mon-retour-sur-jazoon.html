@@ -8,329 +8,329 @@
 {% block article %}
 {% article %}
 
-C'est dans le complex cinématographique Arena Filmcity de Zürich que
-j'ai participé à ma toute première conférence internationale sur
-Java. Sur une durée de trois jours, c'est comme un petit gamin
-émerveillé par un mur de bonbons que j'ai navigué de session en
-session dont voici un aperçu[^1]. La conférence s'est déroulée du 1 au
-3 juin j'ai donc plus d'un mois de retard sur les faits mais ça prend
-du temps tout de même d'écrire un article pareil, non mais!
+C'est dans le complex cinÃ©matographique Arena Filmcity de ZÃ¼rich que
+j'ai participÃ© Ã  ma toute premiÃ¨re confÃ©rence internationale sur
+Java. Sur une durÃ©e de trois jours, c'est comme un petit gamin
+Ã©merveillÃ© par un mur de bonbons que j'ai naviguÃ© de session en
+session dont voici un aperÃ§u[^1]. La confÃ©rence s'est dÃ©roulÃ©e du 1 au
+3 juin j'ai donc plus d'un mois de retard sur les faits mais Ã§a prend
+du temps tout de mÃªme d'Ã©crire un article pareil, non mais!
 
-Toutes les présentations dans un zip [ici](http://jazoon.com/Portals/0/Content/downloads/Jazoon%2710_Presentation_Slides.zip)
+Toutes les prÃ©sentations dans un zip [ici](http://jazoon.com/Portals/0/Content/downloads/Jazoon%2710_Presentation_Slides.zip)
 
 [TOC]
 
 # Le mardi #
 
-Ce premier jour restera mon préféré. De bonnes session d'introduction
-et de conclusion, un apéro bien sympa en fin d'après-midi et la
-découverte d'une conférence super bien organisée. Bien accueilli, bien
+Ce premier jour restera mon prÃ©fÃ©rÃ©. De bonnes session d'introduction
+et de conclusion, un apÃ©ro bien sympa en fin d'aprÃ¨s-midi et la
+dÃ©couverte d'une confÃ©rence super bien organisÃ©e. Bien accueilli, bien
 nourri, tout est quasi parfait.
 
 ## Java SE and JavaFX: The Road Ahead ##
 
-La toute première présentation est donnée par Danny Coward, *Chief
-Architect for Client Software* chez Oracle. Membre du JCP, présent sur
-Java depuis la version 1.0, il a notamment mené la standardisation de
+La toute premiÃ¨re prÃ©sentation est donnÃ©e par Danny Coward, *Chief
+Architect for Client Software* chez Oracle. Membre du JCP, prÃ©sent sur
+Java depuis la version 1.0, il a notamment menÃ© la standardisation de
 l'api servlet. Il en connait donc un bout.
 
 Avec son accent british, l'orateur nous rappelle que Java a 15 ans,
-qu'il y a aujourd'hui 7 millions de développeurs Java et que Java se
-trouve partout des smartcards jusqu'aux téléviseurs. Petit clin d'oeil
-au *green project* avec un iphone des années 1990 dans les labos de Sun[^2].
+qu'il y a aujourd'hui 7 millions de dÃ©veloppeurs Java et que Java se
+trouve partout des smartcards jusqu'aux tÃ©lÃ©viseurs. Petit clin d'oeil
+au *green project* avec un iphone des annÃ©es 1990 dans les labos de Sun[^2].
 
-En revenant sur l'actualité il parle ensuite des divers évolutions
+En revenant sur l'actualitÃ© il parle ensuite des divers Ã©volutions
 actuellement en cours de discussion au sein du jcp pour la version 7
 du jdk. Il pointe du doigt pour commencer sur l'effort de
-refactorisation et de modularisation. Le jdk7 sera modulaire grâce à
-un système de *class loading* plus efficace en chargeant uniquement
-les classes nécessaires.
+refactorisation et de modularisation. Le jdk7 sera modulaire grÃ¢ce Ã 
+un systÃ¨me de *class loading* plus efficace en chargeant uniquement
+les classes nÃ©cessaires.
 
-L'accent est ensuite mis sur le parallèlisme. La version 7 du jdk
-améliorera les choses de ce côté-là notamment grâce à un *garbage
-collector* amélioré tournant selon les dire de Danny Coward quasiment
-en même temps que l'application. Un *framework* Fork/Join[^3] fera
-également son apparition permettant de séparer des tâches en petit
-bouts, les exécuter en parallèle et ensuite rassembler les résultats
-pour ainsi profiter de la présence de tous les processeurs de la
+L'accent est ensuite mis sur le parallÃ¨lisme. La version 7 du jdk
+amÃ©liorera les choses de ce cÃ´tÃ©-lÃ  notamment grÃ¢ce Ã  un *garbage
+collector* amÃ©liorÃ© tournant selon les dire de Danny Coward quasiment
+en mÃªme temps que l'application. Un *framework* Fork/Join[^3] fera
+Ã©galement son apparition permettant de sÃ©parer des tÃ¢ches en petit
+bouts, les exÃ©cuter en parallÃ¨le et ensuite rassembler les rÃ©sultats
+pour ainsi profiter de la prÃ©sence de tous les processeurs de la
 machine. Ce framework est une extension du package
 `java.util.concurrent` apparu dans la version 5 du jdk.
 
-La machine virtuelle étant l'un des grands atouts de Java, il existe
-aujourd'hui plus de 200 langages pouvant s'exécuter sur celle-ci. Le
-jdk7 apportera également des améliorations à ce niveau-là notamment en
+La machine virtuelle Ã©tant l'un des grands atouts de Java, il existe
+aujourd'hui plus de 200 langages pouvant s'exÃ©cuter sur celle-ci. Le
+jdk7 apportera Ã©galement des amÃ©liorations Ã  ce niveau-lÃ  notamment en
 terme de performances.
 
-Finalement concernant le code produit par les développeurs au jour le
-jour Danny Coward explique qu'ajouter de nouvelles fonctionalités à ce
-niveau-là est pris très au sérieux et bien réfléchi car une fois
-ajoutées, ces nouvelles fonctionalités restent présentes à jamais. On
-pourra néanmoins retrouver plusieurs ajouts:
+Finalement concernant le code produit par les dÃ©veloppeurs au jour le
+jour Danny Coward explique qu'ajouter de nouvelles fonctionalitÃ©s Ã  ce
+niveau-lÃ  est pris trÃ¨s au sÃ©rieux et bien rÃ©flÃ©chi car une fois
+ajoutÃ©es, ces nouvelles fonctionalitÃ©s restent prÃ©sentes Ã  jamais. On
+pourra nÃ©anmoins retrouver plusieurs ajouts:
 
-* *diamond type inference* : déclarations utilisant les *generics* simplifiées
-* *exception handling* : possiblité d'avoir plusieurs exceptions dans un seul `catch`
-* `try(<closeable resource){}` : utilisation simplifiée des ressources devant être 'fermées' (ex: les flux d'entrée-sortie)
+* *diamond type inference* : dÃ©clarations utilisant les *generics* simplifiÃ©es
+* *exception handling* : possiblitÃ© d'avoir plusieurs exceptions dans un seul `catch`
+* `try(<closeable resource){}` : utilisation simplifiÃ©e des ressources devant Ãªtre 'fermÃ©es' (ex: les flux d'entrÃ©e-sortie)
 * `switch` sur des `String`
-* closures : gros sujet de discussions, aucune syntaxe n'a clairement été choisie aujourd'hui
+* closures : gros sujet de discussions, aucune syntaxe n'a clairement Ã©tÃ© choisie aujourd'hui
 
-Le but étant clairement d'alléger notre code, de le rendre plus
-lisible. On retrouve plusieurs idées venant du monde des langages
+Le but Ã©tant clairement d'allÃ©ger notre code, de le rendre plus
+lisible. On retrouve plusieurs idÃ©es venant du monde des langages
 dynamiques...
 
-Pour finir Danny Coward nous parle de [JavaFX][1]. Une démo de ce qui
-a été fait pour le site des jeux olympiques de Vancouver, des
-composants compatibles du mobile à la tv, des performances améliorées,
+Pour finir Danny Coward nous parle de [JavaFX][1]. Une dÃ©mo de ce qui
+a Ã©tÃ© fait pour le site des jeux olympiques de Vancouver, des
+composants compatibles du mobile Ã  la tv, des performances amÃ©liorÃ©es,
 etc. Oracle ne lache donc pas le morceau concernant sa plateforme
 RIA. JavaFX fait d'ailleurs le sujet pas moins de six sessions.
 
-Très bonne présentation donnée par Danny Coward, la conférence
-commence alors très fort.
+TrÃ¨s bonne prÃ©sentation donnÃ©e par Danny Coward, la confÃ©rence
+commence alors trÃ¨s fort.
 
-[Télécharger les slides de la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a5_0930-1030_coward_keynote.pdf)
+[TÃ©lÃ©charger les slides de la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/tu_a5_0930-1030_coward_keynote.pdf)
 
 ## The Java EE 6 Platform: Powerful, Productive, Extensible ##
 
-Cette session présentée par Jérome Docher et Alexis Moussine-Pouchkine
-est là pour nous parler des nouveautés de JEE 6. Une nouvelle notion
-de profile, de nouvelles annotations, une api REST, un système de
-*packaging* simplifié et une version *lite* des EJB font notamment
+Cette session prÃ©sentÃ©e par JÃ©rome Docher et Alexis Moussine-Pouchkine
+est lÃ  pour nous parler des nouveautÃ©s de JEE 6. Une nouvelle notion
+de profile, de nouvelles annotations, une api REST, un systÃ¨me de
+*packaging* simplifiÃ© et une version *lite* des EJB font notamment
 leur apparition.
 
 ### Web Profile ###
 
-La spécification de JEE 6 fait mention d'un sous-ensemble d'api[^4]
-disponible dans ce qui est appelé le web profile. Ce profile comme le
-démontre la liste des api disponibles fourni le nécessaire pour la
+La spÃ©cification de JEE 6 fait mention d'un sous-ensemble d'api[^4]
+disponible dans ce qui est appelÃ© le web profile. Ce profile comme le
+dÃ©montre la liste des api disponibles fourni le nÃ©cessaire pour la
 plupart des applications entreprises sans inclure toutes les api
 entreprises existantes comme par exemple EJB 3.1. La notion de
-profile est extensible et tout un chacun peut créer son propre profile.
+profile est extensible et tout un chacun peut crÃ©er son propre profile.
 
 ### Packaging ###
 
-Il n'est dorénavant plus impératif de créer un `ear` dès lors qu'un
+Il n'est dorÃ©navant plus impÃ©ratif de crÃ©er un `ear` dÃ¨s lors qu'un
 projet contient des EJB. Tout composant peut se retrouver dans une
-archive `war`. Une notion de *web fragment* apparaît également
-permettant une meilleure intégration des librairies dans les projets
-JEE. A noter également que le fichier `web.xml` n'est dorénavant plus
-obligatoire grâce notamment à l'ajout d'annotations telles que
+archive `war`. Une notion de *web fragment* apparaÃ®t Ã©galement
+permettant une meilleure intÃ©gration des librairies dans les projets
+JEE. A noter Ã©galement que le fichier `web.xml` n'est dorÃ©navant plus
+obligatoire grÃ¢ce notamment Ã  l'ajout d'annotations telles que
 `@WebServlet` et `@WebFilter`. En parlant d'annotations une autre
-nouveauté intéressante: l'annotation `@HandlesTypes`qui permet
-d'ajouter depuis le code des mapping -- entre autre -- à chaud dans le
+nouveautÃ© intÃ©ressante: l'annotation `@HandlesTypes`qui permet
+d'ajouter depuis le code des mapping -- entre autre -- Ã  chaud dans le
 container.
 
 ### JAX-RS 1.1 ###
 
-L'implémentation de *RESTful web services* se fait grâce à la
-spécification JAX-RS à partir de JEE 6. Basée sur des annotations mais
-proposant également une api disponible depuis le code,
-l'implémentation de référence se nomme Jersey et elle est disponible
+L'implÃ©mentation de *RESTful web services* se fait grÃ¢ce Ã  la
+spÃ©cification JAX-RS Ã  partir de JEE 6. BasÃ©e sur des annotations mais
+proposant Ã©galement une api disponible depuis le code,
+l'implÃ©mentation de rÃ©fÃ©rence se nomme Jersey et elle est disponible
 conjointement avec glassfish.
 
 ### EJB ###
 
-Une nouvelle version mineure fait son apparition avec en nouveauté
+Une nouvelle version mineure fait son apparition avec en nouveautÃ©
 quelques annotations: `@Singleton`, `@Startup` et `@Asynchronous` mais
-également comme évoqué plus haut la possibilité dorénavant de créer un
-EJB au sein même d'une application web. Plus besoin forcément d'un
+Ã©galement comme Ã©voquÃ© plus haut la possibilitÃ© dorÃ©navant de crÃ©er un
+EJB au sein mÃªme d'une application web. Plus besoin forcÃ©ment d'un
 `ear`.
 
-L'`EJBContainer` voit également le jour permettant de lancer une
+L'`EJBContainer` voit Ã©galement le jour permettant de lancer une
 instance d'un container EJB localement. Ce nouveau composant devrait
 notamment faciliter grandement les tests d'EJB mais aussi permettre
 aux applications jse d'acceuillir des EJB en leur sein.
 
-La contrainte pour la version *lite* évoquée plus haut se trouve au
-niveau du type d'EJB qu'il est permis de déployer dans cette
+La contrainte pour la version *lite* Ã©voquÃ©e plus haut se trouve au
+niveau du type d'EJB qu'il est permis de dÃ©ployer dans cette
 version. Uniquement les EJB de type local sont permis.
 
 ### Bean Validation ###
 
-Cette spécification permet la validation des propriétés au sein des
+Cette spÃ©cification permet la validation des propriÃ©tÃ©s au sein des
 beans au moyen soit d'annotations (ex: `@NotNull`) soit au moyen d'une
-api disponible. A noter également que cette api n'est pas dépendante
+api disponible. A noter Ã©galement que cette api n'est pas dÃ©pendante
 du container, il est possible de l'utiliser depuis n'importe quel type
 d'applications.
 
 ### DI -- *Dependency Injection* ###
 
-La notion d'injection de dépendances est maintenant prise en charge
+La notion d'injection de dÃ©pendances est maintenant prise en charge
 par le container. Ca va un peu plus loin que ce que fait par exemple
-Spring dans le sens que le container peut gérer la portée des
-propriétés injectées (ex: session, requête, etc.). L'annotation
-`@Resource` permet toujours d'injecter les composants configurés sur
+Spring dans le sens que le container peut gÃ©rer la portÃ©e des
+propriÃ©tÃ©s injectÃ©es (ex: session, requÃªte, etc.). L'annotation
+`@Resource` permet toujours d'injecter les composants configurÃ©s sur
 le serveur comme les ressources JNDI par exemple. `@Inject` fait son
-arrivée en proposant l'injection *type safe*. Autre arrivée: les
-*qualifier* qui sont des annotations définies par le développeur
-lui-même dans le but de spécifier quel type d'instance injecter. Les
-slides prennent comme exemple un objet `User` devant être injecté dans
+arrivÃ©e en proposant l'injection *type safe*. Autre arrivÃ©e: les
+*qualifier* qui sont des annotations dÃ©finies par le dÃ©veloppeur
+lui-mÃªme dans le but de spÃ©cifier quel type d'instance injecter. Les
+slides prennent comme exemple un objet `User` devant Ãªtre injectÃ© dans
 un `CheckoutHandler` et le *qualifier* `LoggedIn` permet de s'assurer
-que l'instance injectée sera l'utilisateur identifié à l'application
+que l'instance injectÃ©e sera l'utilisateur identifiÃ© Ã  l'application
 dans ce contexte-ci.
 
-Une autre possibilité de gérer les dépendances avec JEE 6 c'est avec
-les événements qui font leur arrivée avec l'annotation `@Observe`.
+Une autre possibilitÃ© de gÃ©rer les dÃ©pendances avec JEE 6 c'est avec
+les Ã©vÃ©nements qui font leur arrivÃ©e avec l'annotation `@Observe`.
 
 ### Et encore... ###
 
-Des nouveautés aussi côté JSF avec support simplifié d'ajax, des
-événements systèmes mais aussi côté JPA avec l'arrivée d'une api
-*Criteria* permettant la création de requête *type-safe* et plus
-uniquement une suite de `String` source d'erreur à l'exécution.
+Des nouveautÃ©s aussi cÃ´tÃ© JSF avec support simplifiÃ© d'ajax, des
+Ã©vÃ©nements systÃ¨mes mais aussi cÃ´tÃ© JPA avec l'arrivÃ©e d'une api
+*Criteria* permettant la crÃ©ation de requÃªte *type-safe* et plus
+uniquement une suite de `String` source d'erreur Ã  l'exÃ©cution.
 
-La présentation se termine avec une démo utilisant glassfish
-l'implémentation de référence de JEE 6. Petit détail intéressant
-révélé durant la démo: la possibilité de redémarer une application
-tout en gardant la session dans le même état. Pour plus de détail
-n'hésitez pas à consulter les slides ou bientôt la session directement
-puisque cette session s'est déroulée dans la salle 5 qui était filmée.
+La prÃ©sentation se termine avec une dÃ©mo utilisant glassfish
+l'implÃ©mentation de rÃ©fÃ©rence de JEE 6. Petit dÃ©tail intÃ©ressant
+rÃ©vÃ©lÃ© durant la dÃ©mo: la possibilitÃ© de redÃ©marer une application
+tout en gardant la session dans le mÃªme Ã©tat. Pour plus de dÃ©tail
+n'hÃ©sitez pas Ã  consulter les slides ou bientÃ´t la session directement
+puisque cette session s'est dÃ©roulÃ©e dans la salle 5 qui Ã©tait filmÃ©e.
 
-[Télécharger les slides de la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a5_1100-1150_dochez.pdf)
+[TÃ©lÃ©charger les slides de la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/tu_a5_1100-1150_dochez.pdf)
 
 
 ## CDI, Seam & RESTEasy: You haven't seen REST yet ##
 
 Dan Allen reprend ici les principes de REST tout d'abord en expliquant
-en trois points les aspects essentiels d'une architecture centrée sur
+en trois points les aspects essentiels d'une architecture centrÃ©e sur
 les ressources:
 
 1. Uniforme: architecturer les URL pour adresser les besoins, les
-méthodes adressent les opérations (GET, PUT, DELETE, POST)
-2. Orienté représentation
-3. Communication sans état: plus *scalable* et plus cohérent avec le
+mÃ©thodes adressent les opÃ©rations (GET, PUT, DELETE, POST)
+2. OrientÃ© reprÃ©sentation
+3. Communication sans Ã©tat: plus *scalable* et plus cohÃ©rent avec le
 protocol HTTP
 
 S'ensuit quelques extraits de code avec explications utilisant JAX-RS
-comme base de référence. Il termine par une démo de RESTEasy qui se
-trouve être l'implémentation de JAX-RS par JBoss. Cette implémentation
-propose entre autre l'avantage d'avoir un serveur embarqué pour les
-tests et une forte intégration au framework Seam.
+comme base de rÃ©fÃ©rence. Il termine par une dÃ©mo de RESTEasy qui se
+trouve Ãªtre l'implÃ©mentation de JAX-RS par JBoss. Cette implÃ©mentation
+propose entre autre l'avantage d'avoir un serveur embarquÃ© pour les
+tests et une forte intÃ©gration au framework Seam.
 
-Dan Allen résume finalement en citant les principaux bénéfices de REST:
+Dan Allen rÃ©sume finalement en citant les principaux bÃ©nÃ©fices de REST:
 
 1. Respect du protocole HTTP
-2. Simplicité
-3. Exposition des données au travers d'une API standardisée
+2. SimplicitÃ©
+3. Exposition des donnÃ©es au travers d'une API standardisÃ©e
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a3_1200-1250_allen.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/tu_a3_1200-1250_allen.pdf)
 
 ## Objects of Value ##
 
-Après un bon lunch je continue avec cette session présentée par Kevlin
-Henney. Si vous avez l'occasion de le voir à une conférence ça vaut le
-coup. C'est vraiment un excellent présentateur.
+AprÃ¨s un bon lunch je continue avec cette session prÃ©sentÃ©e par Kevlin
+Henney. Si vous avez l'occasion de le voir Ã  une confÃ©rence Ã§a vaut le
+coup. C'est vraiment un excellent prÃ©sentateur.
 
-Il nous a parlé ici un peu philosophiquement de l'importance que nos
-objets aient une identité clairement définie. Trop souvent les
+Il nous a parlÃ© ici un peu philosophiquement de l'importance que nos
+objets aient une identitÃ© clairement dÃ©finie. Trop souvent les
 `String` font office de fourre-tout.
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a5_1400-1450_henney.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/tu_a5_1400-1450_henney.pdf)
 
 ## Server-side OSGi with Apache Sling ##
 
-Le présentateur était malheureusement pas assez à l'aise pour rendre
-le sujet intéressant. Soporifique à souhait, la pause café s'est faite
-désirer...
+Le prÃ©sentateur Ã©tait malheureusement pas assez Ã  l'aise pour rendre
+le sujet intÃ©ressant. Soporifique Ã  souhait, la pause cafÃ© s'est faite
+dÃ©sirer...
 
-Le principe de Sling est de *mapper* une URL à une ressource et d'y
+Le principe de Sling est de *mapper* une URL Ã  une ressource et d'y
 apposer un script de traitement. Les ressources en question sont
-hierarchiquement disposées dans un *repository* JCR. Tout ça fournit
-une base solide à l'implémentation d'un CMS personalisable, d'ailleurs
-utilisé par Day Software au travers de leur solution commerciale CQ.
+hierarchiquement disposÃ©es dans un *repository* JCR. Tout Ã§a fournit
+une base solide Ã  l'implÃ©mentation d'un CMS personalisable, d'ailleurs
+utilisÃ© par Day Software au travers de leur solution commerciale CQ.
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a7_1500-1550_meschberger.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/tu_a7_1500-1550_meschberger.pdf)
 
 ## Servlet 3.0 -- Asynchronous, extensibility, ease of development ##
 
-La version 3 de l'api servlet -- intégrée à JEE 6 -- est vantée par
-Rajiv Mordani dans cette session suivie par une démo par Arun Gupta.
+La version 3 de l'api servlet -- intÃ©grÃ©e Ã  JEE 6 -- est vantÃ©e par
+Rajiv Mordani dans cette session suivie par une dÃ©mo par Arun Gupta.
 
-Extensibilité et asynchronicité sont donc les maîtres mots de cette
-nouvelle mouture. Il est dorénavant possible -- comme vu plus haut --
+ExtensibilitÃ© et asynchronicitÃ© sont donc les maÃ®tres mots de cette
+nouvelle mouture. Il est dorÃ©navant possible -- comme vu plus haut --
 d'ajouter dynamiquement depuis le code de nouveau composants au
-container de servlet. Pour parler d'extensibilité la notion de
-fragment fait aussi son arrivée. Cela devrait faciliter la vie du
-développeur notamment lors de l'utilisation de frameworks tiers. En
-effet ces frameworks pourront se configurer d'eux-mêmes au sein de
-l'application, plus besoin de définir le nécessaire pour configurer un
+container de servlet. Pour parler d'extensibilitÃ© la notion de
+fragment fait aussi son arrivÃ©e. Cela devrait faciliter la vie du
+dÃ©veloppeur notamment lors de l'utilisation de frameworks tiers. En
+effet ces frameworks pourront se configurer d'eux-mÃªmes au sein de
+l'application, plus besoin de dÃ©finir le nÃ©cessaire pour configurer un
 framework au sein du fichier `web.xml`.
 
-En plus de ces points forts, l'arrivée de plusieurs annotations
-devraient également faciliter notre vie... Voir la présentation The
+En plus de ces points forts, l'arrivÃ©e de plusieurs annotations
+devraient Ã©galement faciliter notre vie... Voir la prÃ©sentation The
 Java EE 6 Platform: Powerful, Productive, Extensible pour plus d'info.
 
-A noter finalement la possibilité de se passer complètement du fichier
-`web.xml` à partir de cette nouvelle version.
+A noter finalement la possibilitÃ© de se passer complÃ¨tement du fichier
+`web.xml` Ã  partir de cette nouvelle version.
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a3_1630-1720_mordani.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/tu_a3_1630-1720_mordani.pdf)
 
 ## 97 Things Every Programmer Should Know ##
 
-A nouveau une présentation par Kevlin Henney et à nouveau un vrai
-régal. Pour cette dernière session de la journée on est tous
-rassemblée dans la salle principale. Et plus d'une fois les rires ont
-émergé de l'assistance, Kevlin est vraiment un bon orateur...
+A nouveau une prÃ©sentation par Kevlin Henney et Ã  nouveau un vrai
+rÃ©gal. Pour cette derniÃ¨re session de la journÃ©e on est tous
+rassemblÃ©e dans la salle principale. Et plus d'une fois les rires ont
+Ã©mergÃ© de l'assistance, Kevlin est vraiment un bon orateur...
 
-Cette session-ci présentait son dernier livre portant le même nom que
+Cette session-ci prÃ©sentait son dernier livre portant le mÃªme nom que
 la session. Ce livre est une compilation d'avis d'une ribambelle
-d'experts sollicités par Kevlin.
+d'experts sollicitÃ©s par Kevlin.
 
 Comme conseils on a pu retrouver par exemple:
 
-* Apprender à estimer: on négocie les objectifs, mais pas les estimations
+* Apprender Ã  estimer: on nÃ©gocie les objectifs, mais pas les estimations
 
-* Commenter uniquement ce que le code ne dit pas: un bon code nécessitera moins de commentaire qu'un mauvais code.
+* Commenter uniquement ce que le code ne dit pas: un bon code nÃ©cessitera moins de commentaire qu'un mauvais code.
 
-* Ecrire les tests pour être lus par des humains: de bon tests font acte de documentation
+* Ecrire les tests pour Ãªtre lus par des humains: de bon tests font acte de documentation
 
-* Préférer des objets ayant une signification métier plutôt que d'utiliser des types primitifs. J'ai particulièrement aimé l'idée d'utiliser un *tag cloud* sur le code d'un projet. Après génération de ce *tag cloud*, si on a une idée de quoi on parle c'est mieux... L'idée est initialement présentée sur [cet article](http://fragmental.tw/2009/04/29/tag-clouds-see-how-noisy-your-code-is/).
+* PrÃ©fÃ©rer des objets ayant une signification mÃ©tier plutÃ´t que d'utiliser des types primitifs. J'ai particuliÃ¨rement aimÃ© l'idÃ©e d'utiliser un *tag cloud* sur le code d'un projet. AprÃ¨s gÃ©nÃ©ration de ce *tag cloud*, si on a une idÃ©e de quoi on parle c'est mieux... L'idÃ©e est initialement prÃ©sentÃ©e sur [cet article](http://fragmental.tw/2009/04/29/tag-clouds-see-how-noisy-your-code-is/).
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/tu_a5_1740-1830_henney_keynote.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/tu_a5_1740-1830_henney_keynote.pdf)
 
 # Le mercredi #
 
-Que ce soit pour ce deuxième jour ou le troisième et dernier je serai
+Que ce soit pour ce deuxiÃ¨me jour ou le troisiÃ¨me et dernier je serai
 certainement moins prolixe. Moins enthousiaste, moins de sessions de
-qualité...
+qualitÃ©...
 
 ## Total cost of ownership and return on investment ##
 
-Ken Schwaber, co-créateur de la méthodologie Scrum, est l'orateur de
-cette première session du matin. L'idée est de pointer du doigt les
-méthodes traditionnelles de développement ne prenant pas forcément en
-compte les coûts à long terme d'un projet logiciel.
+Ken Schwaber, co-crÃ©ateur de la mÃ©thodologie Scrum, est l'orateur de
+cette premiÃ¨re session du matin. L'idÃ©e est de pointer du doigt les
+mÃ©thodes traditionnelles de dÃ©veloppement ne prenant pas forcÃ©ment en
+compte les coÃ»ts Ã  long terme d'un projet logiciel.
 
-Cette session aura été la toute première à nous faire participer
-puisque durant celle-ci, l'orateur nous demande d'échanger entre
+Cette session aura Ã©tÃ© la toute premiÃ¨re Ã  nous faire participer
+puisque durant celle-ci, l'orateur nous demande d'Ã©changer entre
 assistants notre conception de ce qu'est "*done*". Autrement dit que
-doit contenir un projet terminé. Les tests d'intégrations doivent en
+doit contenir un projet terminÃ©. Les tests d'intÃ©grations doivent en
 faire partie? Les tests de performance? De charge?
 
-Si la notion de *done* n'est pas complète toute une série de travail à
-faire est reporté en fin de projet ou du moins à plus tard. Si l'on
-reporte trop de choses à plus tard -- dû à une mauvaise notion de ce
-qui est *done* -- forcément qu'un gros boulot restera à faire. Cela
+Si la notion de *done* n'est pas complÃ¨te toute une sÃ©rie de travail Ã 
+faire est reportÃ© en fin de projet ou du moins Ã  plus tard. Si l'on
+reporte trop de choses Ã  plus tard -- dÃ» Ã  une mauvaise notion de ce
+qui est *done* -- forcÃ©ment qu'un gros boulot restera Ã  faire. Cela
 ressort bien de la slide 12:
 
 > Stabilization is when you do all the "undone" work
 
-La suite de la session n'est que publicité pour le nouveau cours scrum
-disponible. Si cela vous intéresse rendez-vous sur le site officiel: [http://www.scrum.org/](http://www.scrum.org/)
+La suite de la session n'est que publicitÃ© pour le nouveau cours scrum
+disponible. Si cela vous intÃ©resse rendez-vous sur le site officiel: [http://www.scrum.org/](http://www.scrum.org/)
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/we_a5_0900-1000_schwaber_keynote.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/we_a5_0900-1000_schwaber_keynote.pdf)
 
 ## iPhone/iPad development from the Java perspective ##
 
-Carrément impatient d'assister à cette présentation, je ne suis
-visiblement pas le seul vu l'assistance en nombre venue pour écouter
-Ognen Ivanovski prodiguer ses conseils sur le développement
+CarrÃ©ment impatient d'assister Ã  cette prÃ©sentation, je ne suis
+visiblement pas le seul vu l'assistance en nombre venue pour Ã©couter
+Ognen Ivanovski prodiguer ses conseils sur le dÃ©veloppement
 iPhone/iPad.
 
-### L'expérience utilisateur ###
+### L'expÃ©rience utilisateur ###
 
-Premier élément évoqué: le hardware. Développer sur mobile signifie
-davantage de contraintes à ce niveau-là par rapport à du développement
-JEE sur de gros serveurs. Petit récapitulatif provenant de la
-présentation:
+Premier Ã©lÃ©ment Ã©voquÃ©: le hardware. DÃ©velopper sur mobile signifie
+davantage de contraintes Ã  ce niveau-lÃ  par rapport Ã  du dÃ©veloppement
+JEE sur de gros serveurs. Petit rÃ©capitulatif provenant de la
+prÃ©sentation:
 
 <table>
 <tr>
@@ -353,397 +353,397 @@ présentation:
 </tr>
 </table>
 
-Si les contraintes au niveau matériel sont bien réelles il faudra
-également reconsidérer nos préconceptions par rapport à l'utilisation
+Si les contraintes au niveau matÃ©riel sont bien rÃ©elles il faudra
+Ã©galement reconsidÃ©rer nos prÃ©conceptions par rapport Ã  l'utilisation
 de l'application. Une application sur iPhone qui demande beaucoup
-d'interactions avec l'utilisateur pour atteindre un résultat n'est pas
+d'interactions avec l'utilisateur pour atteindre un rÃ©sultat n'est pas
 une bonne application. L'iPhone s'utilise dans le bus, en marchant,
-dans l'ascenseur, le canapé, dans quasiment toutes situations si ce
-n'est à un bureau, tout l'inverse des applications dont on a
-l'habitude de développer. Il faudra par conséquent bien réfléchir
+dans l'ascenseur, le canapÃ©, dans quasiment toutes situations si ce
+n'est Ã  un bureau, tout l'inverse des applications dont on a
+l'habitude de dÃ©velopper. Il faudra par consÃ©quent bien rÃ©flÃ©chir
 l'interaction utilisateur, qu'elle se fasse le plus simplement
-possible et ce avec le minimum d'information entrée par
-l'utilisateur. Lorsqu'il se doit d'interragir, il faut aussi penser à
-afficher des contrôles suffisament grands, l'utilisateur entre les
-données avec ses doigts et non plus avec une souris... Autre
-préconception à s'enlever de la tête.
+possible et ce avec le minimum d'information entrÃ©e par
+l'utilisateur. Lorsqu'il se doit d'interragir, il faut aussi penser Ã 
+afficher des contrÃ´les suffisament grands, l'utilisateur entre les
+donnÃ©es avec ses doigts et non plus avec une souris... Autre
+prÃ©conception Ã  s'enlever de la tÃªte.
 
 Une bonne utilisation du *multi-touch* et des animations permettront
-également de rendre l'application plus *responsive* et de faire
-comprendre à l'utilisateur où il en est, ce qu'il peut faire et
-comment. Même si l'on peut y être un peu habitué au sein des
-applications web au travers par exemple des progrès réalisés au sein
-des frameworks javascript, l'iPhone pousse l'expérience encore plus
+Ã©galement de rendre l'application plus *responsive* et de faire
+comprendre Ã  l'utilisateur oÃ¹ il en est, ce qu'il peut faire et
+comment. MÃªme si l'on peut y Ãªtre un peu habituÃ© au sein des
+applications web au travers par exemple des progrÃ¨s rÃ©alisÃ©s au sein
+des frameworks javascript, l'iPhone pousse l'expÃ©rience encore plus
 loin.
 
-### L'écosystème ###
+### L'Ã©cosystÃ¨me ###
 
 L'image du *Walled Garden* est bien connue lorsqu'on parle d'Apple et
-on y revient automatiquement dès lors que l'orateur commence à nous
-parler de l'écosystème d'un développement pour iPhone. Des licences
-qu'il faut garder à l'oeil du fait de leurs variations incessantes, un
-risque de rejet de son application dès le départ ou encore sur une
-évolution ultérieure, tels sont quelques points à risque lors qu'on
-attaque ce marché. Une des dernières évolutions de license en dates
-ayant fait le plus de bruit a été l'interdiction pur et simple
-d'utiliser des outils de *cross-compilation* permettant de développer
+on y revient automatiquement dÃ¨s lors que l'orateur commence Ã  nous
+parler de l'Ã©cosystÃ¨me d'un dÃ©veloppement pour iPhone. Des licences
+qu'il faut garder Ã  l'oeil du fait de leurs variations incessantes, un
+risque de rejet de son application dÃ¨s le dÃ©part ou encore sur une
+Ã©volution ultÃ©rieure, tels sont quelques points Ã  risque lors qu'on
+attaque ce marchÃ©. Une des derniÃ¨res Ã©volutions de license en dates
+ayant fait le plus de bruit a Ã©tÃ© l'interdiction pur et simple
+d'utiliser des outils de *cross-compilation* permettant de dÃ©velopper
 une application par exemple sous Flash pour au final fonctionner en
 Objective-C le langage d'Apple. Par rapport au processus de validation
-l'orateur en faisant part de son expérience nous explique que
-l'approbation est d'habitude prévisible. A noter tout de même que ce
-processus de validation à un côté très positif: l'utilisateur donne
-une grande confiance aux applications présentes dans l'AppStore.
+l'orateur en faisant part de son expÃ©rience nous explique que
+l'approbation est d'habitude prÃ©visible. A noter tout de mÃªme que ce
+processus de validation Ã  un cÃ´tÃ© trÃ¨s positif: l'utilisateur donne
+une grande confiance aux applications prÃ©sentes dans l'AppStore.
 
-### Le côté *hype* ###
+### Le cÃ´tÃ© *hype* ###
 
-Pouvoir proposer ses solutions au travers de l'AppStore ajoute un côté
-marketing certain aujourd'hui avec tout l'effet de mode auprès du
-grand public que l'iPhone a pu engendrer. Dès lors si le produit est
-bon tout ça peut devenir une mine d'or, par contre un solution bancale
-risque de faire mal à l'image de marque.
+Pouvoir proposer ses solutions au travers de l'AppStore ajoute un cÃ´tÃ©
+marketing certain aujourd'hui avec tout l'effet de mode auprÃ¨s du
+grand public que l'iPhone a pu engendrer. DÃ¨s lors si le produit est
+bon tout Ã§a peut devenir une mine d'or, par contre un solution bancale
+risque de faire mal Ã  l'image de marque.
 
-### A se remémorer ###
+### A se remÃ©morer ###
 
-Une bonne application iPhone devra répondre à un besoin typique
-d'utilisateur **mobile**. Typiquement vérifier les horaires de train
-fera une très bonne application du moment qu'elle est pensée de
-manière ergonomique (notion de *minimum input/maximum output*). L'idée
-sera donc d'identifier ces situations où une utilisation de manière
+Une bonne application iPhone devra rÃ©pondre Ã  un besoin typique
+d'utilisateur **mobile**. Typiquement vÃ©rifier les horaires de train
+fera une trÃ¨s bonne application du moment qu'elle est pensÃ©e de
+maniÃ¨re ergonomique (notion de *minimum input/maximum output*). L'idÃ©e
+sera donc d'identifier ces situations oÃ¹ une utilisation de maniÃ¨re
 mobile d'une application pourrait combler un besoin.
 
-L'idée vraiment ressortie durant cette session c'est de se rappeler
-que sur un appareil de ce type les contraintes mémoires sont à prendre
-bien plus au sérieux par rapport à un développement sur serveur ou
-machine de bureau. Autre point important, réfléchir à l'utilisation
+L'idÃ©e vraiment ressortie durant cette session c'est de se rappeler
+que sur un appareil de ce type les contraintes mÃ©moires sont Ã  prendre
+bien plus au sÃ©rieux par rapport Ã  un dÃ©veloppement sur serveur ou
+machine de bureau. Autre point important, rÃ©flÃ©chir Ã  l'utilisation
 mobile faite par l'utilisateur. L'utilisateur n'est pas assis devant
-son écran. Il ne faut pas manquer également la phase de test réelle
-sur l'appareil directement. Les tests sur émulateur pouvant
-effectivement être parfois trompeurs...
+son Ã©cran. Il ne faut pas manquer Ã©galement la phase de test rÃ©elle
+sur l'appareil directement. Les tests sur Ã©mulateur pouvant
+effectivement Ãªtre parfois trompeurs...
 
 ### Et l'iPad? ###
 
-Vu le titre de la session je m'attendais à un peu plus de contenu
-concernant l'iPad mais c'est vrai que début juin il était vraiment à
-peine sorti en Suisse. Malgré celà l'orateur en a tout de même parlé
-succintement en mentionnant un projet qu'ils ont pu mener avant même
+Vu le titre de la session je m'attendais Ã  un peu plus de contenu
+concernant l'iPad mais c'est vrai que dÃ©but juin il Ã©tait vraiment Ã 
+peine sorti en Suisse. MalgrÃ© celÃ  l'orateur en a tout de mÃªme parlÃ©
+succintement en mentionnant un projet qu'ils ont pu mener avant mÃªme
 que l'iPad soit sorti. Pour s'en sortir ils ont sorti des maquettes
-1:1 par rapport à la résolution de l'appareil. On en saura pas plus.
+1:1 par rapport Ã  la rÃ©solution de l'appareil. On en saura pas plus.
 
 ### Les outils ###
 
-Sur la fin de la session, les outils permettant le développement
-d'applications iPhone nous sont succintements présentés ainsi qu'un
-petit aperçu de ce à quoi ressemble Objective C.
+Sur la fin de la session, les outils permettant le dÃ©veloppement
+d'applications iPhone nous sont succintements prÃ©sentÃ©s ainsi qu'un
+petit aperÃ§u de ce Ã  quoi ressemble Objective C.
 
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/we_a3_1030-1130_ivanovski.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/we_a3_1030-1130_ivanovski.pdf)
 
 ## What's new in Hibernate: a JPA 2 perspective ##
 
-Emmanuel Bernard prend place dans la salle numéro 5 pour nous parler
-des nouveautés sur Hibernate. Session intéressante par l'initiateur du
+Emmanuel Bernard prend place dans la salle numÃ©ro 5 pour nous parler
+des nouveautÃ©s sur Hibernate. Session intÃ©ressante par l'initiateur du
 podcast des Cast Codeurs j'y ai appris une chose ou deux vraiment
-intéressantes.
+intÃ©ressantes.
 
 ### Envers ###
 
-La première chose c'est le projet
+La premiÃ¨re chose c'est le projet
 [envers](http://www.jboss.org/envers). Ce projet a pour but de fournir
-une historisation automatique des entités gérées par Hibernate. Pour
-se faire, Hibernate crée un nouveau schéma en parallèle complètement
-géré par Hibernate et permettant de stocker toutes les différentes
-versions de chaque entité. Le produit permettra de remonter dans le
-temps sur ses entités. Bigrement intéressant!
+une historisation automatique des entitÃ©s gÃ©rÃ©es par Hibernate. Pour
+se faire, Hibernate crÃ©e un nouveau schÃ©ma en parallÃ¨le complÃ¨tement
+gÃ©rÃ© par Hibernate et permettant de stocker toutes les diffÃ©rentes
+versions de chaque entitÃ©. Le produit permettra de remonter dans le
+temps sur ses entitÃ©s. Bigrement intÃ©ressant!
 
 ### Recherche ###
 
-Deuxième point super intéressant, la possibilité dorénavant de faire
-une recherche *fulltext* sur le schéma d'entités. Cette fonctionalité
-s'appuie sur le projet Lucene d'Apache. L'avantage étant que le
-développeur n'a pas besoin de configurer ce dernier, Hibernate prend
+DeuxiÃ¨me point super intÃ©ressant, la possibilitÃ© dorÃ©navant de faire
+une recherche *fulltext* sur le schÃ©ma d'entitÃ©s. Cette fonctionalitÃ©
+s'appuie sur le projet Lucene d'Apache. L'avantage Ã©tant que le
+dÃ©veloppeur n'a pas besoin de configurer ce dernier, Hibernate prend
 tout en charge au travers du sous-projet Hibernate Search.
 
 ### Et aussi ###
 
-*Clustering* amélioré, de nouvelles possibilités de mapping,
- compatibilité JPA 2.0, la validation, tels sont d'autres sujets
- abordés durant cette présentation.
+*Clustering* amÃ©liorÃ©, de nouvelles possibilitÃ©s de mapping,
+ compatibilitÃ© JPA 2.0, la validation, tels sont d'autres sujets
+ abordÃ©s durant cette prÃ©sentation.
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/we_a5_1130-1220_bernard.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/we_a5_1130-1220_bernard.pdf)
 
 ## Java persistence criteria API ##
 
-Après le repas, très dur d'assister à cette présentation pour faire
+AprÃ¨s le repas, trÃ¨s dur d'assister Ã  cette prÃ©sentation pour faire
 poli... Soporiphique.
 
-Je n'ai pas grand chose à dire sur cette présentation puisque
-l'oratrice n'a pas apporté de réelle plus-value par rapport aux slides
-de la présentation.
+Je n'ai pas grand chose Ã  dire sur cette prÃ©sentation puisque
+l'oratrice n'a pas apportÃ© de rÃ©elle plus-value par rapport aux slides
+de la prÃ©sentation.
 
-En résumé la Criteria API permet au développeur de créer une requête
-typée. Autrement dit pas de type `String` comme le sont les requêtes
+En rÃ©sumÃ© la Criteria API permet au dÃ©veloppeur de crÃ©er une requÃªte
+typÃ©e. Autrement dit pas de type `String` comme le sont les requÃªtes
 JPQL. L'avantage de cette solution c'est qu'une erreur sera
-directement découverte à la compilation et non plus uniquement au
-moment de l'exécution.
+directement dÃ©couverte Ã  la compilation et non plus uniquement au
+moment de l'exÃ©cution.
 
-Pour plus de détails, jetez un oeil aux slides.
+Pour plus de dÃ©tails, jetez un oeil aux slides.
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/we_a3_1330-1420_demichiel.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/we_a3_1330-1420_demichiel.pdf)
 
 ## Patterns in practices in Hibernate ##
 
-Dans ma lancée j'assiste à nouveau à une présentation plutôt
-désagréable. La session a été inlassablement obstruée par des
+Dans ma lancÃ©e j'assiste Ã  nouveau Ã  une prÃ©sentation plutÃ´t
+dÃ©sagrÃ©able. La session a Ã©tÃ© inlassablement obstruÃ©e par des
 "eeeeee", "aaaaaaa", "meeeeeuuuuuuu", typiquement le genre de choses
-qui me fait péter un plomb!
+qui me fait pÃ©ter un plomb!
 
-Bref du coup j'ai eu pas mal de peine à suivre. Cette session avait
-pour but de démontrer quelques pièges à éviter lors de l'utilisation
+Bref du coup j'ai eu pas mal de peine Ã  suivre. Cette session avait
+pour but de dÃ©montrer quelques piÃ¨ges Ã  Ã©viter lors de l'utilisation
 d'Hibernate.
 
-Je ne peux malheureusement rien ajouter de plus par rapport à ce que
+Je ne peux malheureusement rien ajouter de plus par rapport Ã  ce que
 disent directement les slides.
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/we_a3_1430-1520_wegrzynowicz.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/we_a3_1430-1520_wegrzynowicz.pdf)
 
 ## How Java powers large online retail sites ##
 
-Retour d'expérience intéressant du CEO de ATG gros fournisseur de
-solutions e-commerce. L'orateur nous explique son expérience avec Java
-qui a été choisi dès le début pour leur solution. On parle ici de gros
-système e-commerce traitant (cf slides) plus d'un million de visiteurs
+Retour d'expÃ©rience intÃ©ressant du CEO de ATG gros fournisseur de
+solutions e-commerce. L'orateur nous explique son expÃ©rience avec Java
+qui a Ã©tÃ© choisi dÃ¨s le dÃ©but pour leur solution. On parle ici de gros
+systÃ¨me e-commerce traitant (cf slides) plus d'un million de visiteurs
 par jour et des dizaines de milliers de commandes par jour.
 
 Que ce soit la partie *content management*, la partie *analytics*, les
-interfaces de paiement, l'intégration *back-office* avec la gestion du
-stock, des commandes d'approvisionnement etc. ou encore les différents
-systèmes service clients toute partie fait bon sujet à implémentation
+interfaces de paiement, l'intÃ©gration *back-office* avec la gestion du
+stock, des commandes d'approvisionnement etc. ou encore les diffÃ©rents
+systÃ¨mes service clients toute partie fait bon sujet Ã  implÃ©mentation
 avec Java selon l'orateur.
 
-Durant la session, les composantes mobiles et sociales ont été
-identifiées également comme tendances de marchés. Oui, du social même
-dans le e-commerce, jetez un oeil par exemple à
+Durant la session, les composantes mobiles et sociales ont Ã©tÃ©
+identifiÃ©es Ã©galement comme tendances de marchÃ©s. Oui, du social mÃªme
+dans le e-commerce, jetez un oeil par exemple Ã 
 [tor.com](http://tor.com/) pour vous en convaincre. Ou encore ce
-système qui permet aux commercants de proposer directement sur la
-vitrine de leur boutique un barcode qui lorsqu'il est scanné par un
+systÃ¨me qui permet aux commercants de proposer directement sur la
+vitrine de leur boutique un barcode qui lorsqu'il est scannÃ© par un
 mobile type Android ou iPhone redirigera directement sur la page
-google personalisée de la boutique où le client pourra critiquer les
-produits et partager avec la toile entière ses impressions et bons
+google personalisÃ©e de la boutique oÃ¹ le client pourra critiquer les
+produits et partager avec la toile entiÃ¨re ses impressions et bons
 plans... *The Web is watching you!*
 
-Bref, intéressante session avec ces retours d'expérience et cette
-vérité toujours évidente que Java est bien un langage, une plateforme
-même qui tient un bon avenir.
+Bref, intÃ©ressante session avec ces retours d'expÃ©rience et cette
+vÃ©ritÃ© toujours Ã©vidente que Java est bien un langage, une plateforme
+mÃªme qui tient un bon avenir.
 
 ### Quelques conseils d'architecture ###
 
-Durant sa présentation on sent le besoin de définir une bonne
+Durant sa prÃ©sentation on sent le besoin de dÃ©finir une bonne
 architecture pour tenir la route sur ce genre de produit si l'on veut
 supporter la masse.
 
-Sur de tels système, il conseil d'avoir des experts plus ou moins par
+Sur de tels systÃ¨me, il conseil d'avoir des experts plus ou moins par
 domaine ou par composant (ex. catalogue, profiles utilisateurs, etc.)
-et de fournir des composants réutilisables. Rien de révolutionaire
+et de fournir des composants rÃ©utilisables. Rien de rÃ©volutionaire
 mais certainement d'autant plus important sur un produit devant
 supporter autant de charge.
 
-Autre point important: garder un modèle de données propre et simple
+Autre point important: garder un modÃ¨le de donnÃ©es propre et simple
 afin de permettre des performances acceptable et une bonne gestion et
-une possibilité facilitée de grandir.
+une possibilitÃ© facilitÃ©e de grandir.
 
-Il a également donné plusieurs conseils d'architecture physique en
+Il a Ã©galement donnÃ© plusieurs conseils d'architecture physique en
 parlant notamment du sujet bouillant u moment, le
-*cloud*. Référez-vous aux slides pour plus d'infos sur le sujet.
+*cloud*. RÃ©fÃ©rez-vous aux slides pour plus d'infos sur le sujet.
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/we_a5_1600-1650_brazile.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/we_a5_1600-1650_brazile.pdf)
 
-## La deuxième journée se termine... ##
+## La deuxiÃ¨me journÃ©e se termine... ##
 
-Avec les présentation *rookies* mettant en scène des jeunes de moins
-de 26 ans qui ont l'opportunité d'appréhender pour la première fois la
-scène. Une grande chance d'autant plus qu'ils ont pu profiter des
-critiques d'un jury de professionnels[^5]. Le contenu a été
-intéressant et j'ai impressionné par la qualité de leur prestence. Ca
+Avec les prÃ©sentation *rookies* mettant en scÃ¨ne des jeunes de moins
+de 26 ans qui ont l'opportunitÃ© d'apprÃ©hender pour la premiÃ¨re fois la
+scÃ¨ne. Une grande chance d'autant plus qu'ils ont pu profiter des
+critiques d'un jury de professionnels[^5]. Le contenu a Ã©tÃ©
+intÃ©ressant et j'ai impressionnÃ© par la qualitÃ© de leur prestence. Ca
 valait bien certaines sessions officielles.
 
-* 1ère présentation rookie: [OpenSocial done right - Integrating OpenSocial for 16 million users](http://jazoon.com/Portals/0/Content/slides/we_a5_1710-1730_hofmann.pdf)
-* 2ème présentation : [End-to-End Security: Accounting for the User Factor - A Real Case of Application Development](http://jazoon.com/Portals/0/Content/slides/we_a5_1740-1800_Ion.pdf)
-* 3ème présentation (le gagnant): [Analyze Heapdumps in a Web Browser - Single Sourcing in Practice](http://jazoon.com/Portals/0/Content/slides/we_a5_1810-1830_muskalla.pdf)
+* 1Ã¨re prÃ©sentation rookie: [OpenSocial done right - Integrating OpenSocial for 16 million users](http://jazoon.com/Portals/0/Content/slides/we_a5_1710-1730_hofmann.pdf)
+* 2Ã¨me prÃ©sentation : [End-to-End Security: Accounting for the User Factor - A Real Case of Application Development](http://jazoon.com/Portals/0/Content/slides/we_a5_1740-1800_Ion.pdf)
+* 3Ã¨me prÃ©sentation (le gagnant): [Analyze Heapdumps in a Web Browser - Single Sourcing in Practice](http://jazoon.com/Portals/0/Content/slides/we_a5_1810-1830_muskalla.pdf)
 
 # Le jeudi #
 
 ## The Gaia satellite and data processing ##
 
-Présentation vraiment dur à suivre au sortir du lit. William O'Mullane
-a présenté ici le projet de de l'European Space Astronomy Centre avec
-un zoom sur la partie développement bien sûr.
+PrÃ©sentation vraiment dur Ã  suivre au sortir du lit. William O'Mullane
+a prÃ©sentÃ© ici le projet de de l'European Space Astronomy Centre avec
+un zoom sur la partie dÃ©veloppement bien sÃ»r.
 
-Java est aussi utilisé dans le domaine de la recherche spatiale et
-cette session en a donné un joli aperçu.
+Java est aussi utilisÃ© dans le domaine de la recherche spatiale et
+cette session en a donnÃ© un joli aperÃ§u.
 
-Je vous suggère de voir les slides si le sujet vous intéresse ou bien
-d'attendre la publication de la vidéo sur
+Je vous suggÃ¨re de voir les slides si le sujet vous intÃ©resse ou bien
+d'attendre la publication de la vidÃ©o sur
 [parleys.com](http://parleys.com)
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/th_a5_0900-1000_o'mullane_keynote.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/th_a5_0900-1000_o'mullane_keynote.pdf)
 
 ## Essentials of testing: the tools you need to know ##
 
-Beaucoup de monde pour cette session, à tel point qu'il n'y avait pas
-assez de sièges disponibles.
+Beaucoup de monde pour cette session, Ã  tel point qu'il n'y avait pas
+assez de siÃ¨ges disponibles.
 
-Cette session avait pour objectif d'offrir un retour d'expérience
-partagé par deux expert de gestion qualité à propos du challenge de
-mettre en place et de garder à jour un ensemble d'outils permettant
-d'améliorer la qualité d'un projet de développement.
+Cette session avait pour objectif d'offrir un retour d'expÃ©rience
+partagÃ© par deux expert de gestion qualitÃ© Ã  propos du challenge de
+mettre en place et de garder Ã  jour un ensemble d'outils permettant
+d'amÃ©liorer la qualitÃ© d'un projet de dÃ©veloppement.
 
-Une série d'outils étant à disposition et ce pour chaque couche d'un
+Une sÃ©rie d'outils Ã©tant Ã  disposition et ce pour chaque couche d'un
 logiciel il peut devenir difficile de faire son choix et ensuite de
-les intégrer tous ensemble. Ces employés d'AdNovum ont donc passé
-cette session à présenter tout d'abord la liste des outils disponibles
+les intÃ©grer tous ensemble. Ces employÃ©s d'AdNovum ont donc passÃ©
+cette session Ã  prÃ©senter tout d'abord la liste des outils disponibles
 par couche logiciel et ensuite ce qu'il est possible de faire avec ces
-outils notamment au travers de quelques démos.
+outils notamment au travers de quelques dÃ©mos.
 
 Premier conseil d'importance: la notion de pyramide que l'on retrouve
 en slide 11. Cette pyramide encourage une large part de tests
-unitaires. Ces tests succints et dirigés clairement sur une fonction
-précise doivent être rapidement éxécutables et devraient faire partie
+unitaires. Ces tests succints et dirigÃ©s clairement sur une fonction
+prÃ©cise doivent Ãªtre rapidement Ã©xÃ©cutables et devraient faire partie
 du livrable de l'application. Vous vous rappelez de la notion du
-*done* défendue dans la session sur Scrum? Les tests unitaires doivent
-être inclus à part égale avec le code applicatif. Concernant les tests
-d'intégration, fonctionnels et d'interface graphique bien qu'ils
-soient aussi très importants leur lourdeur demandera davantage de
-temps à déveloper et à exécuter un équilibre sera donc de mise pour
+*done* dÃ©fendue dans la session sur Scrum? Les tests unitaires doivent
+Ãªtre inclus Ã  part Ã©gale avec le code applicatif. Concernant les tests
+d'intÃ©gration, fonctionnels et d'interface graphique bien qu'ils
+soient aussi trÃ¨s importants leur lourdeur demandera davantage de
+temps Ã  dÃ©veloper et Ã  exÃ©cuter un Ã©quilibre sera donc de mise pour
 mettre en oeuvre une batterie de tests couvrant tous les cas et
 donnant le plus de garantie possibles au client que tout est sous
-contrôle.
+contrÃ´le.
 
-La slide numéro 13 vaut également le détour offrant une petite vue
-d'ensemble de la solution qu'ils ont choisi avec la possibilité de
-voir quelles couches sont testées avec quels outils. Au delà de ça je
-trouve vraiment bien que les notions de qualités et plus
-particulièrement de tests fasse l'objet de sujet de conférences. Bien
+La slide numÃ©ro 13 vaut Ã©galement le dÃ©tour offrant une petite vue
+d'ensemble de la solution qu'ils ont choisi avec la possibilitÃ© de
+voir quelles couches sont testÃ©es avec quels outils. Au delÃ  de Ã§a je
+trouve vraiment bien que les notions de qualitÃ©s et plus
+particuliÃ¨rement de tests fasse l'objet de sujet de confÃ©rences. Bien
 trop souvent dans les projets, parler de tests applicatifs rime
 uniquement avec tests unitaires. Aujourd'hui il est possible de
-pousser bien plus loin et la qualité de nos projets augmentera j'en
-suis certain si l'on fait l'effort de démocratiser ce genre de
+pousser bien plus loin et la qualitÃ© de nos projets augmentera j'en
+suis certain si l'on fait l'effort de dÃ©mocratiser ce genre de
 connaissances.
 
 D'un point de vue technique les orateurs ont pu dire que HtmlUnit est
-bien plus rapide que Selenium, à tester, je ne connaissais pas ce
+bien plus rapide que Selenium, Ã  tester, je ne connaissais pas ce
 framework...
 
-D'autres notions intéressantes ont été abordées, je vous laisse
+D'autres notions intÃ©ressantes ont Ã©tÃ© abordÃ©es, je vous laisse
 visionner les slides pour plus d'informations.
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/th_a6_1030-1120_polasek.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/th_a6_1030-1120_polasek.pdf)
 
 ## Rapid application development with Apache Wicket ##
 
-Wicket est un framework né en 2005 proposant de faire du développement
-web un peu à la manière d'un développement Swing. Ce projet profite
-d'une communauté très active et d'une certaine simplicité
-rafraîchissante. Rien qu'à voir comment on commence un projet wicket:
+Wicket est un framework nÃ© en 2005 proposant de faire du dÃ©veloppement
+web un peu Ã  la maniÃ¨re d'un dÃ©veloppement Swing. Ce projet profite
+d'une communautÃ© trÃ¨s active et d'une certaine simplicitÃ©
+rafraÃ®chissante. Rien qu'Ã  voir comment on commence un projet wicket:
 un jar wicket et slf4j pour le logging et c'est parti! Maven propose
-d'ailleurs un archetype de démarrage, tout semble fait pour du simple
+d'ailleurs un archetype de dÃ©marrage, tout semble fait pour du simple
 et efficace.
 
-L'idée donc derrière ce framework est de proposer des composants
-réutilisables et de les insérer dans des pages html grâce à des
-attributs spécifiques au éléments formant la page mais sans jamais
+L'idÃ©e donc derriÃ¨re ce framework est de proposer des composants
+rÃ©utilisables et de les insÃ©rer dans des pages html grÃ¢ce Ã  des
+attributs spÃ©cifiques au Ã©lÃ©ments formant la page mais sans jamais
 utiliser de langages particulier. On s'appuie uniquement sur des
-attributs html. Pas de langage EL ou autre, rien. Cela peut être un
-sacré atout dès lors que l'on veuille travailler avec des webdesigners
-ne connaissant justement pas toutes les particularités du
-développement java et en particulier le langage EL ou autre scriplets
+attributs html. Pas de langage EL ou autre, rien. Cela peut Ãªtre un
+sacrÃ© atout dÃ¨s lors que l'on veuille travailler avec des webdesigners
+ne connaissant justement pas toutes les particularitÃ©s du
+dÃ©veloppement java et en particulier le langage EL ou autre scriplets
 (beurk).
 
-Après avoir défendu ces quelques avantages et d'autres encore que j'ai
-certainement oublié de noter, plusieurs démo s'en sont suivies et je
-dois dire que c'est plutôt séduisant comme idée...
+AprÃ¨s avoir dÃ©fendu ces quelques avantages et d'autres encore que j'ai
+certainement oubliÃ© de noter, plusieurs dÃ©mo s'en sont suivies et je
+dois dire que c'est plutÃ´t sÃ©duisant comme idÃ©e...
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/th_a3_1130-1220_lombardi.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/th_a3_1130-1220_lombardi.pdf)
 
 ## Exploring HTML5 with JavaServer Faces 2.0 ##
 
-Après un nouveau bon lunch je retrouve une session sur HTML5 et JSF2.
+AprÃ¨s un nouveau bon lunch je retrouve une session sur HTML5 et JSF2.
 
-Connaissant un peu les nouveautés de HTML5, enfin les grandes
-nouveautés en tout cas avec l'arrivée des tags `audio`, `video` et
-d'autres plus sémentiques comme `section` ou encore `article` le début
-de session ne m'a rien appris à ce sujet. Je fondais alors mes espoirs
-sur ce qu'allais nous apprendre l'orateur sur JSF2 à ce niveau-là.
+Connaissant un peu les nouveautÃ©s de HTML5, enfin les grandes
+nouveautÃ©s en tout cas avec l'arrivÃ©e des tags `audio`, `video` et
+d'autres plus sÃ©mentiques comme `section` ou encore `article` le dÃ©but
+de session ne m'a rien appris Ã  ce sujet. Je fondais alors mes espoirs
+sur ce qu'allais nous apprendre l'orateur sur JSF2 Ã  ce niveau-lÃ .
 
-Malheureusement j'ai été un peu déçu puisqu'il a majoritairement parlé
-de ce qui était possible de faire avec HTML5 et ensuite s'est
-visiblement aperçu qu'il avait pris trop de temps à le faire pour
-finalement parler qu'en vitesse de l'intégration à JSF2. Ce qui au
-final semble donc être simplement des composants composites utilisant
-les tags HTML5 derrière, rien de bien passionant donc.
+Malheureusement j'ai Ã©tÃ© un peu dÃ©Ã§u puisqu'il a majoritairement parlÃ©
+de ce qui Ã©tait possible de faire avec HTML5 et ensuite s'est
+visiblement aperÃ§u qu'il avait pris trop de temps Ã  le faire pour
+finalement parler qu'en vitesse de l'intÃ©gration Ã  JSF2. Ce qui au
+final semble donc Ãªtre simplement des composants composites utilisant
+les tags HTML5 derriÃ¨re, rien de bien passionant donc.
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/th_a7_1330-1420_kitain.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/th_a7_1330-1420_kitain.pdf)
 
 ## Search, Find, Classify - A short tour through Apache Solr ##
 
-Un orateur tout simplement pitoyable, j'ai quitté la session tellement
-c'était agaçant à écouté, à nouveau des "mmmmmm", "aaaaaa". Pas bon
-pour moi en plus je commence à fatiguer après toutes ces sessions à me
-concentrer à comprendre ce qu'on dit en anglais.... Je pars assister à
-la session sur les hautes performances en accès aux bases de données
-relationnelles avec comme contenu la présentation de la librairie
+Un orateur tout simplement pitoyable, j'ai quittÃ© la session tellement
+c'Ã©tait agaÃ§ant Ã  Ã©coutÃ©, Ã  nouveau des "mmmmmm", "aaaaaa". Pas bon
+pour moi en plus je commence Ã  fatiguer aprÃ¨s toutes ces sessions Ã  me
+concentrer Ã  comprendre ce qu'on dit en anglais.... Je pars assister Ã 
+la session sur les hautes performances en accÃ¨s aux bases de donnÃ©es
+relationnelles avec comme contenu la prÃ©sentation de la librairie
 cliente de MySQL ClusterJ. Plusieurs benchmarks et quelques chiffres
-intéressants, cette librairie n'utilise pas JDBC mais optimise de son
-côté les accès aux bases donc MySQL. Intéressant, si le sujet vous
-intéresse n'hésitez pas à consulter les slides.
+intÃ©ressants, cette librairie n'utilise pas JDBC mais optimise de son
+cÃ´tÃ© les accÃ¨s aux bases donc MySQL. IntÃ©ressant, si le sujet vous
+intÃ©resse n'hÃ©sitez pas Ã  consulter les slides.
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/th_a5_1430-1520_maurmann.pdf)
-[Télécharger la présentation sur les performances d'accès aux bases de données relationnelles](http://jazoon.com/Portals/0/Content/slides/th_a6_1430-1520_russell.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/th_a5_1430-1520_maurmann.pdf)
+[TÃ©lÃ©charger la prÃ©sentation sur les performances d'accÃ¨s aux bases de donnÃ©es relationnelles](http://jazoon.com/Portals/0/Content/slides/th_a6_1430-1520_russell.pdf)
 
 ## Real Java EE testing with Arquillian ##
 
-Cette dernière session à laquelle j'assiste est une session programmée
-sur 20 minutes faite quasiment uniquement de démos.
+Cette derniÃ¨re session Ã  laquelle j'assiste est une session programmÃ©e
+sur 20 minutes faite quasiment uniquement de dÃ©mos.
 
-En deux mots, Arquillian est un framework développé au sein de JBoss permettant d'effectuer ses tests au sein d'un container distant ou embarqué. Le projet en est à ses débuts, les démos ont démontré en tout cas que cela fonctionne mais ça me fait quand même furieusement rappeler le projet [cargo](http://cargo.codehaus.org/Maven2+plugin), je me trompe?
+En deux mots, Arquillian est un framework dÃ©veloppÃ© au sein de JBoss permettant d'effectuer ses tests au sein d'un container distant ou embarquÃ©. Le projet en est Ã  ses dÃ©buts, les dÃ©mos ont dÃ©montrÃ© en tout cas que cela fonctionne mais Ã§a me fait quand mÃªme furieusement rappeler le projet [cargo](http://cargo.codehaus.org/Maven2+plugin), je me trompe?
 
-[Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/th_a7_1600-1620_knutsen.pdf)
+[TÃ©lÃ©charger la prÃ©sentation](http://jazoon.com/Portals/0/Content/slides/th_a7_1600-1620_knutsen.pdf)
 
 # Mon retour final #
 
-Je finis ces trois jours de session fatigué. Fatigué par le fait que
+Je finis ces trois jours de session fatiguÃ©. FatiguÃ© par le fait que
 je dois encore trop me concentrer pour comprendre ce que disent les
 orateurs. C'est pas encore assez fluide dans mon esprit pour pouvoir
-le faire plus librement, avec moins d'énergie.
+le faire plus librement, avec moins d'Ã©nergie.
 
-Je rentre donc un peu fatigué mais au-delà de ça j'ai passé 3 jours
-exceptionnels, c'était ma toute première conférence de ce genre et
-j'ai été servi en contenu et en rencontres. Entre les lunchs et apéros
-offerts par Jazoon, j'ai pu rencontrer plusieurs développeurs sympas
-partageants la même passion. Je peux assurément encore faire des
-efforts pour dépasser ma timidité et aller encore plus à la rencontre
-des autres mais j'ai tout de même fait la connaissance de plusieurs
+Je rentre donc un peu fatiguÃ© mais au-delÃ  de Ã§a j'ai passÃ© 3 jours
+exceptionnels, c'Ã©tait ma toute premiÃ¨re confÃ©rence de ce genre et
+j'ai Ã©tÃ© servi en contenu et en rencontres. Entre les lunchs et apÃ©ros
+offerts par Jazoon, j'ai pu rencontrer plusieurs dÃ©veloppeurs sympas
+partageants la mÃªme passion. Je peux assurÃ©ment encore faire des
+efforts pour dÃ©passer ma timiditÃ© et aller encore plus Ã  la rencontre
+des autres mais j'ai tout de mÃªme fait la connaissance de plusieurs
 gars bien sympas!
 
-Autre point super positif, l'organisation. Lunchs, apéros, sessions
-intéressantes, wifi (même si un peu récalcitrant le 1er jour) tout
-était quasiment parfait. Tout ça dans un complex de cinémas, c'est
-génial! J'ai pu découvrir un peu plus la ville de Zürich et ça vaut le
-coup de visiter, c'est aussi ça qui n'a peut-être pas arrangé le coup
+Autre point super positif, l'organisation. Lunchs, apÃ©ros, sessions
+intÃ©ressantes, wifi (mÃªme si un peu rÃ©calcitrant le 1er jour) tout
+Ã©tait quasiment parfait. Tout Ã§a dans un complex de cinÃ©mas, c'est
+gÃ©nial! J'ai pu dÃ©couvrir un peu plus la ville de ZÃ¼rich et Ã§a vaut le
+coup de visiter, c'est aussi Ã§a qui n'a peut-Ãªtre pas arrangÃ© le coup
 de fatigue du jeudi :)
 
 Bref je suis vraiment super content d'avoir pu profiter de cette
-opportunité de rencontres et de veille technologique parce que c'est
-vrai ce genre de conférence permet merveilleusement de voir ce qu'il
-se fait dans beaucoup de domaines, c'est très enrichissant et je ne
-peux qu'encourager tout à chacun à tenter l'expérience.
+opportunitÃ© de rencontres et de veille technologique parce que c'est
+vrai ce genre de confÃ©rence permet merveilleusement de voir ce qu'il
+se fait dans beaucoup de domaines, c'est trÃ¨s enrichissant et je ne
+peux qu'encourager tout Ã  chacun Ã  tenter l'expÃ©rience.
 
 [1]: http://javafx.com/
 
-[^1]: gardez un oeil sur le site de [Jazoon](http://jazoon.com) qui petit à petit met en ligne les conférences
-[^2]: retrouvez la vidéo diffusée durant la session à propos de ce projet [ici](http://blogs.sun.com/jag/entry/the_green_ui)
+[^1]: gardez un oeil sur le site de [Jazoon](http://jazoon.com) qui petit Ã  petit met en ligne les confÃ©rences
+[^2]: retrouvez la vidÃ©o diffusÃ©e durant la session Ã  propos de ce projet [ici](http://blogs.sun.com/jag/entry/the_green_ui)
 [^3]: le blog insideIT.fr en fait l'objet d'un [article](http://www.insideit.fr/post/2008/09/15/Java-7-Fork/Join-:-Exploiter-toute-la-puissance)
-[^4]: JSF 2.0, JSP 2.2, EL 2.2, JSTL 1.2, JSR45 1.0, Servlet 3.0, CDI 1.0, EJB 3.1 Lite, DI 1.0, Managed Beans 1.0, Bean Validation 1.0, Interceptors 1.1, JSR250 1.1, JPA 2.0 pour être précis
-[^5]: jury composé de Danny Coward, Ken Schwaber et William O'Mullane
+[^4]: JSF 2.0, JSP 2.2, EL 2.2, JSTL 1.2, JSR45 1.0, Servlet 3.0, CDI 1.0, EJB 3.1 Lite, DI 1.0, Managed Beans 1.0, Bean Validation 1.0, Interceptors 1.1, JSR250 1.1, JPA 2.0 pour Ãªtre prÃ©cis
+[^5]: jury composÃ© de Danny Coward, Ken Schwaber et William O'Mullane
 
 {% endarticle %}
 {% endblock %}
