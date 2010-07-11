@@ -282,3 +282,13 @@ span.date{
 #comments a{color: black;}
 #comments .sidebar{padding-top: 2em;}
 #disqus_thread{display:none;}
+/*****************
+      TOC
+*****************/
+div.toc ul, div.toc ul ul, div.toc ul ul ul, div.toc ul ul ul ul{
+    margin: 0 !important;
+    padding-left: 1em;
+}
+div.toc ul li{
+    list-style-type: none !important;
+}
