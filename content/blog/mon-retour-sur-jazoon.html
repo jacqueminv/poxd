@@ -3,7 +3,7 @@
    title: "Mon retour sur Jazoon"
    categories:
        - dev
-   created: 2010-06-12
+   created: 2010-07-11
 %}
 {% block article %}
 {% article %}
@@ -12,7 +12,11 @@ C'est dans le complex cinématographique Arena Filmcity de Zürich que
 j'ai participé à ma toute première conférence internationale sur
 Java. Sur une durée de trois jours, c'est comme un petit gamin
 émerveillé par un mur de bonbons que j'ai navigué de session en
-session dont voici un aperçu[^1].
+session dont voici un aperçu[^1]. La conférence s'est déroulée du 1 au
+3 juin j'ai donc plus d'un mois de retard sur les faits mais ça prend
+du temps tout de même d'écrire un article pareil, non mais!
+
+Toutes les présentations dans un zip [ici](http://jazoon.com/Portals/0/Content/downloads/Jazoon%2710_Presentation_Slides.zip)
 
 [TOC]
 
@@ -321,7 +325,7 @@ visiblement pas le seul vu l'assistance en nombre venue pour écouter
 Ognen Ivanovski prodiguer ses conseils sur le développement
 iPhone/iPad.
 
-## L'expérience utilisateur ##
+### L'expérience utilisateur ###
 
 Premier élément évoqué: le hardware. Développer sur mobile signifie
 davantage de contraintes à ce niveau-là par rapport à du développement
@@ -354,15 +358,15 @@ Si les contraintes au niveau matériel sont bien réelles il faudra
 de l'application. Une application sur iPhone qui demande beaucoup
 d'interactions avec l'utilisateur pour atteindre un résultat n'est pas
 une bonne application. L'iPhone s'utilise dans le bus, en marchant,
-dans l'ascenseur, dans quasiment toutes situations si ce n'est à un
-bureau, tout l'inverse des applications dont on a l'habitude de
-développer. Il faudra par conséquent bien réfléchir l'interaction
-utilisateur, qu'elle se fasse le plus simplement possible et ce avec
-le minimum d'information entrée par l'utilisateur. Lorsqu'il se doit
-d'interragir, il faut aussi penser à afficher des contrôles
-suffisament grands, l'utilisateur entre les données avec ses doigts et
-non plus avec une souris... Autre préconception à s'enlever de la
-tête.
+dans l'ascenseur, le canapé, dans quasiment toutes situations si ce
+n'est à un bureau, tout l'inverse des applications dont on a
+l'habitude de développer. Il faudra par conséquent bien réfléchir
+l'interaction utilisateur, qu'elle se fasse le plus simplement
+possible et ce avec le minimum d'information entrée par
+l'utilisateur. Lorsqu'il se doit d'interragir, il faut aussi penser à
+afficher des contrôles suffisament grands, l'utilisateur entre les
+données avec ses doigts et non plus avec une souris... Autre
+préconception à s'enlever de la tête.
 
 Une bonne utilisation du *multi-touch* et des animations permettront
 également de rendre l'application plus *responsive* et de faire
@@ -372,36 +376,199 @@ applications web au travers par exemple des progrès réalisés au sein
 des frameworks javascript, l'iPhone pousse l'expérience encore plus
 loin.
 
-## L'écosystème ##
+### L'écosystème ###
 
+L'image du *Walled Garden* est bien connue lorsqu'on parle d'Apple et
+on y revient automatiquement dès lors que l'orateur commence à nous
+parler de l'écosystème d'un développement pour iPhone. Des licences
+qu'il faut garder à l'oeil du fait de leurs variations incessantes, un
+risque de rejet de son application dès le départ ou encore sur une
+évolution ultérieure, tels sont quelques points à risque lors qu'on
+attaque ce marché. Une des dernières évolutions de license en dates
+ayant fait le plus de bruit a été l'interdiction pur et simple
+d'utiliser des outils de *cross-compilation* permettant de développer
+une application par exemple sous Flash pour au final fonctionner en
+Objective-C le langage d'Apple. Par rapport au processus de validation
+l'orateur en faisant part de son expérience nous explique que
+l'approbation est d'habitude prévisible. A noter tout de même que ce
+processus de validation à un côté très positif: l'utilisateur donne
+une grande confiance aux applications présentes dans l'AppStore.
 
+### Le côté *hype* ###
 
-résolutions différentes / tests réels
+Pouvoir proposer ses solutions au travers de l'AppStore ajoute un côté
+marketing certain aujourd'hui avec tout l'effet de mode auprès du
+grand public que l'iPhone a pu engendrer. Dès lors si le produit est
+bon tout ça peut devenir une mine d'or, par contre un solution bancale
+risque de faire mal à l'image de marque.
+
+### A se remémorer ###
+
+Une bonne application iPhone devra répondre à un besoin typique
+d'utilisateur **mobile**. Typiquement vérifier les horaires de train
+fera une très bonne application du moment qu'elle est pensée de
+manière ergonomique (notion de *minimum input/maximum output*). L'idée
+sera donc d'identifier ces situations où une utilisation de manière
+mobile d'une application pourrait combler un besoin.
+
+L'idée vraiment ressortie durant cette session c'est de se rappeler
+que sur un appareil de ce type les contraintes mémoires sont à prendre
+bien plus au sérieux par rapport à un développement sur serveur ou
+machine de bureau. Autre point important, réfléchir à l'utilisation
+mobile faite par l'utilisateur. L'utilisateur n'est pas assis devant
+son écran. Il ne faut pas manquer également la phase de test réelle
+sur l'appareil directement. Les tests sur émulateur pouvant
+effectivement être parfois trompeurs...
+
+### Et l'iPad? ###
+
+Vu le titre de la session je m'attendais à un peu plus de contenu
+concernant l'iPad mais c'est vrai que début juin il était vraiment à
+peine sorti en Suisse. Malgré celà l'orateur en a tout de même parlé
+succintement en mentionnant un projet qu'ils ont pu mener avant même
+que l'iPad soit sorti. Pour s'en sortir ils ont sorti des maquettes
+1:1 par rapport à la résolution de l'appareil. On en saura pas plus.
+
+### Les outils ###
+
+Sur la fin de la session, les outils permettant le développement
+d'applications iPhone nous sont succintements présentés ainsi qu'un
+petit aperçu de ce à quoi ressemble Objective C.
+
 
 [Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/we_a3_1030-1130_ivanovski.pdf)
 
 ## What's new in Hibernate: a JPA 2 perspective ##
 
+Emmanuel Bernard prend place dans la salle numéro 5 pour nous parler
+des nouveautés sur Hibernate. Session intéressante par l'initiateur du
+podcast des Cast Codeurs j'y ai appris une chose ou deux vraiment
+intéressantes.
+
+### Envers ###
+
+La première chose c'est le projet
+[envers](http://www.jboss.org/envers). Ce projet a pour but de fournir
+une historisation automatique des entités gérées par Hibernate. Pour
+se faire, Hibernate crée un nouveau schéma en parallèle complètement
+géré par Hibernate et permettant de stocker toutes les différentes
+versions de chaque entité. Le produit permettra de remonter dans le
+temps sur ses entités. Bigrement intéressant!
+
+### Recherche ###
+
+Deuxième point super intéressant, la possibilité dorénavant de faire
+une recherche *fulltext* sur le schéma d'entités. Cette fonctionalité
+s'appuie sur le projet Lucene d'Apache. L'avantage étant que le
+développeur n'a pas besoin de configurer ce dernier, Hibernate prend
+tout en charge au travers du sous-projet Hibernate Search.
+
+### Et aussi ###
+
+*Clustering* amélioré, de nouvelles possibilités de mapping,
+ compatibilité JPA 2.0, la validation, tels sont d'autres sujets
+ abordés durant cette présentation.
+
 [Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/we_a5_1130-1220_bernard.pdf)
 
 ## Java persistence criteria API ##
+
+Après le repas, très dur d'assister à cette présentation pour faire
+poli... Soporiphique.
+
+Je n'ai pas grand chose à dire sur cette présentation puisque
+l'oratrice n'a pas apporté de réelle plus-value par rapport aux slides
+de la présentation.
+
+En résumé la Criteria API permet au développeur de créer une requête
+typée. Autrement dit pas de type `String` comme le sont les requêtes
+JPQL. L'avantage de cette solution c'est qu'une erreur sera
+directement découverte à la compilation et non plus uniquement au
+moment de l'exécution.
+
+Pour plus de détails, jetez un oeil aux slides.
 
 [Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/we_a3_1330-1420_demichiel.pdf)
 
 ## Patterns in practices in Hibernate ##
 
+Dans ma lancée j'assiste à nouveau à une présentation plutôt
+désagréable. La session a été inlassablement obstruée par des
+"eeeeee", "aaaaaaa", "meeeeeuuuuuuu", typiquement le genre de choses
+qui me fait péter un plomb!
+
+Bref du coup j'ai eu pas mal de peine à suivre. Cette session avait
+pour but de démontrer quelques pièges à éviter lors de l'utilisation
+d'Hibernate.
+
+Je ne peux malheureusement rien ajouter de plus par rapport à ce que
+disent directement les slides.
+
 [Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/we_a3_1430-1520_wegrzynowicz.pdf)
 
 ## How Java powers large online retail sites ##
 
+Retour d'expérience intéressant du CEO de ATG gros fournisseur de
+solutions e-commerce. L'orateur nous explique son expérience avec Java
+qui a été choisi dès le début pour leur solution. On parle ici de gros
+système e-commerce traitant (cf slides) plus d'un million de visiteurs
+par jour et des dizaines de milliers de commandes par jour.
+
+Que ce soit la partie *content management*, la partie *analytics*, les
+interfaces de paiement, l'intégration *back-office* avec la gestion du
+stock, des commandes d'approvisionnement etc. ou encore les différents
+systèmes service clients toute partie fait bon sujet à implémentation
+avec Java selon l'orateur.
+
+Durant la session, les composantes mobiles et sociales ont été
+identifiées également comme tendances de marchés. Oui, du social même
+dans le e-commerce, jetez un oeil par exemple à
+[tor.com](http://tor.com/) pour vous en convaincre. Ou encore ce
+système qui permet aux commercants de proposer directement sur la
+vitrine de leur boutique un barcode qui lorsqu'il est scanné par un
+mobile type Android ou iPhone redirigera directement sur la page
+google personalisée de la boutique où le client pourra critiquer les
+produits et partager avec la toile entière ses impressions et bons
+plans... *The Web is watching you!*
+
+Bref, intéressante session avec ces retours d'expérience et cette
+vérité toujours évidente que Java est bien un langage, une plateforme
+même qui tient un bon avenir.
+
+### Quelques conseils d'architecture ###
+
+Durant sa présentation on sent le besoin de définir une bonne
+architecture pour tenir la route sur ce genre de produit si l'on veut
+supporter la masse.
+
+Sur de tels système, il conseil d'avoir des experts plus ou moins par
+domaine ou par composant (ex. catalogue, profiles utilisateurs, etc.)
+et de fournir des composants réutilisables. Rien de révolutionaire
+mais certainement d'autant plus important sur un produit devant
+supporter autant de charge.
+
+Autre point important: garder un modèle de données propre et simple
+afin de permettre des performances acceptable et une bonne gestion et
+une possibilité facilitée de grandir.
+
+Il a également donné plusieurs conseils d'architecture physique en
+parlant notamment du sujet bouillant u moment, le
+*cloud*. Référez-vous aux slides pour plus d'infos sur le sujet.
+
 [Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/we_a5_1600-1650_brazile.pdf)
 
-La journée se termine avec les présentation *rookies* mettant en scène
-des jeunes de moins de 26 ans qui ont l'opportunité d'appréhender pour
-la première fois la scène. Une grande chance d'autant plus qu'ils ont
-pu profiter des critiques d'un jury de professionnels[^5]. Le contenu
-a été intéressant et j'ai impressionné par la qualité de leur
-prestence. Ca valait bien certaines sessions officielles.
+## La deuxième journée se termine... ##
+
+Avec les présentation *rookies* mettant en scène des jeunes de moins
+de 26 ans qui ont l'opportunité d'appréhender pour la première fois la
+scène. Une grande chance d'autant plus qu'ils ont pu profiter des
+critiques d'un jury de professionnels[^5]. Le contenu a été
+intéressant et j'ai impressionné par la qualité de leur prestence. Ca
+valait bien certaines sessions officielles.
+
+* 1ère présentation rookie: [OpenSocial done right - Integrating OpenSocial for 16 million users](http://jazoon.com/Portals/0/Content/slides/we_a5_1710-1730_hofmann.pdf)
+* 2ème présentation : [End-to-End Security: Accounting for the User Factor - A Real Case of Application Development](http://jazoon.com/Portals/0/Content/slides/we_a5_1740-1800_Ion.pdf)
+* 3ème présentation (le gagnant): [Analyze Heapdumps in a Web Browser - Single Sourcing in Practice](http://jazoon.com/Portals/0/Content/slides/we_a5_1810-1830_muskalla.pdf)
 
 # Le jeudi #
 
@@ -411,27 +578,164 @@ Présentation vraiment dur à suivre au sortir du lit. William O'Mullane
 a présenté ici le projet de de l'European Space Astronomy Centre avec
 un zoom sur la partie développement bien sûr.
 
+Java est aussi utilisé dans le domaine de la recherche spatiale et
+cette session en a donné un joli aperçu.
+
+Je vous suggère de voir les slides si le sujet vous intéresse ou bien
+d'attendre la publication de la vidéo sur
+[parleys.com](http://parleys.com)
+
 [Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/th_a5_0900-1000_o'mullane_keynote.pdf)
 
 ## Essentials of testing: the tools you need to know ##
+
+Beaucoup de monde pour cette session, à tel point qu'il n'y avait pas
+assez de sièges disponibles.
+
+Cette session avait pour objectif d'offrir un retour d'expérience
+partagé par deux expert de gestion qualité à propos du challenge de
+mettre en place et de garder à jour un ensemble d'outils permettant
+d'améliorer la qualité d'un projet de développement.
+
+Une série d'outils étant à disposition et ce pour chaque couche d'un
+logiciel il peut devenir difficile de faire son choix et ensuite de
+les intégrer tous ensemble. Ces employés d'AdNovum ont donc passé
+cette session à présenter tout d'abord la liste des outils disponibles
+par couche logiciel et ensuite ce qu'il est possible de faire avec ces
+outils notamment au travers de quelques démos.
+
+Premier conseil d'importance: la notion de pyramide que l'on retrouve
+en slide 11. Cette pyramide encourage une large part de tests
+unitaires. Ces tests succints et dirigés clairement sur une fonction
+précise doivent être rapidement éxécutables et devraient faire partie
+du livrable de l'application. Vous vous rappelez de la notion du
+*done* défendue dans la session sur Scrum? Les tests unitaires doivent
+être inclus à part égale avec le code applicatif. Concernant les tests
+d'intégration, fonctionnels et d'interface graphique bien qu'ils
+soient aussi très importants leur lourdeur demandera davantage de
+temps à déveloper et à exécuter un équilibre sera donc de mise pour
+mettre en oeuvre une batterie de tests couvrant tous les cas et
+donnant le plus de garantie possibles au client que tout est sous
+contrôle.
+
+La slide numéro 13 vaut également le détour offrant une petite vue
+d'ensemble de la solution qu'ils ont choisi avec la possibilité de
+voir quelles couches sont testées avec quels outils. Au delà de ça je
+trouve vraiment bien que les notions de qualités et plus
+particulièrement de tests fasse l'objet de sujet de conférences. Bien
+trop souvent dans les projets, parler de tests applicatifs rime
+uniquement avec tests unitaires. Aujourd'hui il est possible de
+pousser bien plus loin et la qualité de nos projets augmentera j'en
+suis certain si l'on fait l'effort de démocratiser ce genre de
+connaissances.
+
+D'un point de vue technique les orateurs ont pu dire que HtmlUnit est
+bien plus rapide que Selenium, à tester, je ne connaissais pas ce
+framework...
+
+D'autres notions intéressantes ont été abordées, je vous laisse
+visionner les slides pour plus d'informations.
 
 [Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/th_a6_1030-1120_polasek.pdf)
 
 ## Rapid application development with Apache Wicket ##
 
+Wicket est un framework né en 2005 proposant de faire du développement
+web un peu à la manière d'un développement Swing. Ce projet profite
+d'une communauté très active et d'une certaine simplicité
+rafraîchissante. Rien qu'à voir comment on commence un projet wicket:
+un jar wicket et slf4j pour le logging et c'est parti! Maven propose
+d'ailleurs un archetype de démarrage, tout semble fait pour du simple
+et efficace.
+
+L'idée donc derrière ce framework est de proposer des composants
+réutilisables et de les insérer dans des pages html grâce à des
+attributs spécifiques au éléments formant la page mais sans jamais
+utiliser de langages particulier. On s'appuie uniquement sur des
+attributs html. Pas de langage EL ou autre, rien. Cela peut être un
+sacré atout dès lors que l'on veuille travailler avec des webdesigners
+ne connaissant justement pas toutes les particularités du
+développement java et en particulier le langage EL ou autre scriplets
+(beurk).
+
+Après avoir défendu ces quelques avantages et d'autres encore que j'ai
+certainement oublié de noter, plusieurs démo s'en sont suivies et je
+dois dire que c'est plutôt séduisant comme idée...
+
 [Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/th_a3_1130-1220_lombardi.pdf)
 
 ## Exploring HTML5 with JavaServer Faces 2.0 ##
+
+Après un nouveau bon lunch je retrouve une session sur HTML5 et JSF2.
+
+Connaissant un peu les nouveautés de HTML5, enfin les grandes
+nouveautés en tout cas avec l'arrivée des tags `audio`, `video` et
+d'autres plus sémentiques comme `section` ou encore `article` le début
+de session ne m'a rien appris à ce sujet. Je fondais alors mes espoirs
+sur ce qu'allais nous apprendre l'orateur sur JSF2 à ce niveau-là.
+
+Malheureusement j'ai été un peu déçu puisqu'il a majoritairement parlé
+de ce qui était possible de faire avec HTML5 et ensuite s'est
+visiblement aperçu qu'il avait pris trop de temps à le faire pour
+finalement parler qu'en vitesse de l'intégration à JSF2. Ce qui au
+final semble donc être simplement des composants composites utilisant
+les tags HTML5 derrière, rien de bien passionant donc.
 
 [Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/th_a7_1330-1420_kitain.pdf)
 
 ## Search, Find, Classify - A short tour through Apache Solr ##
 
+Un orateur tout simplement pitoyable, j'ai quitté la session tellement
+c'était agaçant à écouté, à nouveau des "mmmmmm", "aaaaaa". Pas bon
+pour moi en plus je commence à fatiguer après toutes ces sessions à me
+concentrer à comprendre ce qu'on dit en anglais.... Je pars assister à
+la session sur les hautes performances en accès aux bases de données
+relationnelles avec comme contenu la présentation de la librairie
+cliente de MySQL ClusterJ. Plusieurs benchmarks et quelques chiffres
+intéressants, cette librairie n'utilise pas JDBC mais optimise de son
+côté les accès aux bases donc MySQL. Intéressant, si le sujet vous
+intéresse n'hésitez pas à consulter les slides.
+
 [Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/th_a5_1430-1520_maurmann.pdf)
+[Télécharger la présentation sur les performances d'accès aux bases de données relationnelles](http://jazoon.com/Portals/0/Content/slides/th_a6_1430-1520_russell.pdf)
 
 ## Real Java EE testing with Arquillian ##
 
+Cette dernière session à laquelle j'assiste est une session programmée
+sur 20 minutes faite quasiment uniquement de démos.
+
+En deux mots, Arquillian est un framework développé au sein de JBoss permettant d'effectuer ses tests au sein d'un container distant ou embarqué. Le projet en est à ses débuts, les démos ont démontré en tout cas que cela fonctionne mais ça me fait quand même furieusement rappeler le projet [cargo](http://cargo.codehaus.org/Maven2+plugin), je me trompe?
+
 [Télécharger la présentation](http://jazoon.com/Portals/0/Content/slides/th_a7_1600-1620_knutsen.pdf)
+
+# Mon retour final #
+
+Je finis ces trois jours de session fatigué. Fatigué par le fait que
+je dois encore trop me concentrer pour comprendre ce que disent les
+orateurs. C'est pas encore assez fluide dans mon esprit pour pouvoir
+le faire plus librement, avec moins d'énergie.
+
+Je rentre donc un peu fatigué mais au-delà de ça j'ai passé 3 jours
+exceptionnels, c'était ma toute première conférence de ce genre et
+j'ai été servi en contenu et en rencontres. Entre les lunchs et apéros
+offerts par Jazoon, j'ai pu rencontrer plusieurs développeurs sympas
+partageants la même passion. Je peux assurément encore faire des
+efforts pour dépasser ma timidité et aller encore plus à la rencontre
+des autres mais j'ai tout de même fait la connaissance de plusieurs
+gars bien sympas!
+
+Autre point super positif, l'organisation. Lunchs, apéros, sessions
+intéressantes, wifi (même si un peu récalcitrant le 1er jour) tout
+était quasiment parfait. Tout ça dans un complex de cinémas, c'est
+génial! J'ai pu découvrir un peu plus la ville de Zürich et ça vaut le
+coup de visiter, c'est aussi ça qui n'a peut-être pas arrangé le coup
+de fatigue du jeudi :)
+
+Bref je suis vraiment super content d'avoir pu profiter de cette
+opportunité de rencontres et de veille technologique parce que c'est
+vrai ce genre de conférence permet merveilleusement de voir ce qu'il
+se fait dans beaucoup de domaines, c'est très enrichissant et je ne
+peux qu'encourager tout à chacun à tenter l'expérience.
 
 [1]: http://javafx.com/
 
