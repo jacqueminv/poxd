@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 from fabric.api import *
-import os
+import os, os.path
 import fabric.contrib.project as project
+from smooshy import smoosher
 
 PROD = 'poxd.webfactional.com'
 DEST_PATH = '/home/poxd/webapps/poxdhyde/'
@@ -23,7 +24,7 @@ def reserve():
     serve()
 
 def smush():
-    local('smusher ./media/images')
+    smoosher.recursive_smoosher(["./media/images/"])
 
 @hosts(PROD)
 def publish():
@@ -32,3 +33,4 @@ def publish():
         remote_dir=DEST_PATH,
         local_dir=DEPLOY_PATH.rstrip('/') + '/'
     )
+    run("chmod 644 webapps/poxdhyde/media/images/*")

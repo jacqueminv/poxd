@@ -6,7 +6,7 @@ LOG_LEVEL = logging.INFO
 DATE_FORMAT = "j F Y"
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
 
-MD_EXTENSIONS = ['footnotes']
+MD_EXTENSIONS = ['footnotes','toc']
 PYGMENTS_OPTIONS = {'cssclass':'syntax'}
 DEFAULT_CATEGORY = 'divers'
 

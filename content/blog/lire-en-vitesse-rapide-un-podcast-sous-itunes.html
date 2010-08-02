@@ -1,0 +1,37 @@
+{% extends "_post.html" %}
+{%hyde
+   title: "Lire en vitesse rapide (x2 ou x3) un podcast sous itunes"
+   categories:
+       - divers
+   created: 2010-06-05
+%}
+{% block article %}
+{% article %}
+
+L'iPhone permet déjà depuis pas mal de temps de passer les podcasts en
+lecture rapide mais malheureusement itunes lui n'a pas suivi la même
+tendance. Ca en embètent certains...
+
+<a href="http://twitter.com/emmanuelbernard/status/12457844844">
+<img src="/media/images/eb-itunes.png" width="500" alt="I wish iTunes had the reading option x2 speed like the iPhone"/>
+</a>
+
+Comptez-moi dans le lot. Enfin jusque aujourd'hui puisqu'en fait il y
+a une solution toute simple. Cette solution n'utilise pas itunes et
+donc le titre est un peu trompeur mais j'imagine que les utilisateurs
+rencontrant ce problème l'ont avec itunes donc je voulais faire dans
+le pratique[^1].
+
+1. Dans la perspective podcast d'itunes, faire un clic-droit sur l'épisode du podcast à lire
+2. Sélectionner "Show in Finder"
+3. Clic-droit sur le fichier dans le finder et ouvrir le fichier avec Quicktime
+4. Une fois Quicktime ouvert, faire Window -> Show A/V Controls
+5. Parmis les options, régler la vitesse désirée sous Playback Speed
+
+Et voilà problème résolu! Quand même un peu bête qu'itunes n'inclut
+pas directement cette fonctionalité!
+
+[^1]: notez que je décris la procédure sur un système Mac -- il vous faudra télécharger [Quicktime](http://www.apple.com/quicktime/download/) sur tout autre système.
+
+{% endarticle %}
+{% endblock %}

@@ -1,0 +1,120 @@
+{% extends "_post.html" %}
+{%hyde
+   title: "SICP en version epub"
+   categories:
+      - dev
+   created: 2010-05-29
+%}
+{% block article %}
+{% article %}
+
+Après avoir terminé la lecture de la biographie de Richard Stallman
+j'ai été un peu plus séduit par le format epub. Le confort
+d'utilisation est supérieur à ce que je pensais et plusieurs
+fonctionalités offertes par un *e-reader* sont fort
+sympathiques... J'y reviendrai lors d'une prochaine critique de la bio
+susmentionnée.
+
+Pour l'instant le sujet de ce billet, c'est la publication de [SICP][1] en
+version epub[^1]. A ma surprise elle n'existait pas encore ou en tout cas
+je ne l'ai pas trouvée. Si je me trompe donnez-moi un lien please!
+
+Je possède SICP en version papier mais de l'avoir en version ebook sur
+mon iphone[^2] est un confort supplémentaire non négligeable.
+
+Bref si vous êtes intéressé c'est par là:
+[http://db.tt/ryenOj](http://db.tt/ryenOj)
+
+Copiez simplement cette url dans votre *e-reader* et hop après
+téléchargement plongez-vous confortablement dans ce livre incroyable!
+
+Pour les intéressés voici le snippet en python que j'ai utilisé pour
+convertir le livre en ligne en un seul fichier html. J'ai ensuite
+utilisé le logiciel [Calibre][2] pour la conversion en format epub ce
+qui nous donne au final un ebook fonctionnel. Oui fonctionnel, sans
+plus mais moi ça me convient très bien. Certains liens ne fonctionnent
+pas depuis la table des matières, d'autres marchent... Je n'ai pas
+cherché à comprendre pourquoi (vous vous rappelez [*Adopter le "assez
+bien"*][3] ?). Si quelqu'un a une piste qu'il n'hésite pas à me
+prodiguer ses lumières.
+
+[1]: http://mitpress.mit.edu/sicp/
+[2]: http://calibre-ebook.com/
+[3]: http://www.poxd.org/blog/adopter-le-assez-bien.html
+
+[^1]: epub est un format ouvert standardisé pour les livres électroniques -- *citant [Wikipedia](http://fr.wikipedia.org/wiki/EPUB_(format))*
+[^2]: j'utilise [Stanza](http://www.lexcycle.com/) excellent e-reader pour l'iphone selon moi
+
+{% syntax python %}
+import urllib2 as urllib
+import re
+
+url = "http://mitpress.mit.edu/sicp/full-text/book/book.html"
+base = "http://mitpress.mit.edu/sicp/full-text/book/"
+navigation = re.compile("<p><div class=navigation.+?<p>")
+href = re.compile("<a(.+)href=\"(?!http://).+\.html#(.+?)\"")
+body = re.compile(".*<body>(.+)</body>", re.DOTALL)
+
+def download_resources(content):
+    def _load(url):
+        resource = urllib.urlopen(url)
+        resource_content = resource.read()
+        resource.close()
+        return resource_content
+    def _write(local_url, content, binary=False):
+        mode = "w"
+        if binary:
+            mode += "b"
+        with open(local_url, mode) as local_resource:
+            local_resource.write(content)        
+    #1 load css 
+    links = re.search('<link .* href="(.+)"', content)
+    if links:
+        resource_url = links.groups()[0]
+        resource_content = _load(base + resource_url)
+        _write(resource_url, resource_content)
+    #2 load images
+    img_set = set()
+    for img in re.finditer('<img.+?src=[\'"](?!http)(.+?)[\'"].*?>', content):
+        img_url = img.groups()[0]
+        img_set.add(base + img_url)
+    for url in img_set:
+        resource_content = _load(url)
+        _write(url[len(base):], resource_content, True)
+
+#initial content
+content = urllib.urlopen(url)
+content = content.read()
+head = re.match("(<!doctype.+)<body>", content, re.DOTALL)
+head = head.groups()[0]
+content = body.match(content).groups()[0]
+
+#loop through the book until no 'next' url is found
+while True:
+    next_url = get_next_url(content)
+    if next_url is None:
+        break
+    next_url = "http://mitpress.mit.edu/sicp/full-text/book/%s" % next_url
+    content = re.sub(navigation, "", content)
+    c = get_content(next_url)
+    content = content + c
+
+def sanitize(match):
+    name = match.groups()[0]
+    name = name.replace("%","")
+    href = match.groups()[1]
+    href = href.replace("%","")
+    return "<a %s href='#%s'" % (name, href)
+
+content = re.sub(href, sanitize, content)
+content = re.sub('<a name="(.+)"', lambda m: '<a name="' + m.groups()[0].replace("%","") + '"', content)
+content = re.sub(navigation, "", content)
+content = head + "<body>" + content + "</body></html>"
+download_resources(content)
+
+#print the final book
+print content
+{% endsyntax %}
+
+{% endarticle %}
+{% endblock %}
