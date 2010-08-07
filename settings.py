@@ -18,7 +18,8 @@ DEPLOY_DIR = os.path.join(ROOT_PATH, 'deploy')
 TMP_DIR = os.path.join(ROOT_PATH, 'deploy_tmp')
 
 SITEMAP_FILE = os.path.join(TMP_DIR, 'sitemap.xml')
-SITEMAP_GENERATOR = os.path.join(ROOT_PATH,  "../lib/sitemap_gen-1.4/sitemap_gen.py")
+HYDE_PATH = "c:\\pet_projects\\hyde\\"
+SITEMAP_GENERATOR = os.path.join(ROOT_PATH, HYDE_PATH + "lib\\sitemap_gen-1.4\\sitemap_gen.py")
 
 
 BACKUPS_DIR = os.path.join(ROOT_PATH, 'backups')
@@ -83,11 +84,11 @@ CONTENT_PROCESSORS = {
 }
 SITE_PRE_PROCESSORS = {
     'blog': {
-        'hydeengine.site_pre_processors.CategoriesManager': {'node':'blog'},
-        'hydeengine.site_pre_processors.CategoriesArchiveGenerator': {'template':"_archives.html"},
+        'hydeengine.sitepreprocessors.category_management.CategoriesManager':
+            {'node':'blog', 'template': '_archives.html'}
         },
     '/': {
-        'hydeengine.site_pre_processors.NodeInjector' : {
+        'hydeengine.sitepreprocessors.node.NodeInjector' : {
                'variable' : 'blog_node',
                'path' : 'content/blog'
         }
@@ -133,7 +134,7 @@ FILTER = {
 # path for YUICompressor, or None if you don't
 # want to compress JS/CSS. Project homepage:
 # http://developer.yahoo.com/yui/compressor/
-YUI_COMPRESSOR = "./lib/yuicompressor-2.4.1.jar"
+YUI_COMPRESSOR = HYDE_PATH + "./lib/yuicompressor-2.4.1.jar"
 #YUI_COMPRESSOR = None 
 
 # path for HSS, which is a preprocessor for CSS-like files (*.hss)
