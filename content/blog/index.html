@@ -1,28 +1,30 @@
 {% extends "_archives.html" %}
+{% block title %}PoXd - archives{% endblock %}
 {% block listing %}
 <ul>
-{% for post in page.node.walk_pages %}
-    {% if not post.listing %}
-    {% ifequal post.node page.node %}
+{% for node in page.node.walk %}
+{% for post in node.pages %}
+{% ifnotequal post node.listing_page %}
+{% if not post.exclude %}
     {% ifchanged post.created.year %}
     {% if forloop.first %}
-    <li class="month"><h1 class="section first">{{post.created|date:"Y"}}</h1><!--<h1>{{post.created|date:"F Y"|title}}</h1>--></li>
+    <li><h2>{{post.created|date:"Y"}}</h2></li>
     {% else %}
-    <li class="month"><h1 class="section">{{post.created|date:"Y"}}</h1><!--<h1>{{post.created|date:"F Y"|title}}</h1>--></li>
+    <li><h2><hr class="clear unvisible" />{{post.created|date:"Y"}}</h2></li>
     {% endif %}
     {% endifchanged %}
-    <li class="entry">
-        <div class="yui-u first align-right" style="width:12%"><span class="postdate">{{post.created|date:"j/m"|title}}</span></div>
-        <div class="yui-u" style="width:88%"><a href="{{post.url}}">
+    <li>
+        <time pubdate>{{post.created|date:"j/m"|title}}</time>
+        <a href="{{post.url}}">
         {% with post.name_without_extension|remove_date_prefix|unslugify as default_title %}
             {% filter typogrify %}
             {{post.title|default_if_none:default_title }}
             {% endfilter %}
-        {%endwith%}</a></div>
-        <hr class="clear"/>
+        {%endwith%}</a>
     </li>
-    {% endifequal %}
-    {% endif %}
+{% endif %}
+{% endifnotequal %}    
+{% endfor %}
 {% endfor %}
 </ul>
 {% endblock %}

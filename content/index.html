@@ -1,51 +1,35 @@
-{% extends "skeleton/_home2.html" %}
-{% block home_content %}
-{% recent_posts post 5 page.blog_node %}
-<div id="home" class="yui-ge">
-<div class="yui-u first">
+{% extends "skeleton/_index.html" %}
+{% block title %}PoXd - accueil{% endblock %}
+{% block main_content %}
+{% recent_posts post 2 page.blog_node %}
 {% filter typogrify %}
-<div id="pub" class="yui-gf" style="width: 95%;">
-    <h1 class="section">Dernières publications</h1>
+{% for p in post %}
+{% if forloop.first %}
+<article>
+<header>
+	<h1><a href="{{p.url}}">{{p.title}}</a></h1>
+	<p>Publié le <time pubdate datetime="{{p.created|date:"Y-m-d"}}">{{p.created|date:"d F Y"}}</time></p>
+</header>
+{% markdown %}
+{% render_article p %}
+{% endmarkdown %}
+
+<section class="raligned">
+  <nav>
     {% for p in post %}
-    <div class="yui-u first align-right" style="width:20%">
-        <span class="postdate">{{p.created|date:"j/m"}}</span>
-    </div>
-    <div class="yui-u first" style="width:74.2%"> 
-        <h1 style="width: 100%;"><a href="{{p.full_url}}">{{p.title}}</a></h1>
-    </div>
-    <hr class="clear"/>
+    {% if forloop.first %}
+    <p class="no-margin"><a href="{{p.url}}#comments">Commenter</a> cet article</p>        
+    {% endif %}
+    {% if forloop.last %}
+    <p class="no-margin">Billet précédent: <a href="{{p.url}}">{{p.title}}</a></p>    
+    {% endif %}
     {% endfor %}
-</div>
+    <p class="no-margin">Découvrez le reste dans <strong><a href="/blog/index.html">les archives</a></strong>.</p>
+  </nav>
+</section>
+
+</article>
+{% endif %}
+{% endfor %}
 {% endfilter %}
-</div>
-<div class="sidebar yui-u">
-<h1>A propos</h1>
-<div>
-<p>Passionné de bouquins et de développement logiciel je vous accueille avec grand plaisir sur mon blog.</p>
-<p>Ne s'appuyant sur aucune base de données, ce site prend vie grâce à hyde, un générateur de sites statiques développé en python dont je suis contributeur.</p>
-<!--<p style="text-align: center; font-weight: normal; font-size: 2em;">&#955;</p>-->
-<h1>Recherche</h1>
-<form action="http://www.google.com/cse" id="cse-search-box">
-  <div>
-    <input type="hidden" name="cx" value="003809943872332300594:qkaoz1sxboo" />
-    <input type="hidden" name="ie" value="UTF-8" />
-    <input type="text" name="q" size="31" style="width:97%;" onkeypress="poxd.checkEnter();" />
-    <!--<input type="submit" name="sa" value="Rechercher" />-->
-  </div>
-</form>
-</div>
-</div>
-<br class="clear"/>
-<h1 class="section">Dernières critiques de livres</h1>
-<div id="lastbooks">
-    {% recent_posts lastbooks 5 page.blog_node lectures %}
-    {% for book in lastbooks %}
-    <div class="book">
-        <a href="{{book.full_url}}"><img src="{{book.cover}}" width="100%" alt="{{book.heading}}" /></a>
-        <div class="caption"><span>{{book.heading}}</span></div>
-    </div>
-    {% endfor %}
-</div>
-<!--<blockquote>"I find television very educating. Every time somebody turns on the set, I go into the other room and read a book."</blockquote>-->
-</div>
 {% endblock %}

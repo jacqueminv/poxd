@@ -10,6 +10,9 @@
 %}
 {% block article %}
 {% article %}
+
+<div class="five left">
+  {% markdown %}
 Lorsqu'un livre me plaît, je lis volontiers dans le train en allant au
 boulot et en en revenant. Lorsqu'un livre m'accroche sérieusement en
 plus du train je lis également en me couchant mais alors si un livre
@@ -60,12 +63,12 @@ sera pas mon livre de chevet de sitôt. Il me faudra certainement le
 relire un jour pour essayer de percer la chose et comprendre pourquoi
 un si grand nombre de gens adorent ce livre, disant même que c'est l'un
 des tous meilleurs livres d'espionnage.
+  {% endmarkdown %}
+</div>
+<div class="one left lr">
+  <strong>Sur Amazon</strong>
+  <iframe src="http://rcm-fr.amazon.fr/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=thpowo-21&o=8&p=8&l=as1&m=amazon&f=ifr&md=0V7HTNAW9BB7KPZWWWG2&asins=2020479915" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
+</div>
 
 {% endarticle %}
-{% endblock %}
-{% block meta %}
-{% markdown %}
-#Sur Amazon
-<iframe src="http://rcm-fr.amazon.fr/e/cm?lt1=_blank&bc1=000000&IS2=1&bg1=FFFFFF&fc1=000000&lc1=0000FF&t=thpowo-21&o=8&p=8&l=as1&m=amazon&f=ifr&md=0V7HTNAW9BB7KPZWWWG2&asins=2020479915" style="width:120px;height:240px;" scrolling="no" marginwidth="0" marginheight="0" frameborder="0"></iframe>
-{% endmarkdown %}
 {% endblock %}
