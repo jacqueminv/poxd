@@ -1,4 +1,5 @@
 var poxd = {
+    forum_key: "iwdK7RuAjLY7xGZTSZZvZ3lprsY8SplSsI75eb09giEKHNh2ilyRMKHHEHFUPG4C",
     checkEnter: function(e){
         var characterCode;
     	 if(e && e.which) {
@@ -13,7 +14,8 @@ var poxd = {
      	  return false;
     	 }
         return true;
+    },
+    scrollToTop: function() {
+	$('html, body').animate({scrollTop:0}, 'slow');
     }
 }
-
-

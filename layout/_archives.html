@@ -3,47 +3,48 @@
     listing: true
 %}
 {% block main_content %}
-<div class="yui-ge" id="archives">
-<div class="yui-u first">
+<div id="archives">  
+<section class="four left">
 {% block listing %}
 <ul>
 {% for post in posts %}
     {% ifchanged post.created.year %}
     {% if forloop.first %}
-    <li class="month"><h1 class="section first">{{post.created|date:"Y"}}</h1></li>
+    <li><h2>{{post.created|date:"Y"}}</h2></li>
     {% else %}
-    <li class="month"><h1 class="section">{{post.created|date:"Y"}}</h1><!--<h1>{{post.created|date:"F Y"|title}}</h1>--></li>
+    <li><h2><hr class="clear unvisible" />{{post.created|date:"Y"}}</h2></li>
     {% endif %}
     {% endifchanged %}
-    <li class="entry">
-        <div class="yui-u first align-right" style="width:12%"><span class="postdate">{{post.created|date:"j/m"|title}}</span></div>
-        <div class="yui-u" style="width:88%"><a href="{{post.url}}">
+    <li>
+        <time pubdate>{{post.created|date:"j/m"|title}}</time>
+        <a href="{{post.url}}">
         {% with post.name_without_extension|remove_date_prefix|unslugify as default_title %}
             {% filter typogrify %}
             {{post.title|default_if_none:default_title }}
             {% endfilter %}
-        {%endwith%}</a></div>
-        <hr class="clear"/>
+        {%endwith%}</a>
     </li>
 {% endfor %}
 </ul>
 {% endblock %}
-</div>
+</section>
 
-<div class="yui-u sidebar">
-<h1 class="first">Recherche</h1>
+<section class="two left lr">
+<h2>Recherche</h2>
 <form action="http://www.google.com/cse" id="cse-search-box">
   <div>
     <input type="hidden" name="cx" value="003809943872332300594:qkaoz1sxboo" />
     <input type="hidden" name="ie" value="UTF-8" />
     <input type="text" name="q" size="31" style="width:97%;" onkeypress="poxd.checkEnter();" />
-    <!--<input type="submit" name="sa" value="Rechercher" />-->
   </div>
 </form>
-<h1>Catégories</h1>
+<h2>Catégories</h2>
+<ul>
 {% for category in categories|dictsort:"name" %}
 <li><a href="{{category.archive_url}}">{{category.name}}</a></li>
 {% endfor %}
-</div>
+</ul>
+</section>
+<hr class="unvisible clear">
 </div>
 {% endblock %}

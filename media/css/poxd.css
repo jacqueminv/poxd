@@ -1,294 +1,190 @@
-.seo{display:none;}
-.no-border{border: 0;}
-.align-right{text-align:right;}
 body {
-    font-family: Verdana, Helvetica, Arial, sans-serif;
-    color: rgb(41, 41, 49);
-    margin: 0;
+    width: 760px;
+    margin: 0 auto;
+    font-family: "adelle-1","adelle-2",serif;    
+    font-size: 108%;
+    line-height: 1.3em;    
 }
-a {
-    color: rgb(132, 17, 39);
-}
-a:hover {
-    color: black;
-}
-.clear{
-    clear: both;
-    visibility: hidden;
-    border:0;
-    margin: 0.5em 0;   
-}
-strong{
-    font-weight: bold;    
-}
-em {
-    font-style: italic;    
-}
-h1,h2,h3,h4{
-    font-variant: small-caps;
+
+h1,h2,h3 {
+    font-family: "league-gothic-1","league-gothic-2",sans-serif;
     font-weight: normal;
 }
-h1{
-    font-size: 1.6em;
-    line-height: 1.1em;
-}
-#bd {
-    padding: 0 1.1em;
-}
-#doc > div{
-    padding: 0 1em 0.3em 1em;
-}
-.img-parent{
-    text-align: center;    
-}
-/*************
-    HEADER
-**************/
-#hd{
-    border-top: 4px solid black;
-    margin: 0;
-    margin-bottom: 3em;
-    font-size: 1.1em;
+
+h1 {font-size: 2em; letter-spacing: 0.05em; margin: 1.3em 0 0.65em; line-height: 0.65em;}
+h2 {font-size: 1.7em; letter-spacing: 0.05em; margin: 1.52em 0 0.76em; line-height: 0.76em;}
+h3 {font-size: 1.5em; letter-spacing: 0.05em; margin: 0.87em 0 0.87em; line-height: 0.87em;}
+h1 a, h2 a, h3 a {text-decoration: none;}
+
+p, ul, ol { margin-bottom: 1.3em;}
+pre {white-space: pre;}
+textarea {font-size: 1em;}
+th, td {padding-right: 5px;}
+
+/* HEADER */
+header {
     position: relative;
-    color: black;
-}
-#hd a{
-    text-decoration: none;
-    color: black;
-}
-#hd #menu a{
-    margin-left: 0.7em;
-}
-#hd #menu a:hover{
-    font-weight: bold;
-    margin-left: 0.4em;
-}
-#hd #logo{
-    font-size: 2em;
-    float: left;
-    text-shadow: 1px 1px 1px rgba(0,0,0,.4);
-}
-#hd #logo #x{
-    color: rgb(132, 17, 39);
-    font-weight: 600;
-}
-#hd #menu{
-    bottom:0.49em;
-    position:absolute;
-    right:1em;
-}
-#hd ul{
-    margin: 0;    
-}
-#hd #menu li{
-    display: inline;
-    font-variant: small-caps;
-}
-/*************
-    SIDEBAR
-**************/
-#home .sidebar{
-    background-color: #EEE;
-    -moz-border-radius: 3px; 
-    -webkit-border-radius: 3px; 
-    border: 1px solid #CCC;
-    padding: 0.5em;
-}
-.sidebar{
-    font-size: 0.8em; 
- }
-.sidebar h1{
-    margin-bottom: 0.4em;
-    font-size: 1.4em;   
-}
-.sidebar #nav{
-    line-height: 1.3em;
-}
-.sidebar #nav h1{
-    margin-top: 0;
-}
-.sidebar ul li{
-    list-style-position: inside !important;
-}
-.sidebar #nav ul li{
-    list-style-type: none;
-    margin-bottom: 0.5em;
-}
-/*************
-    FOOTER
-**************/
-#ft{
-    margin-top: 11px;
-    padding-top: 0.5em;
-    color: #666;
-    border-top: 1px solid #CCC; 
-    font-size: 0.9em;
-}
-#ft div.last{
-    text-align: right;   
-}
-/******************
-    HOME CONTENT
-******************/
-#home h1, #post h1.first, #archives h1.first{
-    margin-top: 0;    
-}
-#home h1 a, #archives a{
-    color: #292931;
-    text-decoration: none;
-}
-#home h1 a:hover, #archives a:hover{
-    color: rgb(132, 17, 39);
-}
-#pub div span{
-    font-size: 1.6em;    
-}
-span.postdate{
-    margin-right: 1em;
-    color: #DDD;
-}
-h1.section{
-    padding-bottom: 0.5em;
+    line-height: 1;
     border-bottom: 1px solid #CCC;
-    color: black;
-    font-size: 1.2em;
-    font-weight: bold;
+    margin: 1em 0 2em;
+    padding-bottom: 0.5em;
 }
-#lastbooks{
-    text-align: center;    
+
+header h3 {
+    font-size: 6em;
+    margin: 0;
 }
-#lastbooks .book{
-    display: inline-block;    
-    width: 15%;
-    margin-right: 10px;
-    position: relative;
-    overflow: hidden;  
-    border: 7px solid #DDD;    
+
+header h3 a {
+    color: #444444 !important;
+    text-decoration: none;
 }
-#lastbooks .book .caption{
-    position:absolute;  
-    background:#000;  
-    height:60px;  
-    width:100%;   
-    /* transparency for different browsers */    
-    opacity:0.7;
-    filter:alpha(opacity=70);
-    -moz-opacity:0.7;
-    -khtml-opacity: 0.7;
+
+header h3 a:hover {
+    color: #CCCCCC !important;
 }
-#lastbooks .book .caption {
-    bottom:-60px;         
-} 
-#lastbooks .book .caption span{  
-    color:#EEE;
-    font-weight: normaln;   
-    font-size:9px;  
-    display:block;  
-    padding:5px 10px 0 10px;  
-} 
-/*************
-    POSTS
-**************/
-#post{
-    line-height: 1.4em;
+
+
+header nav {
+    font-family: "league-gothic-1","league-gothic-2",sans-serif;
+    font-size: 3em;
+    position: absolute;
+    right: 0;
+    top: 0.71em;
 }
-#post .yui-u.first h1.first{
-    font-size: 1.6em;
+
+header nav ul li{
+    margin: 0 5px;
+    display: inline;
 }
-#post .yui-u.first h1, #post .yui-u.first h2, #post .yui-u.first h3{
-    font-family: Georgia, serif;
-    font-variant: normal;
+
+
+header nav  a {
+    text-decoration: none;
 }
-#post .yui-u.first h1{
-    font-size: 1.4em;
+
+/* CONTENT */
+article .toc li {list-style: none;}
+article .toc ul {margin-bottom: 0;}
+article header {
+    border: 0;
+    margin: 0;
+    padding: 0;
 }
-#post blockquote{
-    font-style: italic;
-    border-left: 0.1em solid #841127;
-    padding-left: 1em;
+
+article header h1 {margin:0;}
+
+article header p {
+    font-family: "league-gothic-1","league-gothic-2",sans-serif;
+    color: #CCC;
+    letter-spacing: 0.2em;
+    margin: 0.3em 0 1em;
 }
-#post ul {
+
+article footer {
+    background-color: #EEE;
+    font-size: 0.8em;
+    padding: 0.5em 1em;
+    margin: 2em 0;
+    border-top: 1px solid #CCC;
+    border-bottom: 1px solid #CCC;
+    clear: both;
+}
+
+article footer p {margin: 0;}
+
+article section nav {
+    margin: 1em 0;
+}
+
+/* FOOTER */
+#container > footer {
+    clear: both;
+    border-top: 1px solid #CCC;
+    margin-top: 3em;
+    font-size: 0.8em;
+}
+
+#container > footer > a {font-size: 0.8em;}
+
+
+blockquote {font-style: italic; color: #888; padding: 0 2em;}
+.clear {clear: both;}
+.hide {display: none;}
+.footnote hr {width: 10em;}
+.footnote {font-size: 0.9em;}
+.footnote li p {margin: 0;}
+
+/* ARCHIVES */
+#archives {
+    margin: -2em 0 1em;
+}
+
+#archives ul {
     margin-left: 0;
 }
-#post ol li, #post ul li{
-    list-style-position: outside;
-}
-#post ul li{
-    list-style-type: square;
-}
-.footnote hr{
-    width: 7em; 
-    float: left;   
-}
-.footnote ol{
-    clear: left;
-    font-size: 0.9em;    
-}
-.footnote ol p{margin-bottom:0;}
-code{background-color: #EEE; border: 1px solid #DDD;}
-.links-ico{height:22px;position:relative;top:5px;}
-#post .aside{
-    width: 35%;
-    position: relative;
-    left: -4em;
-    padding: 0 10px;
 
-    font-size: 0.85em;
-    line-height: 1.2em;
-
-    border-top: 3px solid #841127;
-    background-color: #EEE;
-}
-.left{float: left;}
-/***************
-    ARCHIVES
-***************/
-#archives{
-    font-size: 1em;    
-}
-#archives ul{
-    margin: 0;
-}
-#archives ul li{
-    list-style-position: outside;
+#archives ul li {
     list-style-type: none;
+    list-style-position: outside;
 }
-span.date{
-    color: #DDD;    
+
+#archives ul li h2 {clear: both;}
+
+#archives ul li time {
+    clear: left;
+    display: block;
+    float: left;
+    width: 55px;
 }
-/****************
-      DISQUS
-****************/
-#dsq-comments-title{display:none !important;}
-.dsq-options{display:none !important;}
-#dsq-pagination{
-    background:none !important;
-    position: absolute;
-    left: 75%;
-    top: 33px;
+
+#archives ul li a {
+    display: block;
+    float: left;
+    width: 86%;
 }
-#dsq-new-post > h3{display:none !important;}
-.dsq-dc-logo{display:none !important;}
-.dsq-item-trackback{display:none !important;}
-.dsq-brlink{display:none !important;}
-#comments{
-    background-color: #EEE;
-    border: 1px solid #CCC;
-    border-radius: 3px;
-    position: relative;
+
+#archives form input {
+    width: 100%;
 }
-#comments h2{border-bottom: 1px solid #EEE;}
-#comments h2:hover{cursor:pointer;}
-#comments a{color: black;}
-#comments .sidebar{padding-top: 2em;}
-#disqus_thread{display:none;}
-/*****************
-      TOC
-*****************/
-div.toc ul, div.toc ul ul, div.toc ul ul ul, div.toc ul ul ul ul{
-    margin: 0 !important;
-    padding-left: 1em;
+
+/* For the remaining look at http://24ways.org/2008/making-modular-layout-systems*/
+.pic p, .caption {
+    font-size: 0.8em;
+    line-height: 1.625em;
+    color: #666;
+    margin: 4px 0 10px;
 }
-div.toc ul li{
-    list-style-type: none !important;
+
+aside {
+    color: #666;
 }
+
+aside p {font-size: 0.8em; margin: 0 0 1.625em; line-height: 1.625em;}
+.syntax {margin: 1.3em 0;}
+
+/* P L A C E M E N T */
+.left {float: left; margin-right: 14px;}
+.right {float: right; margin-left: 14px;}
+.right.inset {margin: 0 120px 0 20px;} /* img floated right within text */
+.left.inset {margin-left: 230px;} /* img floated left within text */
+.centered {text-align: center;}
+.raligned {text-align: right;}
+.unvisible {visibility: hidden;}
+.no-margin {margin: 0 !important;}
+
+/* S I Z E */
+.one {width: 115px;}
+.two {width: 244px;}
+.three {width: 373px;}
+.four {width: 502px;}
+.five {width: 631px;}
+.six {width: 760px;}
+.lr{margin-right: 0;}
+.ll{margin-left: 0;}
+
+/* DISQUS */
+#comments {margin-top: 1.5em; }
+#comments h3 {border-bottom: 1px solid #CCC; padding-bottom: 4px;}
+#dsq-comments-title, .dsq-options, .dsq-item-trackback, #dsq-new-post h3 {display: none !important;}
+#dsq-like-tooltip, #dsq-comments, #dsq-pagination, #dsq-new-post, #dsq-post-button{font-family: "adelle-1","adelle-2",serif; font-size: 1.1em !important;}

@@ -1,0 +1,97 @@
+{% extends "skeleton/_index.html" %}
+{% block title %}PoXd - à propos{% endblock %}
+{% block main_content %}
+{% filter typogrify %}
+<article>
+<div class="four left">
+  <p>
+    <strong>Passionné d'informatique mais pas uniquement, mon nom est
+    Valentin Jacquemin.</strong>
+  </p>
+  <p>
+    J'ai approché mon premier ordinateur à l'âge de 5 ans. C'était un
+    Commodore64. J'ai passé des heures et des heures à jouer, jouer et
+    jouer. La programmation m'a intéressé plus tard vers les 14 ans
+    lorsque j'ai créé mon premier site web à propos de 2 jeux qu'on
+    adorait avec un pote, malheureusement je ne retrouve plus l'url du
+    site. Il n'existe peut-être plus d'ailleurs.
+  </p>
+  <p>
+    Depuis, ma petite vie de développeur m'a mené vers Java, Python,
+    PHP, toute la couche web (HTML, CSS, Javascript) et bien
+    d'autres. Très curieux par nature je développe constamment mes
+    connaissances dans le domaine du développement, j'aime me tenir à
+    jour et tenir une veille technologique constante. Outre cette
+    veille techno il m'arrive de programmer aussi sur mon temps libre,
+    rendez-vous sur mon compte  <a href="{{links.github}}">github</a>
+    pour en avoir une idée.
+  </p>
+  <p>
+    Développer des applications c'est également mon métier puisque
+    actuellement je suis consultant pour la
+    société <a href="http://logica.com">Logica</a>. Grâce à cette
+    position j'ai pu intégrer plusieurs projets pour de grandes
+    sociétés telles que Merck Serono, Novartis, SITA ou encore l'Etat
+    de Genève.
+  </p>
+  <p>
+    A côté de tout ça j'ai une passion pour les livres et la
+    photographie. Ce blog est une expérience qui a pour
+    objectif de communiquer ces différentes passions et découvertes
+    que je peux faire&hellip;
+  </p>
+</div>
+<div class="two left lr raligned">
+  <p>
+    <strong>Retrouvez-moi ailleurs&hellip;</strong>
+  </p>
+  <p>
+    <a href="{{links.twitter}}"><img src="/media/images/twitter.png"/></a>&nbsp;<a href="{{links.flickr}}"><img src="/media/images/flickr.png"/></a>&nbsp;<a href="{{links.linkedin}}"><img src="/media/images/linkedin.png"/></a><br/><a href="{{links.facebook}}"><img src="/media/images/facebook.png"/></a>&nbsp;<a href="{{links.google}}"><img src="/media/images/google.png"/></a>&nbsp;<a href="{{links.friendfeed}}"><img src="/media/images/friendfeed.png"/></a></p>
+</div>
+<hr class="unvisible clear" />
+<h3>Colophon</h3>
+<div class="four left">
+  <p>
+    Ce blog est généré par <a href="{{links.hyde}}">hyde</a>, un outil
+    en ligne de commande dévelopé en python. L'atout majeur de hyde se
+    trouve dans le fait qu'il ne s'appuie pas sur une base de données
+    comme d'autres outils de blogging plus traditionnels. Après
+    génération, ce blog n'est formé que de fichier HTML statiques
+    livrant ainsi une robustesse maximale. Toute partie dynamique est
+    gérée par du code javascript, typiquement les commentaires grâce
+    au formidable <a href="http://disqus.com">disqus</a>.
+  </p>
+  <p>
+    Concernant le design de ce blog, je l'ai migré en HTML5 dès que je
+    suis tombé
+    sur <a href="http://html5boilerplate.com">html5boilerplate</a> qui
+    est un framework de réinitialisation CSS qui a pour objectif de
+    mettre à niveau chaque browser. Jetez-y un oeil vous gagnerez du
+    temps.<br/>  Je me suis également inspiré de
+    l'article <i><a href="http://24ways.org/2008/making-modular-layout-systems">Making
+    modular layout systems</a></i> pour me permettre d'être un maximum
+    flexible lors de la rédaction des articles de ce blog. Grâce à un
+    ensemble de classes CSS je peux facilement partager mon contenu en
+    colonnes et créer ainsi facilement des mises en pages différentes
+    avec un minimum d'effort.
+  </p>
+  <p>
+    Depuis le dernier redesign de ce site j'ai également pris
+    l'opportunité de tester de nouvelles fontes grâce
+    à <a href="http://typekit.com">typekit</a>. J'utilise <a href="http://typekit.com/fonts/adelle-web?utm_medium=colophon&utm_content=font-byline-name&utm_source=typekit-app">Adelle
+    Web</a> pour le texte
+    et <a href="http://typekit.com/fonts/league-gothic?utm_medium=colophon&utm_content=font-byline-name&utm_source=typekit-app">League
+    Gothic</a> pour les titres.
+  </p>
+</div>
+<aside class="two left lr raligned">
+  <p>
+    Ajoutez <code>?grid</code> à n'importe quelle URL de ce site pour voir
+    la configuration des colonnes.<br/>
+    Par exemple: <a href="?grid">/a-propos.html?grid</a>
+  </p>
+</aside>
+</article>
+<hr class="unvisible clear" />
+{% endfilter %}
+{% endblock %}

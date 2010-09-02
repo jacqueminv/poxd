@@ -1,74 +1,54 @@
 {% extends "skeleton/_index.html" %}
 {% block title %}{{site.name}} - {{page.title}}{% endblock %}
 {% block main_content %}
-<div id="post" class="yui-ge">
-<div class="yui-u first" style="width: 72%;">
 {% filter typogrify %}
-<h1 class="first" style="margin-bottom:0.2em;">{{page.title}}</h1>
-<span class="postdate">Publié le {{page.created|date:"d F Y"}}</span>
-<hr class="clear"/>
+<article>
+<header>
+	<h1>{{page.title}}</h1>
+	<p>Publié le <time pubdate datetime="{{page.created|date:"Y-m-d"}}">{{page.created|date:"d F Y"}}</time></p>  
+</header>
 {% markdown %}
 {% block article %}{% endblock %}
 {% endmarkdown %}
-</div>
-<div class="yui-u sidebar">
-<div id="nav">
-<h1>Navigation</h1>
-<ul>
-    {% if page.prev %}
-    <li>&#8594; <a href="{{page.prev.url}}">{{page.prev.title}}</a></li>
-    {% endif %}
-    {% if page.next %}
-    <li>&#8592; <a href="{{page.next.url}}">{{page.next.title}}</a></li>
-    {% endif %}
-</ul>
-</div>
-<div>
-<h1>Catégories</h1>
-<ul>
-{% for c in page.categories %}
-<li>
-{% for category in page.node.categories %}
-{% ifequal category.name c %}
-<a href="{{category.archive_url}}">{{category.name}}</a>
-{% endifequal %}
-{% endfor %}
-</li>
-{% endfor %}
-</ul>
-</div>
-<div>
-<h1>Recherche</h1>
-<form action="http://www.google.com/cse" id="cse-search-box">
-  <div>
-    <input type="hidden" name="cx" value="003809943872332300594:qkaoz1sxboo" />
-    <input type="hidden" name="ie" value="UTF-8" />
-    <input type="text" name="q" size="31" style="width:97%;" onkeypress="poxd.checkEnter();" />
-  </div>
-</form>
-</div>
-<hr class="clear"/>
-<div>{% block meta %}{% endblock %}</div>
-</div>
-</div>
-<div id="comments" class="yui-ge">
-    <div class="yui-u first">
-        <h2>Commenter cet article &#8594;</h2>
+
+
+  <section>{% block meta %}{% endblock %}</section>
+
+  <footer id="postinfo" class="centered">
+    <p>
+      Publié sous {% for c in page.categories %}
+      {% for category in page.node.categories %}
+      {% ifequal category.name c %}
+      <a href="{{category.archive_url}}">{{category.name}}</a>{% if not forloop.last %},{% endif %}
+      {% endifequal %}
+      {% endfor %}
+      {% endfor %}.<br/>
+      Abonnez-vous au <a href="http://feeds.feedburner.com/poxd-feed">flux rss</a> ou suivez-moi sur <a href="http://twitter.com/poxd">twitter</a> pour être tenu à jour.
+    </p>
+  </footer>
+
+  <section>
+    <nav class="centered">
+      {% if page.next %}
+      <a href="{{page.next.url}}" title="{{page.next.title}}">Précédent</a>
+      {% endif %}
+      {% if page.prev and page.next%}      
+      //
+      {% endif %}
+      {% if page.prev %}
+      <a href="{{page.prev.url}}" title="{{page.prev.title}}">Suivant</a>
+      {% endif %}
+    </nav>
+  </section>
+
+  <section>
+    <div id="comments">
+        <h3>Ajouter un commentaire <span></span></h3>
         <div id="disqus_thread"></div>
         <script type="text/javascript" src="http://disqus.com/forums/poxd/embed.js"></script>
         <noscript><a href="http://disqus.com/forums/poxd/?url=ref">Voir le fil de discussion.</a></noscript>
-        <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
     </div>
-    <div class="yui-u sidebar">
-        <p>commentaires gérés par <span class="logo-disqus">Disqus</span></p>
-    </div>
-</div>
-<script type="text/javascript">
-        $(document).ready(function () {
-            $('#comments > .first > h2').click(function(){
-                $('#disqus_thread').toggle();
-            });
-        }); 
-</script>
+  </section>
+</article>
 {% endfilter %}
 {% endblock %}
