@@ -1,8 +1,8 @@
-#!/usr/bin/env python
+#/usr/bin/python2.5
 from fabric.api import *
 import os, os.path
 import fabric.contrib.project as project
-from smooshy import smoosher
+#from smooshy import smoosher
 
 PROD = 'poxd.webfactional.com'
 DEST_PATH = '/home/poxd/webapps/poxdhyde/'
@@ -24,7 +24,8 @@ def reserve():
     serve()
 
 def smush():
-    smoosher.recursive_smoosher(["./media/images/"])
+    pass
+#    smoosher.recursive_smoosher(["./media/images/"])
 
 @hosts(PROD)
 def publish():

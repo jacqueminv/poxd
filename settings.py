@@ -5,6 +5,8 @@ DEBUG=True
 LOG_LEVEL = logging.INFO
 DATE_FORMAT = "j F Y"
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__))
+HYDE_PATH = "/Users/pollux/pet_projects/hyde/"
+GROWL = "/usr/local/bin/growlnotify"
 
 MD_EXTENSIONS = ['footnotes','toc']
 PYGMENTS_OPTIONS = {'cssclass':'syntax'}
@@ -18,8 +20,7 @@ DEPLOY_DIR = os.path.join(ROOT_PATH, 'deploy')
 TMP_DIR = os.path.join(ROOT_PATH, 'deploy_tmp')
 
 SITEMAP_FILE = os.path.join(TMP_DIR, 'sitemap.xml')
-HYDE_PATH = "c:\\pet_projects\\hyde\\"
-SITEMAP_GENERATOR = os.path.join(ROOT_PATH, HYDE_PATH + "lib\\sitemap_gen-1.4\\sitemap_gen.py")
+SITEMAP_GENERATOR = os.path.join(ROOT_PATH, HYDE_PATH + "lib/sitemap_gen-1.4/sitemap_gen.py")
 
 
 BACKUPS_DIR = os.path.join(ROOT_PATH, 'backups')
@@ -29,7 +30,7 @@ SITE_ROOT = "/"
 SITE_WWW_URL = "http://www.poxd.org/" #"http://localhost:8080/"
 SITE_NAME = "PoXd"
 SITE_AUTHOR = "Valentin Jacquemin"
-SITE_AUTHOR_EMAIL = "jacqueminv@gmail.com"
+SITE_AUTHOR_EMAIL = "jacqueminv@gmail.com (Valentin Jacquemin)"
 LANGUAGE_CODE = 'fr'
 
 #Url Configuration
@@ -119,7 +120,14 @@ CONTEXT = {
     'GENERATE_CLEAN_URLS': GENERATE_CLEAN_URLS,
     'links': {
         "jekyll": "http://github.com/mojombo/jekyll/tree/master",
-        "hyde": "http://ringce.com/hyde"
+        "hyde": "http://ringce.com/hyde",
+        "twitter": "http://twitter.com/poxd",
+        "flickr": "http://flickr.com/poxd",
+        "linkedin": "http://linkedin.com/in/valentinjacquemin",
+        "facebook": "http://facebook.com/valentin.jacquemin",
+        "google": "http://www.google.com/profiles/jacqueminv",
+        "friendfeed": "http://friendfeed.com/pollux",
+        "github": "http.github.com/poxd"
         }
 }
 
@@ -134,7 +142,7 @@ FILTER = {
 # path for YUICompressor, or None if you don't
 # want to compress JS/CSS. Project homepage:
 # http://developer.yahoo.com/yui/compressor/
-YUI_COMPRESSOR = HYDE_PATH + "./lib/yuicompressor-2.4.1.jar"
+YUI_COMPRESSOR = HYDE_PATH + "lib/yuicompressor-2.4.1.jar"
 #YUI_COMPRESSOR = None 
 
 # path for HSS, which is a preprocessor for CSS-like files (*.hss)
