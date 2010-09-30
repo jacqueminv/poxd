@@ -142,7 +142,7 @@ FILTER = {
 # path for YUICompressor, or None if you don't
 # want to compress JS/CSS. Project homepage:
 # http://developer.yahoo.com/yui/compressor/
-YUI_COMPRESSOR = HYDE_PATH + "lib/yuicompressor-2.4.1.jar"
+YUI_COMPRESSOR = HYDE_PATH + "lib/yuicompressor-2.4.2.jar"
 #YUI_COMPRESSOR = None 
 
 # path for HSS, which is a preprocessor for CSS-like files (*.hss)
