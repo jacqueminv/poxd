@@ -1,0 +1,228 @@
+{% extends "_post.html" %}
+{%hyde
+   title: "Introduction aux DCVS et git particulièrement"
+   categories:
+      - dev
+   created: 2010-09-30
+%}
+{% block article %}
+{% article %}
+
+<small><i>Cet article a pour objectif d'être une introduction ou une
+description de ce qu'est et ce qu'apporte git par rapport à un passif
+svn. Je n'utilise git que depuis peu donc si toi lecteur tu décèles
+une erreur ou une imprécision dans mes dires n'hésite pas,
+exprime-toi!</i></small>
+
+Bien souvent en entreprise on ne se pose même pas la question: la
+gestion des sources d'un projet se fera avec svn. Pourtant les
+alternatives existent et non sans offrir tout un lot de
+fonctionnalités bien pratiques. Je m'arrête aujourd'hui sur ce qui
+pourrait être -- selon [Joel Spolsky][0] -- la plus grande avancée
+dans le domaine du développement logiciel des 10 dernières années: la
+gestion distribuée du code source. Avec un accent particulier sur git
+l'un des
+<abbr title="Distributed Version Control
+System">DVCS</abbr> les plus utilisés à ce jour.
+
+# Gestionnaires de code source distribués
+
+Svn existe maintenant depuis une dizaine d'années et il a plus ou
+moins succédé à CVS.  L'un comme l'autre proposent un système
+centralisé ce qui veut dire que pour chaque opération, le serveur est
+interrogé. Le serveur est un Dieu par qui toute décision doit passer.
+
+De son côté git propose une approche *peer-to-peer* à l'instar de
+mercurial (python powa!), bazarr, Darcs et bien d'autres. Pour info,
+bien qu'initialisé en 2005, git n'est pas le premier à suivre ce
+modèle puisque son créateur -- Linus Torvalds -- s'est inspiré
+directement d'un concurrent: [BitKeeper][1][^1].
+
+L'idée est de ne plus s'appuyer sur un serveur faisant office de
+machine à tout faire mais plutôt de distribuer la gestion des sources
+parmi tous les terminaux contribuant au projet. Sachant cela,
+plusieurs fonctionnalités peuvent voir alors le jour...
+
+Par exemple, chaque terminal possède tout l'historique du dépôt
+(*repository*) et donc pas besoin d'interroger un serveur pour
+parcourir l'évolution des *commits* du projet. Bénéfice collatéral: un
+gain de performance brute. Cela vaut pour un parcours de l'historique
+mais également pour tout autre opération qu'offre un gestionnaire de
+code source: `commit`, `diff`, `merge`, créer et supprimer des
+branches toutes ces fonctionnalités se feront en premier lieu
+localement sur votre machine. En fait git n'aura besoin d'accéder au
+réseau qu'à partir du moment où l'on voudra *pousser* (push) du code
+vers un autre terminal ou bien à l'inverse en *récupérer* (pull). Si
+vous vous êtes déjà amusé à faire une série de merge avec svn, vous
+comprendrez rapidement à quel point le gain de performance fourni par
+git est agréable.
+
+En plus des performances, le fait de décentraliser la gestion des
+sources ouvre la porte à une "assurance vie" plus robuste que bien des
+stratégies de sauvegardes mises en place par un service IT. Oui
+puisque je le répète, chaque terminal possède tout le contenu du
+dépôt! Bien que ce soit à quelques exceptions près -- un terminal ne
+stockera pas par exemple les différents"hooks" que peut fournir un
+serveur git -- le plus important, les données, sont répliquées sur
+tous les terminaux. Sacré avantage!
+
+Dans la théorie le système est donc bien différent (et il y aurait
+encore beaucoup de choses à dire)... et dans la pratique? Jetons un
+coup d'oeil à ce que ça donne.
+
+# Faire de git un nouvel outil dans son éventail
+
+Une fois [téléchargé][2], démarrer le *versionnage* d'un projet se fait
+simplement au moyen de la commande suivante:
+
+`git init`
+
+C'est tout. Une fraction de seconde après avoir exécuté cette
+commande, le répertoire `.git` est créé dans le dossier courant. C'est
+une nouvelle différence avec svn, les données gérées par git ne sont
+stockées qu'à la racine et non plus dans chacun des dossiers du
+projet.
+
+Après avoir initialisé le projet, parmi les commandes les plus
+couramment utilisées vous avez `git add`, `git commit`, `git status`,
+`git log` et certaines autres mais je vous laisse gentiment découvrir
+tout ça. Baladez-vous sur les quelques liens en fin d'article pour
+vraiment débuter votre apprentissage...
+
+Attention, bien que le vocabulaire soit étrangement similaire à ce
+qu'on retrouve sous svn, il faudra tout de même faire un effort de
+bien comprendre ce que fait chaque commande parce que les différences
+sont bien réelles. Comparez par exemple ce que vous savez de `svn
+commit` avec `git commit`.
+
+## Quelques notions nouvelles
+
+Au delà du vocabulaire il faut noter qu'il existe 3 états possibles
+pour un fichier versionné : commited, modified, staged. Ces 3 états
+sont en relation avec 3 zones: le *working directory*, la *staging
+area* et le *git directory*. Un fichier versionné et non modifié se
+trouve dans la zone dite *working directory* et lorsque vous faites
+`git add <chemin_du_fichier>` celui-ci entre dans la *staging area* qui
+est une zone regroupant tout ce qui va être commité dans le *git
+directory*.  Toute la gestion des sources se fait grâce à ces 3 zones
+localement sur votre machine.
+
+<p class="centered">
+  <img src="http://progit.org/figures/ch1/18333fig0106-tn.png"
+  alt="Git est formé de 3 zones: le working directory, la staging area
+  et le git directory."/>
+</p>
+
+En en apprenant davantage sur git vous découvrirez la flexibilité
+qu'apporte la *staging area*. Du bonheur en perspective je vous le
+garantis.
+
+Outre ces 3 états il est aussi à noter que git pousse à commiter
+souvent. Release early, release often comme le veut la tradition. Et
+bien git facilite beaucoup cette méthode grâce à son atout principal:
+la gestion des branches...
+
+## Repenser sa façon de travailler
+
+S'il y a quelque chose de terrible à faire sur un projet géré par svn
+c'est bien de merger deux branches.  Si on veut garder l'historique il
+va falloir répliquer chaque commit à la mano (même si maintenant il
+existe une option à `svn log` pour récupérer l'historique d'une
+branche intégrée par merge c'est pas super) mais surtout c'est lent,
+méchamment lent!
+
+Non seulement avec git c'est bien plus rapide mais surtout le
+développement utilisant les branches fait parti intégrante du workflow
+d'un développeur utilisant git. Pour essayer de résumer le concept, la
+branche principale -- appelée master -- sera la base stable de
+l'applicatif et chacune des nouvelles fonctionnalités, chaque
+résolution de bug pourront faire office de branche. Chaque branche
+partant de la base stable progressera de manière isolée sans impacter
+les autres développements. Le concept n'est étranger à aucun
+développeur certainement (même ceux utilisant svn) mais ce qui change
+par contre c'est la transparence, la simplicité et l'efficacité avec
+lesquelles git gère le tout. Mis bout à bout le concept devient *réel*
+pour la première fois dans ma petite expérience de développeur.
+
+Pour dire la même chose, Linus lui [dira plutôt](http://marc.info/?l=git&m=116129092117475):
+
+> Git branches are branches done right. I just don't see how you
+  _could_ do them better.
+
+
+# Pour en savoir plus
+
+Git s'utilise aujourd'hui de plus en plus, particulièrement dans le
+monde open source. Il faut dire qu'une plate-forme comme github
+favorise son adoption. Si vous ne connaissez pas encore ce réseau
+social dédié au développement je vous encourage à prendre [5 minutes
+pour voir ce que ça donne][3]. Vous aurez certainement l'opportunité
+de retrouver des codeurs plus talentueux que vous ce qui est une
+formidable opportunité d'apprendre. Pour pouvoir intégrer le site il
+va falloir vous faire à git et c'est -- selon moi -- le meilleur moyen
+[d'apprendre][4] ce qu'il peut vous apporter.
+
+Il existe [également][9] [plusieurs][7] [bouquins][8] sur le sujet. J'ai pour ma part
+lu [Pro Git][5] qui est d'excellente qualité. Bonne progression dans
+le sujet, beaucoup d'exemples et aussi une section "les mains dans le
+cambouis" (pour reprendre la formule aux CastCoders) au chapitre 9 qui
+est vraiment intéressante si ça vous intéresse d'en savoir un peu plus
+sur comment git s'organise pour retrouver ses petits. Notez également
+que le livre est disponible sous format [ebook gratuitement][6].
+
+Pour rester au niveau introduction je peux encore vous rediriger vers
+la vidéo suivante où Linus Torvalds, avec son petit (ou pas si petit
+que ça en fait) air prétentieux, nous fait part de son aversion envers
+le système centralisé suivi par svn et de ce qui a été fait sur git
+pour tenter d'y apporter une solution.
+
+<p class="centered">
+<object width="500" height="405">
+   <param name="movie" value="http://www.youtube.com/v/4XpnKHJAok8?fs=1&amp;hl=en_US&amp;border=1"></param>;
+   <param name="allowFullScreen" value="true"></param>
+   <param name="allowscriptaccess" value="always"></param>
+   <embed src="http://www.youtube.com/v/4XpnKHJAok8?fs=1&amp;hl=en_US&amp;border=1";;
+      type="application/x-shockwave-flash" allowscriptaccess="always"
+      allowfullscreen="true" width="500" height="405">
+   </embed>
+</object>
+</p>
+
+Je ne sais pas si il faut dire prétentieux ou honnête. Vous diriez
+quoi vous après l'extrait suivant de la source *sus-linkée*?
+
+> That should tell people something. It's pretty much the fastest SCM
+  out there (and yeah, that's on almost any operation you can name),
+  it still has the smallest disk footprint I've ever heard of, and it
+  hasn't had the"format of the week" disease that every other project
+  seems to go through.
+
+Quoiqu'il en soit si vous aussi svn vous voudriez davantage l'utiliser
+pour gérer des branches, si vous aussi les temps de latences vous font
+parfois péter un plomb, prenez le temps de jeter un oeil à git. Git
+vous rendra ce temps.
+
+[^1]: Si l'histoire de git en tant que telle vous intéresse je vous encourage à [consulter la fiche Wikipedia](http://en.wikipedia.org/wiki/Git_(software))  qui est comme toujours un bon point de départ vers une multitude de liens.
+
+[0]: http://joelonsoftware.com/items/2010/03/17.html
+
+[1]: http://www.bitkeeper.com/
+
+[2]: http://git-scm.com/download
+
+[3]: http://github.com/
+
+[4]: http://help.github.com/
+
+[5]: http://progit.org/
+
+[6]: https://github.s3.amazonaws.com/media/progit.epub
+
+[7]: http://www.amazon.fr/gp/product/0596520123?ie=UTF8&tag=thpowo-21&linkCode=as2&camp=1642&creative=19458&creativeASIN=0596520123
+
+[8]: http://www.amazon.fr/gp/product/1934356727?ie=UTF8&tag=thpowo-21&linkCode=as2&camp=1642&creative=19458&creativeASIN=1934356727
+
+[9]: http://www.amazon.fr/gp/product/1934356158?ie=UTF8&tag=thpowo-21&linkCode=as2&camp=1642&creative=19458&creativeASIN=1934356158
+
+{% endarticle %}
+{% endblock %}
