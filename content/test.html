@@ -1,0 +1,59 @@
+{% extends "skeleton/_index.html" %}
+{% block main_content %}
+{% filter typogrify %}
+
+<div class="two left">
+{% markdown %}
+A normal paragraph nothing incredible. Bla bla bla bla blurp, oh sorry.
+
+Mute. Oh no wait i still have to say that I love this website! Tell me who you are or you will be disapointed. Tchouk tchouk.
+
+# Awesome
+
+Freaking awesome.
+
+Eh oh wait small hobbit, here is a beer for you!
+
+Lorem ipsum latinus incredibilus.Lorem ipsum latinus incredibilus.Lorem ipsum latinus incredibilus.Lorem ipsum latinus incredibilus.Lorem ipsum latinus incredibilus.
+
+Eh oh wait small hobbit, here is a beer for you!
+
+{% endmarkdown %}
+</div>
+<div class="three left">
+{% markdown %}
+
+An newly a paragraph but a bit longer to see if alignement will be
+correct or not.
+
+An another paragraph ilorem ipsum tagada tsoin tsoin. Phsit!
+
+## Freaking
+
+Lorem ipsum latinus incredibilus
+
+Lorem ipsum latinus incredibilus.Lorem ipsum latinus incredibilus.Lorem ipsum latinus incredibilus.Lorem ipsum latinus incredibilus.Lorem ipsum latinus incredibilus.
+
+### Hello
+
+Lorem ipsum latinus incredibilus.Lorem ipsum latinus incredibilus.Lorem ipsum latinus incredibilus.Lorem ipsum latinus incredibilus.Lorem ipsum latinus incredibilus.
+
+Lorem ipsum latinus incredibilus
+
+{% endmarkdown %}
+</div>
+
+<aside class="one left lr">
+{% markdown %}
+An newly a paragraph but a bit longer to see if alignement will be
+correct or not.
+
+An another paragraph ilorem ipsum tagada tsoin tsoin. Phsit!
+
+Lorem ipsum latinus incredibilus
+
+{% endmarkdown %}
+</aside>
+
+{% endfilter %}
+{% endblock %}

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<rss version="2.0">
+   <channel>
+      <title>PoXd</title>
+      <link>http://www.poxd.org//</link>
+      <description></description>
+      <language>fr</language>
+      <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+      <generator>Hyde</generator>
+      <webMaster>jacqueminv@gmail.com (Valentin Jacquemin)</webMaster>
+          
+      <item>
+         <title>Linux's Forgotten Man</title>
+         <link>http://www.poxd.org/blog/linux-s-forgotten-man.html</link>
+         <guid>http://www.poxd.org/blog/linux-s-forgotten-man.html</guid>
+         <description><![CDATA[
+
+<p>En cette fin de weekend plutôt maussade, un excellent article, concis
+et riche à propos de <span class="caps">RMS</span> et de sa position par rapport à Linus
+Torvals, créateur du noyau Linux. On y découvre également une fois de
+plus que l&#8217;open source n&#8217;est pas forcément éthiquement relié au
+mouvement du logiciel&nbsp;libre.</p>
+<p>Aujourd&#8217;hui bien que Linux ne soit <em>que</em> le noyau et non le système
+d&#8217;exploitation dans son ensemble, le commun des utilisateurs <strong>et</strong>
+des dévelopeurs n&#8217;utilisent plus que Linux pour le désigner. Comme le
+montre bien cet extrait ce n&#8217;est pas sans chagriner&nbsp;<span class="caps">RMS</span>.</p>
+<blockquote>
+<p><span class="dquo">&#8220;</span>[Torvalds] is basically an engineer,&#8221; Stallman said. &#8220;He likes free
+software, but isn&#8217;t concerned with issues of freedom. That&#8217;s why I&#8217;m
+unhappy when the <span class="caps">GNU</span> system is called Linux&#8230;. People are no longer
+exposed to the philosophical views of the <span class="caps">GNU</span>&nbsp;project.&#8221;</p>
+</blockquote>
+<p>&#8212; <a href="http://www.wired.com/science/discoveries/news/1999/03/18291">Linux&#8217;s Forgotten Man</a>, article <a href="http://wired.com">wired</a> du 3 mai&nbsp;1999</p>
+<p>Bonne semaine à&nbsp;tous!</p>
+]]></description>
+         <pubDate>09 May 10 00:00 GMT</pubDate>
+         <author>jacqueminv@gmail.com (Valentin Jacquemin)</author>
+      </item>    
+      <item>
+         <title>Liberté, égalité, fraternité, signum du logiciel libre</title>
+         <link>http://www.poxd.org/blog/liberte-egalite-fraternite-signum-du-libre.html</link>
+         <guid>http://www.poxd.org/blog/liberte-egalite-fraternite-signum-du-libre.html</guid>
+         <description><![CDATA[
+
+<p>S&#8217;il ne fallait en mentionner qu&#8217;un ce serait lui: <span class="caps">RMS</span>. Maître respecté au sein
+de la nation hacker, c&#8217;est <span class="caps">LE</span> nom qu&#8217;on retrouve partout lorsqu&#8217;on parle du
+monde du&nbsp;libre.</p>
+<p><span class="caps">RMS</span> pour Richard Matthew Stallman, le pionnier en chef du libre. Car même si le
+mode du libre subsistait avant sa formalisation &#8212; je pense en premier lieu au
+milieu universitaire &#8212; <span class="caps">RMS</span> a bien été le fer de lance du mouvement. Il en est
+d&#8217;ailleurs toujours l&#8217;icône et le plus vif défenseur. Voyons comment tout est&nbsp;né&#8230;</p>
+<h1 id="new-unix-implementation"><span class="dquo">&#8220;</span>New Unix&nbsp;implementation&#8221;</h1>
+<p>Le 27 septembre 1983, <span class="caps">RMS</span> envoie sur 2 <em>newsgroups</em> son intention de développer
+un tout nouveau système d&#8217;exploitation entièrement libre. Ses intentions &#8212; et
+par là même toute l&#8217;idéologie du libre &#8212; ressortent bien lorsqu&#8217;il
+dit:<sup id="fnref:1"><a href="#fn:1" rel="footnote">1</a></sup><sup>,</sup><sup id="fnref:2"><a href="#fn:2" rel="footnote">2</a></sup></p>
+<blockquote>
+<p>Je considère comme règle d&#8217;or le fait que si j&#8217;apprécie un programme je dois
+le partager avec d&#8217;autres personnes. Je ne peux pas signer un accord de non
+divulgation et être en accord avec ma&nbsp;conscience.</p>
+</blockquote>
+<div>
+<aside class="three left">
+  <strong><i>Free as in speech</i></strong>
+  <p>La confusion entre logiciels libres et
+  gratuité est très courante mais peut-être encore davantage dans les
+  contrées anglophones où &#8220;gratuit&#8221; et &#8220;libre&#8221; portent le même nom
+  : <i>free</i>.</p><p>Deux tournures permettent de contourner le
+  problème et de savoir de quoi l&#8217;on parle: <i>free as in speech</i>
+  pour signifier la liberté d&#8217;expression et <i>free as in beer</i>
+  pour la&nbsp;gratuité.</p>
+</aside>
+</div>
+
+<p>Tout part de cette envie de partage.  Retenez donc ça: le libre veut promouvoir
+un esprit égalitaire au sein de l&#8217;industrie du logiciel. Ce qui au passage n&#8217;a
+rien à voir avec le coût mercantile du-dit logiciel. Non, ici égalitaire veut
+plutôt dire qu&#8217;un utilisateur ne doit se voir privé d&#8217;aucun de ses droits par le
+logiciel. Ceci implique principalement 4 commandements, appelés les <strong>4
+libertés</strong>:</p>
+<ol>
+<li>La liberté d&#8217;exécuter le programme et ce pour tout&nbsp;usage.</li>
+<li>La liberté d&#8217;étudier le fonctionnement du programme au moyen des sources
+fournies avec le&nbsp;logiciel.</li>
+<li>La liberté de redistribuer des copies payantes ou&nbsp;non.</li>
+<li>La liberté d&#8217;améliorer le programme et de publier ces&nbsp;améliorations.</li>
+</ol>
+<h1 id="gnus-not-unix"><span class="dquo">&#8220;</span><span class="caps">GNU</span>&#8217;s not&nbsp;Unix&#8221;</h1>
+<p>La création de ce nouveau système d&#8217;exploitation complètement libre passe par le
+projet <em><span class="caps">GNU</span></em><sup id="fnref:4"><a href="#fn:4" rel="footnote">4</a></sup>, un ensemble de briques applicatives. Pour y arriver le projet
+a dû regrouper de nombreux développeurs brillants même si Stallman lui-même
+n&#8217;est pas dénué de talent de ce côté-là. Jugez vous-même: c&#8217;est lui qui a &#8212;
+entre autres &#8212; développé le fameux Emacs ou encore le compilateur C du projet
+<em><span class="caps">GNU</span></em>.</p>
+<p>A côté de ça il se penche également sur les implications légales du mouvement
+qu&#8217;il défend en mettant au jour<sup id="fnref:3"><a href="#fn:3" rel="footnote">3</a></sup> la première licence dite libre: la fameuse
+<em><span class="caps">GNU</span> General Public License</em>. Le 4 octobre 1985 cet effort mène à la création de
+la <em>Free Software Foundation</em> ayant pour objectif de promouvoir la liberté des
+utilisateurs de logiciels et de défendre leurs&nbsp;droits.</p>
+<p>Pour se faire cette fondation mène des campagnes<sup id="fnref:5"><a href="#fn:5" rel="footnote">5</a></sup> de promotion, supporte le
+développement de logiciels libres &#8212; en sponsorisant le projet <em><span class="caps">GNU</span></em> par exemple
+&#8212; ou encore enregistre chaque année des milliers de <em>copyrights</em> auprès de
+l&#8217;administration américaine afin de pouvoir toujours mieux défendre les droits
+des logiciels libres et de leur&nbsp;créateurs.</p>
+<h1 id="open-source-spannespan-logiciel-libre">Open source <span>&ne;</span> Logiciel&nbsp;libre</h1>
+<p>Le développement du libre a ainsi pu prendre forme sur maintenant près de trois
+décennies mais en chemin un cousin est né lorsqu&#8217;en 1998 le mouvement <em>Open
+Source</em> est&nbsp;créé.</p>
+<p>Il ne faudrait toutefois pas le confondre avec le logiciel libre. Bien que
+l&#8217;<em>Open Source</em> obéisse au 2ème commandement du libre, il n&#8217;est pas aussi
+profondément attaché au principe éthique de liberté. Il est ainsi possible
+aujourd&#8217;hui de mêler logiciels <em>open source</em> et produits propriétaires, cela
+n&#8217;étant pas vrai du logiciel&nbsp;libre.</p>
+<p>Bref voilà comment en un peu plus de 500 mots on peut définir l&#8217;idéologie
+derrière le logiciel libre, ce qu&#8217;il défend, d&#8217;où il vient. Mais bien que ce
+discours de liberté soit des plus louable dans le concret qu&#8217;est-ce que cela a&nbsp;donné?</p>
+<p>Rendez-vous au prochain article de cette série pour voir les succès du logiciel&nbsp;libre.</p>
+]]></description>
+         <pubDate>27 Mar 10 00:00 GMT</pubDate>
+         <author>jacqueminv@gmail.com (Valentin Jacquemin)</author>
+      </item>    
+      <item>
+         <title>Biographie de RMS, le druide</title>
+         <link>http://www.poxd.org/blog/biographie-rms.html</link>
+         <guid>http://www.poxd.org/blog/biographie-rms.html</guid>
+         <description><![CDATA[
+
+<p>Je fais pas mal de recherches actuellement pour ma suite d&#8217;articles
+à propos du logiciel libre. A ce propos un livre vient d&#8217;être publié
+librement faisant la biographie de Richard Matthew Stallman, guru de la
+communauté du&nbsp;libre.</p>
+<p>En lisant le deuxième chapitre vous trouverez une excellente analogie
+donnée par le maître lui-même à propos des <strong>enjeux du libre</strong>. La&nbsp;voici:</p>
+<blockquote>
+<p>Il compare un logiciel à une recette de cuisine : les deux donnent
+d’utiles instructions, pas à pas, pour accomplir une tâche
+souhaitée. Ils peuvent être aisément modifiés en fonction des désirs
+spécifiques de l’usager, ou de circonstances particulières. « Vous
+n’avez pas à suivre une recette avec précision [&#8230;]. Vous pouvez
+laisser de côté certains ingrédients. Ajouter quelques champignons
+parce que vous en raffolez. Mettre moins de sel car votre médecin vous
+le conseille – peu importe.&nbsp;»</p>
+<p>« De surcroît [&#8230;], logiciels et recettes sont faciles à partager. En
+donnant une recette à un invité, un cuisinier n’y perd que du temps et
+le coût du papier sur lequel il l’inscrit. Partager un logiciel
+nécessite encore moins, habituellement quelques clics de souris et un
+minimum d’électricité. Dans tous les cas, la personne qui donne
+l’information y gagne deux choses : davantage d’amitié et la
+possibilité de récupérer en retour d’autres recettes&nbsp;intéressantes. »</p>
+<p>[&#8230;] « Imaginez que les recettes soient emballées dans des boîtes
+noires. Vous ne pourriez pas connaître les ingrédients utilisés,
+encore moins les changer. Et si vous en faisiez une copie pour un ami,
+ils vous qualifieraient de pirate et essaieraient de vous faire
+emprisonner des années durant. Un tel changement susciterait un énorme
+scandale chez les gens ayant l’habitude de partager des recettes. Mais
+c’est exactement ce que nous impose le monde du logiciel
+propriétaire. Un monde dans lequel la bienséance commune envers les
+autres est prohibée ou empêchée.&nbsp;»</p>
+</blockquote>
+<p><img src="/media/images/framabook.org.png" class="links-ico"/> <a href="http://forge.framabook.org/stallman/">Richard
+Stallman et la révolution du logiciel libre</a> (<a href="http://www.amazon.fr/gp/product/2212126093?ie=UTF8&amp;tag=thpowo-21&amp;linkCode=as2&amp;camp=1642&amp;creative=19458&amp;creativeASIN=2212126093">l&#8217;acheter en format
+papier sur Amazon</a>)</p>
+]]></description>
+         <pubDate>11 Mar 10 00:00 GMT</pubDate>
+         <author>jacqueminv@gmail.com (Valentin Jacquemin)</author>
+      </item>    
+      <item>
+         <title>Ton ordi ne t'appartient pas</title>
+         <link>http://www.poxd.org/blog/ton-ordi-ne-t-appartient-pas.html</link>
+         <guid>http://www.poxd.org/blog/ton-ordi-ne-t-appartient-pas.html</guid>
+         <description><![CDATA[
+
+<p>Bien trop nombreux sont ceux qui aujourd&#8217;hui encore confondent <em>logiciel libre</em> et gratuité ou pire <em>logiciel libre</em> et piètre qualité. Le dernier exemple en date que j&#8217;ai pu trouver étant un article sur <a href="http://arstechnica.com/tech-policy/news/2010/01/protestors-ipad-is-nothing-more-than-a-golden-calf-of-drm.ars">Ars Technica</a> évoquant l&#8217;opposition de la Free Software Fondation à la <em>méthode</em> Apple encline à trop fermer ses systèmes. Je n&#8217;ai pas compté le nombre de commentaires faisant l&#8217;amalgame entre libre et gratuité. Du&nbsp;genre:</p>
+<blockquote>
+<p><span class="dquo">&#8220;</span>No Free&nbsp;Software&#8221;?</p>
+<p>App Store is full of free software. Or is there something we should know&nbsp;about?</p>
+</blockquote>
+<div style="text-align:center;"><img style="height:70%;" src="/media/images/apple-ipad-protest.jpg" alt="Apple et le monde du libre pas toujours sur la même longueur d'onde"/><p style="font-size:0.8em;">Apple et le monde du libre pas toujours sur la même longeur&nbsp;d&#8217;onde.</p></div>
+
+<p>Ca me chagrine tant il suffit de faire quelques recherches sur qu&#8217;est réellement la philosophie du logiciel libre pour comprendre que celà n&#8217;a rien à voir avec la notion de gratuité et que oui, il existe des logiciels libres de qualité. Pour aller plus loin on y trouve même une réelle idéologie ayant pour centre le&nbsp;partage.</p>
+<p>Si confusion il y a aujourd&#8217;hui elle existe depuis toujours je crois. Celà vient peut-être du fait que l&#8217;effort d&#8217;évangélisation n&#8217;est pas assez présent au sein de la communité du <em>libre</em>. Je ne sais pas mais en tout les cas j&#8217;ai bien envie de mettre ma pierre à l&#8217;édifice et d&#8217;essayer d&#8217;en faire connaître davantage à ne serait-ce qu&#8217;un internaute sur ce monde communautaire&nbsp;fascinant.</p>
+<p>Pour ce faire j&#8217;aborderai le sujet sous trois&nbsp;aspects:</p>
+<ol>
+<li><a href="http://www.poxd.org/blog/liberte-egalite-fraternite-signum-du-libre.html">Les origines du logiciel&nbsp;libre</a></li>
+<li>Ses&nbsp;succès</li>
+<li>Ses&nbsp;adversaires</li>
+</ol>
+<p>Chacun de ces points faisant office d&#8217;un billet séparé, mon but ici est d&#8217;informer, de partager ce que je sais. Bien sûr j&#8217;en ai certainement à apprendre, n&#8217;hésitez donc pas à&nbsp;critiquer!</p>
+]]></description>
+         <pubDate>09 Feb 10 00:00 GMT</pubDate>
+         <author>jacqueminv@gmail.com (Valentin Jacquemin)</author>
+      </item>
+   </channel>
+</rss>

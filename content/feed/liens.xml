@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<rss version="2.0">
+   <channel>
+      <title>PoXd</title>
+      <link>http://www.poxd.org//</link>
+      <description></description>
+      <language>fr</language>
+      <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+      <generator>Hyde</generator>
+      <webMaster>jacqueminv@gmail.com (Valentin Jacquemin)</webMaster>
+          
+      <item>
+         <title>Biographie de RMS, le druide</title>
+         <link>http://www.poxd.org/blog/biographie-rms.html</link>
+         <guid>http://www.poxd.org/blog/biographie-rms.html</guid>
+         <description><![CDATA[
+
+<p>Je fais pas mal de recherches actuellement pour ma suite d&#8217;articles
+à propos du logiciel libre. A ce propos un livre vient d&#8217;être publié
+librement faisant la biographie de Richard Matthew Stallman, guru de la
+communauté du&nbsp;libre.</p>
+<p>En lisant le deuxième chapitre vous trouverez une excellente analogie
+donnée par le maître lui-même à propos des <strong>enjeux du libre</strong>. La&nbsp;voici:</p>
+<blockquote>
+<p>Il compare un logiciel à une recette de cuisine : les deux donnent
+d’utiles instructions, pas à pas, pour accomplir une tâche
+souhaitée. Ils peuvent être aisément modifiés en fonction des désirs
+spécifiques de l’usager, ou de circonstances particulières. « Vous
+n’avez pas à suivre une recette avec précision [&#8230;]. Vous pouvez
+laisser de côté certains ingrédients. Ajouter quelques champignons
+parce que vous en raffolez. Mettre moins de sel car votre médecin vous
+le conseille – peu importe.&nbsp;»</p>
+<p>« De surcroît [&#8230;], logiciels et recettes sont faciles à partager. En
+donnant une recette à un invité, un cuisinier n’y perd que du temps et
+le coût du papier sur lequel il l’inscrit. Partager un logiciel
+nécessite encore moins, habituellement quelques clics de souris et un
+minimum d’électricité. Dans tous les cas, la personne qui donne
+l’information y gagne deux choses : davantage d’amitié et la
+possibilité de récupérer en retour d’autres recettes&nbsp;intéressantes. »</p>
+<p>[&#8230;] « Imaginez que les recettes soient emballées dans des boîtes
+noires. Vous ne pourriez pas connaître les ingrédients utilisés,
+encore moins les changer. Et si vous en faisiez une copie pour un ami,
+ils vous qualifieraient de pirate et essaieraient de vous faire
+emprisonner des années durant. Un tel changement susciterait un énorme
+scandale chez les gens ayant l’habitude de partager des recettes. Mais
+c’est exactement ce que nous impose le monde du logiciel
+propriétaire. Un monde dans lequel la bienséance commune envers les
+autres est prohibée ou empêchée.&nbsp;»</p>
+</blockquote>
+<p><img src="/media/images/framabook.org.png" class="links-ico"/> <a href="http://forge.framabook.org/stallman/">Richard
+Stallman et la révolution du logiciel libre</a> (<a href="http://www.amazon.fr/gp/product/2212126093?ie=UTF8&amp;tag=thpowo-21&amp;linkCode=as2&amp;camp=1642&amp;creative=19458&amp;creativeASIN=2212126093">l&#8217;acheter en format
+papier sur Amazon</a>)</p>
+]]></description>
+         <pubDate>11 Mar 10 00:00 GMT</pubDate>
+         <author>jacqueminv@gmail.com (Valentin Jacquemin)</author>
+      </item>    
+      <item>
+         <title>Adopter le "assez bien"</title>
+         <link>http://www.poxd.org/blog/adopter-le-assez-bien.html</link>
+         <guid>http://www.poxd.org/blog/adopter-le-assez-bien.html</guid>
+         <description><![CDATA[
+
+<p>Le perfectionisme &#8212; même dans une mesure relative &#8212; est l&#8217;un des
+plus grand freins à la réalisation de mes projets, informatiques ou
+non d&#8217;ailleurs. Le fait de ne pas atteindre le top du top peut
+carrément stopper la progression mais comme le mentionne cet article,
+un trop grand nombre de fonctionalités, une portée trop large ou une
+mise au jour du public tardive n&#8217;aident pas non&nbsp;plus.</p>
+<blockquote>
+<p>Perfectionism is the enemy of completion. Nitpick and worry about
+  getting it “just right”, and you’ll never get it done. Done is
+  better than&nbsp;right.</p>
+</blockquote>
+<p>Il faut vraiment que je fasse tout pour garder ces conseils en&nbsp;tête!</p>
+<p><img src="/media/images/zenhabits.net.ico" class="links-ico"/> <a href="http://zenhabits.net/2010/02/completion-principles/">4 Simple
+                               Principles of
+                               Getting to&nbsp;Completion</a></p>
+]]></description>
+         <pubDate>22 Feb 10 00:00 GMT</pubDate>
+         <author>jacqueminv@gmail.com (Valentin Jacquemin)</author>
+      </item>    
+      <item>
+         <title>Pourquoi l'iPad va être un nouveau succès</title>
+         <link>http://www.poxd.org/blog/pourquoi-l-ipad-va-etre-un-nouveau-succes.html</link>
+         <guid>http://www.poxd.org/blog/pourquoi-l-ipad-va-etre-un-nouveau-succes.html</guid>
+         <description><![CDATA[
+
+<p>Bien que l&#8217;iPad ait connu un accueil en demi teinte je suis persuadé que ce sera un franc succès de plus pour Apple&#8230; Je voulais d&#8217;ailleurs en écrire un article. Mais après avoir lu &#8220;If your product is great, it doesn&#8217;t need to be good&#8221;, je n&#8217;ai plus rien à&nbsp;dire.</p>
+<blockquote>
+<p>if your product needs &#8220;everything&#8221; in order to be good, then it&#8217;s probably not very innovative (though it might be a nice upgrade to an existing product). Put another way, if your product is great, it doesn&#8217;t need to be&nbsp;good.</p>
+</blockquote>
+<p>Même si beaucoup ont été déçu de voir l&#8217;absence de caméra, de flash ou encore d&#8217;un support multi-tâche ce dont on peut être quasi certain c&#8217;est que le jour où il passera entre nos mains, l&#8217;engin ne manquera pas de séduire et là bam! Tout le monde sera convaincu, parce que ce que fait Apple, Apple le fait génialement&nbsp;bien!</p>
+<p><img src="/media/images/blogspot.com.ico" style="height:22px;position:relative;top:5px;"/>&nbsp;<a href="http://paulbuchheit.blogspot.com/2010/02/if-your-product-is-great-it-doesnt-need.html">If your product is great, it doesn&#8217;t need to be&nbsp;good</a></p>
+]]></description>
+         <pubDate>14 Feb 10 00:00 GMT</pubDate>
+         <author>jacqueminv@gmail.com (Valentin Jacquemin)</author>
+      </item>    
+      <item>
+         <title>Vous faisiez quoi à 12 ans vous?</title>
+         <link>http://www.poxd.org/blog/vous-faisiez-quoi-a-12-ans-vous.html</link>
+         <guid>http://www.poxd.org/blog/vous-faisiez-quoi-a-12-ans-vous.html</guid>
+         <description><![CDATA[
+
+<p>Moi à 12 ans je passais mon temps entre jouer, jouer et
+jouer. J&#8217;exagère mais à peine, encore aujourd&#8217;hui si ce que je dois
+faire peut prendre une forme ludique je n&#8217;hésiterai&nbsp;pas.</p>
+<p>Tout ça pour dire que certains à 12 ans, donnent des présentations
+chez Google. Rien que ça! Ce petit bonhomme donne d&#8217;ailleurs une
+introduction de très bonne facture à jQuery dans le cadre du <em>Summer
+of Code</em> the Google dans lequel d&#8217;ailleurs il a officié - en tout cas
+cette année - <a href="http://google-opensource.blogspot.com/2009/08/wrapping-our-fifth-google-summer-of.html">en tant que <em>mentor</em></a>!</p>
+<div style="text-align: center;"><p><object width="425"
+height="344"><param name="movie"
+value="http://www.youtube.com/v/8mwKq7_JlS8&hl=fr&fs=1&"></param><param
+name="allowFullScreen" value="true"></param><param
+name="allowscriptaccess" value="always"></param><embed
+src="http://www.youtube.com/v/8mwKq7_JlS8&hl=fr&fs=1&"
+type="application/x-shockwave-flash" allowscriptaccess="always"
+allowfullscreen="true" width="425"
+height="344"></embed></object></p></div>
+
+<p>Plutôt bluffant non? On peut retrouver le présentateur sur son <a href="http://dmitrizone.com/">site</a> ou
+encore sur <a href="twitter">twitter</a>.</p>
+]]></description>
+         <pubDate>27 Aug 09 00:00 GMT</pubDate>
+         <author>jacqueminv@gmail.com (Valentin Jacquemin)</author>
+      </item>    
+      <item>
+         <title>Pourquoi j’envie les développeurs Erlang</title>
+         <link>http://www.poxd.org/blog/pourquoi-jenvie-les-developpeurs-erlang.html</link>
+         <guid>http://www.poxd.org/blog/pourquoi-jenvie-les-developpeurs-erlang.html</guid>
+         <description><![CDATA[
+
+<p>Alors qu’actuellement je subis les redémarrage très coûteux du serveur&nbsp;JBoss…</p>
+<blockquote>
+<p><strong>What are the advantages of hot&nbsp;swapping?</strong></p>
+<p>You’re joking. In my world we want to build systems that are started once and thereafter never stop. They evolve with time. Stopping a system to upgrade the code is an admission of&nbsp;failure.</p>
+</blockquote>
+<p>Rien à ajouter. Retrouvez toute l’interview de Joe Armstrong – créateur d’Erlang – ici: <a href="http://www.computerworld.com.au/article/307418/-z_programming_languages_erlang?pp=3">http://www.computerworld.com.au/article/307418/-z_programming_languages_erlang?pp=3</a></p>
+]]></description>
+         <pubDate>16 Jun 09 00:00 GMT</pubDate>
+         <author>jacqueminv@gmail.com (Valentin Jacquemin)</author>
+      </item>    
+      <item>
+         <title>Unix a 40 ans</title>
+         <link>http://www.poxd.org/blog/Unix-a-40-ans.html</link>
+         <guid>http://www.poxd.org/blog/Unix-a-40-ans.html</guid>
+         <description><![CDATA[
+
+<p>Computerworld a publié un <a href="http://www.computerworld.com/action/article.do?command=printArticleBasic&amp;taxonomyName=Operating+Systems&amp;articleId=9133570&amp;taxonomyId=89">article</a> intéressant sur les 40 ans de <a href="http://www.unix.org/what_is_unix/single_unix_specification.html">Unix</a>. Un peu d&#8217;histoire ne fait pas de&nbsp;mal!</p>
+<p>Découvrez comment Ken Thompson - l&#8217;un des tout grand hacker de l&#8217;histoire - a mis à profit un mois de temps libre pour produire la première version de l&#8217;une des oeuvres majeures de l&#8217;informatique pour également donner naissance à d&#8217;autres <strong>unix look-alike</strong> tel que&nbsp;Linux.</p>
+<blockquote>
+<p>Nearly from the start, the system was able to, and did, maintain itself. Since all source programs were always available and easily modified online, we were willing to revise and rewrite the system and its software when new ideas were invented, discovered, or suggested by&nbsp;others.</p>
+</blockquote>
+<p>Qui a dit précurseur du mouvement <strong>open source</strong>&#8230;</p>
+]]></description>
+         <pubDate>14 Jun 09 00:00 GMT</pubDate>
+         <author>jacqueminv@gmail.com (Valentin Jacquemin)</author>
+      </item>
+   </channel>
+</rss>
