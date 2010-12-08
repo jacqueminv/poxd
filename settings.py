@@ -85,11 +85,11 @@ CONTENT_PROCESSORS = {
 }
 SITE_PRE_PROCESSORS = {
     'blog': {
-        'hydeengine.sitepreprocessors.category_management.CategoriesManager':
-            {'node':'blog', 'template': '_archives.html'}
+        'hydeengine.site_pre_processors.CategoriesManager':
+            {'node':'blog', 'template': '_archives.html', 'archiving': True}
         },
     '/': {
-        'hydeengine.sitepreprocessors.node.NodeInjector' : {
+        'hydeengine.site_pre_processors.NodeInjector' : {
                'variable' : 'blog_node',
                'path' : 'content/blog'
         }

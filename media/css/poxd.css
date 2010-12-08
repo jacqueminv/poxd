@@ -19,7 +19,9 @@ h1 a, h2 a, h3 a {text-decoration: none;}
 p, ul, ol { margin-bottom: 1.3em;}
 pre {white-space: pre;}
 textarea {font-size: 1em;}
+table {margin: 1em 0;}
 th, td {padding-right: 5px;}
+sup {vertical-align: middle; position: relative; top: -0.5em;}
 
 /* HEADER */
 header {

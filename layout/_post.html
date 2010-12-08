@@ -19,11 +19,13 @@
       Publié sous {% for c in page.categories %}
       {% for category in page.node.categories %}
       {% ifequal category.name c %}
-      <a href="{{category.archive_url}}">{{category.name}}</a>{% if not forloop.last %},{% endif %}
+      <a href="{{category.archive_url}}">{{category.name}}</a>
+      {% if page.categories|length > 1 and not forloop.parentloop.last %} · {% endif %}
       {% endifequal %}
-      {% endfor %}
-      {% endfor %}.<br/>
-      Abonnez-vous au <a href="http://feeds.feedburner.com/poxd-feed">flux rss</a> ou suivez-moi sur <a href="http://twitter.com/poxd">twitter</a> pour être tenu à jour.
+      {% endfor %}{% endfor %}.<br/>
+      Abonnez-vous au <a href="http://feeds.feedburner.com/poxd-feed">flux rss</a>
+      ou suivez-moi sur <a href="http://twitter.com/poxd">twitter</a>
+      pour être tenu à jour.
     </p>
   </footer>
 

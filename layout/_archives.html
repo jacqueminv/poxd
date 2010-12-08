@@ -40,9 +40,11 @@
 </form>
 <h2>Catégories</h2>
 <ul>
+{% if categories %}
 {% for category in categories|dictsort:"name" %}
 <li><a href="{{category.archive_url}}">{{category.name}}</a></li>
 {% endfor %}
+{% endif %}
 </ul>
 </section>
 <hr class="unvisible clear">
