@@ -1,4 +1,5 @@
-#/usr/bin/python2.5
+#/usr/bin/env python
+
 from fabric.api import *
 import os, os.path
 import fabric.contrib.project as project
