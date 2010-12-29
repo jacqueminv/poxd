@@ -1,0 +1,52 @@
+{% extends "_post.html" %}
+{%hyde
+   title: "HTMLCanvas: éditeur de courbes de bézier"
+   categories:
+   - dev
+   created: 2010-12-28
+%}
+{% block article %}
+{% article %}
+
+<style>
+  iframe {width: 440px; height: 310px; margin: auto; margin-top: 2em; display: block; border: 10px solid #eee;}
+  div.caption {margin-bottom: 2em;}
+</style>
+
+<iframe src="/xp/bezier-01.html"></iframe>
+<div class="centered caption">r : vide la zone de dessin &ndash; z : annule le dernier point &ndash; <a href="https://gist.github.com/757349#file_canvas_bezier_editor">source</a></div>
+<p class="three left">
+  Au début de l'année je
+  prédisais <a href="blog/flash_va_mourir.html">la mort de Flash</a>
+  au vu principalement des nouvelles possibilités offertes par
+  html5. Parmis celles-ci, l'élément <code>canvas</code> qui permet de
+  définir une zone de dessin vectoriel. Les possibilités sont
+  énormes. Allez
+  voir <a href="http://www.pirateslovedaisies.com/">pirateslovedaisies.com</a>
+  pour en avoir rien qu'une mince idée...
+</p>
+<div class="three left lr">
+  <p>
+  Je voulais mettre la main à la pâte tout en ayant rapidement un
+  résultat visible. Un éditeur de courbes de bérizer, voilà un bon
+  exercice pour s'y mettre. On est loin des trucs de fous qu'on peut
+  trouver mais bon il faut bien commencer quelque part. La zone
+  ci-dessus est interactive, amusez-vous!
+  </p>
+</div>
+
+<script type="text/javascript">
+  (function() {
+      function reset(e) {
+          if(!e) var e = window.event;
+          
+          if(e.charCode == 114) {
+              document.getElementsByTagName("iframe")[0].contentWindow.reset();
+          }
+      }
+      document.addEventListener("keypress", reset, true);
+  })();
+</script>
+
+{% endarticle %}
+{% endblock %}

@@ -1,0 +1,306 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <style>
+    body {margin:0;}
+    </style>
+</head>
+<body>
+  <canvas width="440" height="300">
+    Sorry your browser does not support canvas element, you need to get a real browser.
+  </canvas>
+  <script type="text/javascript">
+    (function() {
+        var canvas = document.getElementsByTagName("canvas")[0];
+        if(canvas) {
+            var ctx = canvas.getContext("2d");
+	    var curves = [];
+	    var current_curve = null;
+	    var isDragging = false;
+
+	    function Curve(context, p1, p2, control_point) {
+		this.p1 = p1;
+		this.p2 = p2;
+		this.cp = control_point;
+		this.ctx = context;
+
+		this.add_point = function(p) {
+		    if(!this.p1) {
+			this.p1 = p;
+			this.p1.draw(this.ctx);
+		    } else {
+			if(!this.p2) {
+			    this.p2 = p;
+			    this.p2.draw(this.ctx);
+			}
+			this.cp = this.get_opposite_point(p, this.p2);
+			this.cp.draw(this.ctx);
+		    }
+		}
+
+		this.is_drawable = function() {
+		    return this.p1 && this.p2 && this.cp;
+		}
+
+		this.draw = function() {
+		    if(this.is_drawable()) {
+			var p1 = this.p1, p2 = this.p2, cp = this.cp;
+			p1.draw(this.ctx);
+			this.ctx.beginPath();
+			this.ctx.moveTo(p1.x, p1.y);
+			this.ctx.quadraticCurveTo(cp.x, cp.y, p2.x, p2.y);
+			var c = this.ctx.strokeStyle;
+			var gco = this.ctx.globalCompositeOperation;
+			this.ctx.globalCompositeOperation = "destination-over";
+			this.ctx.strokeStyle = "#000";
+			this.ctx.stroke();
+			this.ctx.strokeStyle = c;
+			this.ctx.globalCompositeOperation = gco;
+			p2.draw(this.ctx);
+		    }
+		}
+
+		this.draw_move = function() {
+		    //draw the line from control point to the cursor
+		    var p = this.get_opposite_point(this.cp, this.p2);
+		    this.ctx.beginPath();
+		    this.ctx.strokeStyle = '#eee';
+		    var gco = this.ctx.globalCompositeOperation;
+		    this.ctx.globalCompositeOperation = "destination-over";
+		    this.ctx.moveTo(this.cp.x, this.cp.y);
+		    this.ctx.lineTo(p.x, p.y);
+		    this.ctx.stroke();
+		    this.ctx.globalCompositeOperation = gco;
+
+		    //draw the curve
+		    this.draw(this.ctx);
+		}
+
+		this.get_opposite_point = function(from, center) {
+		    var x = from.x > center.x ?
+			center.x - (from.x - center.x) :
+			center.x + (center.x - from.x);
+		    var y = from.y > center.y ?
+			center.y - (from.y - center.y) :
+			center.y + (center.y - from.y);
+		    return new Point(this.ctx, x, y);
+		}
+	    }
+
+	    function Point(context, x, y, name) {
+		this.x = x;
+		this.y = y;
+		this.name = name;
+		this.ctx = context;
+
+		this.draw = function() {
+		    var gco = this.ctx.globalCompositeOperation;
+		    this.ctx.globalCompositeOperation = "source-over";
+		    this.ctx.fillStyle = 'red';
+		    this.ctx.fillRect(this.x - 2, this.y - 2, 4, 4);
+		    this.ctx.globalCompositeOperation = gco;
+		}
+	    }
+
+	    //erase the content in the canvas
+            function reset() {
+		canvas.width = canvas.width;
+            }
+
+	    function add_point(e) {
+		if(!e) var e = window.event;
+
+		var point = get_point_from_event(e);
+
+		isDragging = true;
+		current_curve = current_curve || new Curve(ctx);
+		var p = new Point(ctx, point.x, point.y);
+		current_curve.add_point(p);
+	    }
+
+	    function draw_move(e) {
+		if(isDragging && current_curve.is_drawable()) {
+		    if(!e) var e = window.event;
+
+		    redraw_all_but_last_path();
+		    current_curve.add_point(get_point_from_event(e));
+		    current_curve.draw_move();
+		}
+	    }
+
+	    function draw_path(e) {
+		if(current_curve.is_drawable()) {
+		    redraw_all_but_last_path();
+
+		    current_curve.draw();
+		    curves.push(current_curve);
+		    
+		    current_curve = new Curve(ctx, current_curve.p2);
+		    isDragging = false;
+		}
+	    }
+
+	    function redraw_all_but_last_path() {
+		reset();
+
+		for(var i=0, l=curves.length; i<l; i++) {
+		    curves[i].draw();
+		}
+	    }
+
+	    function get_point_from_event(e) {
+		var x = 0, y = 0;
+		if (e.pageX || e.pageY) {
+		    x = e.pageX;
+		    y = e.pageY;
+		}
+		else if (e.clientX || e.clientY) {
+		    x = e.clientX + document.body.scrollLeft
+			+ document.documentElement.scrollLeft;
+		    y = e.clientY + document.body.scrollTop
+			+ document.documentElement.scrollTop;
+		}
+
+		return new Point(ctx, x, y);
+	    }
+
+	    function keys(e) {
+		if(!e) var e = window.event;
+
+		if(e.charCode == 114) {
+		    //r: clear the canvas
+		    reset();
+		} else if(e.charCode == 122) {
+		    //z: erase the last point
+		    var last_curve = curves[curves.length - 1];
+		    if(current_curve.p2) {
+			current_curve.p2 = null;
+			redraw_all_but_last_path();
+			current_curve.p1.draw();
+		    } else if(current_curve.p1) {
+			current_curve.p1 = null;
+			redraw_all_but_last_path();
+			if(last_curve) {
+			    curves.pop();
+			    //p1 and p2 of previous curve are the same
+			    current_curve = last_curve;
+			    keys(e);
+			}
+		    }
+		}
+	    }
+	    
+	    canvas.addEventListener('mousedown', add_point, true);
+	    canvas.addEventListener('mousemove', draw_move, true);
+	    canvas.addEventListener('mouseup', draw_path, true);
+	    window.addEventListener('keypress', keys, true);
+
+
+	    //**************
+	    //Initial draw
+	    //**************
+	    function sample() {
+		var c = new Curve(ctx, new Point(ctx, 357,104), new Point(ctx, 321,100), new Point(ctx, 355,92));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 321,100), new Point(ctx, 277,89), new Point(ctx, 298,82));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 277,89), new Point(ctx, 245,107), new Point(ctx, 250,96));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 245,107), new Point(ctx, 189,121), new Point(ctx, 189,121));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 189,121), new Point(ctx, 146,87), new Point(ctx, 148,98));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 146,87), new Point(ctx, 69,64), new Point(ctx, 127,41));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 69,64), new Point(ctx, 17,77), new Point(ctx, -4,72));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 17,77), new Point(ctx, 19,85), new Point(ctx, 31,80));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 19,85), new Point(ctx, 28,90), new Point(ctx, 17,87));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 28,90), new Point(ctx, 33,94), new Point(ctx, 35,91));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 33,94), new Point(ctx, 82,119), new Point(ctx, 65,117));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 82,119), new Point(ctx, 139,147), new Point(ctx, 116,121));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 139,147), new Point(ctx, 120,209), new Point(ctx, 177,188));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 120,209), new Point(ctx, 55,233), new Point(ctx, 46,206));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 55,233), new Point(ctx, 62,231), new Point(ctx, 62,228));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 62,231), new Point(ctx, 54,238), new Point(ctx, 60,235));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 54,238), new Point(ctx, 62,240), new Point(ctx, 64,239));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 62,240), new Point(ctx, 57,248), new Point(ctx, 56,246));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 57,248), new Point(ctx, 76,250), new Point(ctx, 69,251));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 76,250), new Point(ctx, 78,259), new Point(ctx, 82,250));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 78,259), new Point(ctx, 88,261), new Point(ctx, 87,255));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 88,261), new Point(ctx, 104,263), new Point(ctx, 92,267));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 104,263), new Point(ctx, 115,267), new Point(ctx, 118,259));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 115,267), new Point(ctx, 122,265), new Point(ctx, 115,272));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 122,265), new Point(ctx, 137,265), new Point(ctx, 128,273));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 137,265), new Point(ctx, 187,225), new Point(ctx, 162,238));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 187,225), new Point(ctx, 282,238), new Point(ctx, 209,213));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 282,238), new Point(ctx, 292,250), new Point(ctx, 290,236));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 292,250), new Point(ctx, 314,284), new Point(ctx, 307,281));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 314,284), new Point(ctx, 322,286), new Point(ctx, 319,280));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 322,286), new Point(ctx, 333,288), new Point(ctx, 331,294));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 333,288), new Point(ctx, 344,291), new Point(ctx, 338,284));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 344,291), new Point(ctx, 347,280), new Point(ctx, 351,298));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 347,280), new Point(ctx, 354,286), new Point(ctx, 353,277));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 354,286), new Point(ctx, 365,245), new Point(ctx, 361,304));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 365,245), new Point(ctx, 359,175), new Point(ctx, 369,175));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 359,175), new Point(ctx, 299,153), new Point(ctx, 337,157));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 299,153), new Point(ctx, 297,133), new Point(ctx, 289,145));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 297,133), new Point(ctx, 313,117), new Point(ctx, 311,124));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 313,117), new Point(ctx, 326,107), new Point(ctx, 320,109));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 326,107), new Point(ctx, 352,106), new Point(ctx, 346,108));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 352,106), new Point(ctx, 354,104), new Point(ctx, 354,104));
+		c.draw();
+		var c = new Curve(ctx, new Point(ctx, 354,104), new Point(ctx, 358,105), new Point(ctx, 358,105));
+		c.draw();
+
+	    }
+	    sample();
+
+	    function init() {
+		reset();
+		canvas.removeEventListener("click", init, true);
+		current_curve.p1.draw();
+	    }
+
+	    canvas.addEventListener("click", init, true);
+	    window.reset = reset;
+        }
+    })();
+  </script>
+</body>
+</html>
