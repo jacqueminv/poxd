@@ -1,0 +1,97 @@
+{% extends "_post.html" %}
+{%hyde
+   title: "Les particularités de Javascript"
+   categories:
+    - dev
+   created: 2011-06-02
+%}
+{% block article %}
+{% article %}
+
+Ça m'a fait plaisir de lire l'article [Ten Oddities And Secrets About
+Javascript][1] parce que je cherche un peu de motivation actuellement
+pour écrire sur ce blog et j'ai ici un prétexte pour ajouter une
+onzième particularité de Javascript fort troublante lorsqu'on ne la
+connait pas. Elle s'appelle *hoisting feature*, on pourrait traduire
+ça par *fonctionalité de de levage*... 
+
+Voici un morceau de code pour nous aider:
+
+<iframe style="width: 100%; height: 210px"
+src="http://jsfiddle.net/pf8qM/embedded/"></iframe>
+<noframes>
+{% syntax javascript %}
+var score = 42;
+function computeScore () {
+    if ( score ) {
+        alert(score);
+    }
+    var score = 0;
+    return score + 42;
+}
+
+computeScore();
+{% endsyntax %}
+</noframes>
+
+Selon vous l'alert va apparaître? Si oui quelle valeur sera affichée?
+
+Eh bien non, l'alert ne s'affichera pas. Si ça vous paraît surprenant
+je le comprends, mais cela signifie aussi que cet article pourrait
+vous apprendre quelque chose...
+
+## La portée des variables en Javascript
+
+En Javascript il faut savoir qu'il n'y a que les fonctions qui
+définissent un nouveau bloc de portée pour les variables, déclarer une
+variable dans une boucle ou un `if` ne restreindra pas sa portée à ce
+simple bloc mais bien à la fonction l'englobant ou la portée globale
+dans le cas où cette dernière n'existe pas.
+
+Sachant cela, vous comprendrez alors pourquoi ici l'alert va bien nous
+afficher `true`:
+
+<iframe style="width: 100%; height: 210px"
+src="http://jsfiddle.net/AJe4L/embedded/"></iframe>
+<noframes>
+{% syntax javascript %}
+function test () {
+    if ( true ) {
+        var isDefined = true;
+    }
+    alert( isDefined );
+}
+{% endsyntax %}
+</noframes>
+
+Deuxième point important concernant la *hoisting feature*, c'est que
+toute variable est déclarée en début de portée et ce **même dans le
+cas où le développeur décide de ne pas le faire en début de
+portée**. Si l'on reprend par exemple le code d'introduction, voici
+comment le comment il est interprété:
+
+{% syntax javascript %}
+var score = 42;
+function computeScore () {
+    var score; //"cache" (shadow) la variable globale du même nom sans l'initialiser, sa valeur est donc `undefined`
+    if ( score ) {
+        alert(score);
+    }
+    score = 0;
+    return score + 42;
+}
+
+computeScore();
+{% endsyntax %}
+
+## Bonne pratique de déclaration de variable
+
+Afin de s'éviter toutes surprises la bonne pratique recommandée est de
+déclarer toutes ses variables en début de bloc et en utilisant le
+mot-clé `var`. Omettre le `var` enverrait directement la variable
+dans la portée globale ce qui n'est pas ce qui est recherché en général.
+
+[1]: http://www.smashingmagazine.com/2011/05/30/10-oddities-and-secrets-about-javascript/
+
+{% endarticle %}
+{% endblock %}
